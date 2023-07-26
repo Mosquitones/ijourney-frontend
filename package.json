@@ -12,7 +12,7 @@
     "dev": "vite dev",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint --ext src/assets/fonts/**/* src/**/*.{js, ts, tsx} --no-error-on-unmatched-pattern",
+    "lint": "eslint src/**/*.{js, ts, tsx} --no-error-on-unmatched-pattern",
     "postinstall": "husky install",
     "prepare": "husky install"
   },
