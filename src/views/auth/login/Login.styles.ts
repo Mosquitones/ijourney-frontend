@@ -1,5 +1,6 @@
-import { COLORS, from } from '@eduplaytion/numetry-ui-kit'
 import { Box, BoxProps, Stack } from '@mui/material'
+import { COLORS } from 'common/styles'
+import { from } from 'common/theme'
 import styled from 'styled-components'
 
 export const CharactersStyles = styled.img`

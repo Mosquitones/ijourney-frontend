@@ -9,8 +9,8 @@ import React, {
   useState,
 } from 'react'
 
-import { useFeedback } from '@eduplaytion/numetry-ui-kit'
 import { AxiosError } from 'axios'
+import { useFeedback } from 'contexts/global/Global.context'
 import { useCookies } from 'react-cookie'
 import { useMutation } from 'react-query'
 
@@ -79,30 +79,30 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     }
   )
 
-  const userInfoQuery = useMutation(
-    ['/user/info', { method: 'GET' }],
-    AuthenticationServices.get.userInfo,
-    {
-      onSuccess: (response) => {
-        setSessionDateStorage(new Date().getTime())
-        setUser(response.data)
-        setCookie('access_token', response.data.fusionauthAccessToken, {
-          path: '/',
-        })
-      },
-      onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
-        alert.showError(error.response?.data.message || error.message)
-        deleteSessionDateStorage()
-      },
-    }
-  )
+  // const userInfoQuery = useMutation(
+  //   ['/user/info', { method: 'GET' }],
+  //   AuthenticationServices.get.userInfo,
+  //   {
+  //     onSuccess: (response) => {
+  //       setSessionDateStorage(new Date().getTime())
+  //       setUser(response.data)
+  //       setCookie('access_token', response.data.fusionauthAccessToken, {
+  //         path: '/',
+  //       })
+  //     },
+  //     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
+  //       alert.showError(error.response?.data.message || error.message)
+  //       deleteSessionDateStorage()
+  //     },
+  //   }
+  // )
 
   const fusionAuthLoginQuery = useMutation(
     ['/fusionauth/login', { method: 'POST' }],
     AuthenticationServices.post,
     {
       onSuccess: () => {
-        userInfoQuery.mutate()
+        // userInfoQuery.mutate()
       },
       onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
         alert.showError(error.response?.data.message || error.message)
@@ -110,10 +110,10 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     }
   )
 
-  const revalidateTokenQuery = useMutation(
-    ['/fusionauth/validateToken', { method: 'GET' }],
-    AuthenticationServices.validateToken
-  )
+  // const revalidateTokenQuery = useMutation(
+  //   ['/fusionauth/validateToken', { method: 'GET' }],
+  //   AuthenticationServices.validateToken
+  // )
 
   const isLoggingIn = useMemo(
     () => fusionAuthLoginQuery.isLoading,
@@ -136,15 +136,15 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     logoutQuery.mutateAsync()
   }, [logoutQuery])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (cookies.access_token) {
-        revalidateTokenQuery.mutateAsync()
-      }
-    }, TWO_HOURS_IN_MILLISECONDS)
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (cookies.access_token) {
+  //       revalidateTokenQuery.mutateAsync()
+  //     }
+  //   }, TWO_HOURS_IN_MILLISECONDS)
 
-    return () => clearInterval(interval)
-  }, [cookies.access_token, revalidateTokenQuery])
+  //   return () => clearInterval(interval)
+  // }, [cookies.access_token, revalidateTokenQuery])
 
   const auth = useMemo(
     () => ({
@@ -152,7 +152,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       cookies: {
         accessToken: cookies.access_token,
       },
-      userInfoQuery,
+      // userInfoQuery,
       isUserAuthenticated,
       isLoggingIn,
       signIn,
@@ -161,7 +161,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     [
       user,
       cookies.access_token,
-      userInfoQuery,
+      // userInfoQuery,
       isUserAuthenticated,
       isLoggingIn,
       signIn,

@@ -2,8 +2,9 @@ import './i18n/i18n'
 
 import React, { Suspense } from 'react'
 
-import { GlobalStyles, MuiThemeWrapper } from '@eduplaytion/numetry-ui-kit'
 import { ErrorBoundary } from '@sentry/react'
+import { GlobalStyles } from 'common/styles'
+import { MuiThemeWrapper } from 'common/theme'
 import { AnimatePresence, MotionConfig } from 'framer-motion'
 import { SnackbarProvider } from 'notistack'
 import { CookiesProvider } from 'react-cookie'

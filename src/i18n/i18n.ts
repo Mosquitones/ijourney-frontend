@@ -4,18 +4,14 @@ import languageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
 import { translationEn } from './locales/en'
-import { translationNb } from './locales/nb'
-import { translationNn } from './locales/nn'
 
 const resources = {
   en: translationEn,
-  nn: translationNn,
-  nb: translationNb,
 }
 
 declare module 'react-i18next' {
   interface CustomTypeOptions {
-    defaultNS: 'nb'
+    defaultNS: 'en'
     resources: typeof resources
   }
 }
@@ -28,8 +24,8 @@ i18n
   .use(languageDetector)
   .use(initReactI18next)
   .init({
-    lng: localStorage.getItem('i18nextLng') || 'nb',
-    fallbackLng: 'nb',
+    lng: localStorage.getItem('i18nextLng') || 'en',
+    fallbackLng: 'en',
     returnNull: false,
     interpolation: {
       escapeValue: false,
@@ -39,8 +35,6 @@ i18n
     },
     resources: {
       en: { translation: resources.en },
-      nn: { translation: resources.nn },
-      nb: { translation: resources.nb },
     },
   })
 

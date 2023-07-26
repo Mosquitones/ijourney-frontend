@@ -4,7 +4,6 @@ export interface ProcessEnvTypes {
   VITE_WEB_DESCRIPTION: string
   VITE_PREVIEW_IMG: string
   VITE_API_URL: string
-  VITE_FEIDE_LOGOUT_URL: string
   VITE_FUSIONAUTH_DEV_API_URL: string
 }
 

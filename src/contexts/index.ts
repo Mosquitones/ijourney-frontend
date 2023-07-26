@@ -1,2 +1,2 @@
 export * from './auth/Auth.context'
-export * from './GlobalContext'
+export * from './global/Global.context'

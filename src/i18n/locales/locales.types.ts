@@ -1,7 +1,6 @@
-import type { localTranslationEn } from './en'
+import { translationEn } from './en'
 
-export type AuthLocaleTypes = localTranslationEn['auth']
-export type ComponentsLocaleTypes = localTranslationEn['components']
-export type GeneralLocaleTypes = localTranslationEn['general']
-export type NavigationLocaleTypes = localTranslationEn['navigation']
-export type PagesLocaleTypes = localTranslationEn['pages']
+export type AuthLocaleTypes = typeof translationEn.auth
+export type ComponentsLocaleTypes = typeof translationEn.components
+export type GeneralLocaleTypes = typeof translationEn.general
+export type NavigationLocaleTypes = typeof translationEn.navigation

@@ -1,2 +1,2 @@
 export * from './login/Login'
-export * from './Logout'
+export * from './logout/Logout'

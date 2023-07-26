@@ -1,4 +1,4 @@
-import { CustomTheme } from '@eduplaytion/numetry-ui-kit'
+import { CustomTheme } from 'common/utils'
 
 declare module '@mui/material' {
   export interface Theme extends CustomTheme {

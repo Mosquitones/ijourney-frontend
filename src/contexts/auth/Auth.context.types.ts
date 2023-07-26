@@ -7,7 +7,7 @@ import {
   UserInfoTypes,
 } from 'services'
 
-type UserInfoQueryTypes = UseMutationResult<
+type _UserInfoQueryTypes = UseMutationResult<
   ApiResponseTypes<UserInfoTypes>,
   AxiosError<ApiResponseTypes<unknown>, unknown>,
   void,
@@ -19,7 +19,7 @@ export interface AuthContextTypes {
   cookies: {
     accessToken?: string
   }
-  userInfoQuery: UserInfoQueryTypes
+  // userInfoQuery: UserInfoQueryTypes
   isUserAuthenticated: boolean
   isLoggingIn: boolean
   signIn: (payload: AuthLoginPayloadTypes) => void

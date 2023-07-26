@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 
-import { COLORS, FONT_WEIGHTS } from '@eduplaytion/numetry-ui-kit'
 import { Box, LinearProgress, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
@@ -22,7 +21,10 @@ export default function LogoutPage() {
         <LinearProgress color='primary' />
       </Box>
       <Stack height='100%' alignItems='center' justifyContent='center'>
-        <Typography color={COLORS.dark} fontWeight={FONT_WEIGHTS.extraBold}>
+        <Typography
+          color='red'
+          fontWeight={({ typography }) => typography.fontWeightBold}
+        >
           {t('!#Logging out...')}
         </Typography>
       </Stack>
