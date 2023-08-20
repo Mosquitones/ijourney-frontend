@@ -20,8 +20,6 @@ export type CustomTheme = {
     grey: CustomPaletteColor
     common: Partial<CommonColors>
     text: Partial<TypeText>
-    royalBlue: Partial<CustomPaletteColor>
-    yellow: CustomPaletteColor
     info: CustomPaletteColor
     mode?: PaletteMode
     tonalOffset?: PaletteTonalOffset

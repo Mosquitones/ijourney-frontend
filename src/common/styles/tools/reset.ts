@@ -37,7 +37,8 @@ export const genericReset = () => css`
       button,
       .MuiButtonBase-root,
       .MuiAccordion-root,
-      .MuiSelect-select
+      .MuiSelect-select,
+      [tabindex='-1']
     ):focus {
     outline: 0.2rem solid ${({ theme }) => theme.palette.info.main} !important;
     outline-offset: -0.2rem;

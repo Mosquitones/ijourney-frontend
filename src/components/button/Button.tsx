@@ -1,14 +1,30 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 
-import { Button } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
+import { FCWithChildren } from '@types'
 
-import { test } from './Button.styles'
 import { ButtonPropTypes } from './Button.types'
 
-export const ButtonComponent: React.FC<PropsWithChildren<ButtonPropTypes>> = ({
-  primary,
+export const Button: FCWithChildren<ButtonPropTypes> = ({
+  value,
+  children = value,
+  rounded = false,
+  ...props
 }) => {
-  const count = test + 1
+  const { fontWeight, ...rest } = props
 
-  return <Button variant={primary ? 'contained' : 'text'}> {count}</Button>
+  return (
+    <LoadingButton
+      sx={{
+        fontWeight,
+        borderRadius: rounded ? 100 : '0.5rem',
+        ...rest.sx,
+      }}
+      {...rest}
+    >
+      {children}
+    </LoadingButton>
+  )
 }
+
+export * from './Button.types'

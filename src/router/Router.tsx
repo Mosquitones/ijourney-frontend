@@ -1,31 +1,67 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from 'react'
+import React, { ReactNode } from 'react'
 
-import { DashboardLayout } from 'layout'
+import { AuthTemplate, DashboardLayout } from 'layout'
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Navigate,
-  Outlet,
   Route,
   RouterProvider,
 } from 'react-router-dom'
-import LoginPage from 'views/auth/login/Login'
 
 import { useAuth } from 'contexts'
-import { ROLES } from 'services'
+import { ROLES, UserRoleTypes } from 'services'
 
 import {
   ProtectedRoute,
+  renderAboutUsRoutes,
+  renderAppliedPositionRoutes,
+  renderCourseRoutes,
   renderLoginRoutes,
   renderLogoutRoutes,
+  renderPositionRoutes,
+  renderReportRoutes,
   ROUTES,
+  RouteTypes,
 } from '.'
 
 export const Router: React.FC = () => {
-  const { BASE_ROOT, UNKNOWN, AUTH, LOGIN, PLANS, DISCOUNT_CODES, ID, NEW } =
-    ROUTES
+  const { BASE_ROOT, UNKNOWN, AUTH, LOGIN, APP } = ROUTES
   const { isUserAuthenticated, signOut, user } = useAuth()
+
+  const renderLogoutButton = () => (
+    <button type='button' onClick={signOut}>
+      logout
+    </button>
+  )
+
+  const renderDefaultRoute = (to: RouteTypes) => (
+    <Route key={to} index element={<Navigate to={to} />} />
+  )
+
+  const userRoutes: { [key in UserRoleTypes]?: ReactNode[] } = {
+    candidate: [
+      renderDefaultRoute(ROUTES.POSITIONS),
+      renderPositionRoutes(),
+      renderAppliedPositionRoutes(),
+      renderCourseRoutes(),
+      renderAboutUsRoutes(),
+    ],
+    recruiter: [
+      renderDefaultRoute(ROUTES.POSITIONS),
+      renderPositionRoutes(),
+      renderReportRoutes(),
+      renderCourseRoutes(),
+      renderAboutUsRoutes(),
+    ],
+    admin: [
+      // renderCourseRoutes()
+    ],
+    company: [
+      // renderCourseRoutes()
+    ],
+  }
 
   return (
     <RouterProvider
@@ -33,13 +69,22 @@ export const Router: React.FC = () => {
         createRoutesFromElements(
           <>
             {!isUserAuthenticated && (
-              <Route path={AUTH}>
-                <Route index element={<Navigate to={LOGIN} />} />
-                {renderLoginRoutes()}
-                {renderLogoutRoutes()}
-              </Route>
+              <>
+                <Route index element={<Navigate to={AUTH} />} />
+                <Route path={AUTH}>
+                  <Route index element={<Navigate to={LOGIN} />} />
+                  <Route Component={AuthTemplate}>
+                    {renderLoginRoutes()}
+                    {renderLogoutRoutes()}
+                  </Route>
+                </Route>
+              </>
             )}
-            {/* <Route path={BASE_ROOT} Component={DashboardLayout}>
+            {isUserAuthenticated && (
+              <Route path={AUTH}>{renderLogoutRoutes()}</Route>
+            )}
+            <Route path={BASE_ROOT} Component={DashboardLayout}>
+              {/* <Route path={BASE_ROOT} Component={DashboardLayout}>
               <Route index element={<Navigate to={PLANS} />} />
               <Route
                 element={
@@ -60,7 +105,7 @@ export const Router: React.FC = () => {
                 </Route>
               </Route>
             </Route> */}
-            {/* <Route
+              {/* <Route
               index
               element={
                 // <LayoutComponent
@@ -74,22 +119,52 @@ export const Router: React.FC = () => {
                 // </LayoutComponent>
               }
             /> */}
-            <Route
-              path={BASE_ROOT}
-              element={<ProtectedRoute roles={[ROLES.BACK_OFFICE]} />}
-            >
-              <Route index element={<Navigate to='home' />} />
-              <Route
-                path='home'
-                element={
-                  <div>
-                    HOME
-                    <button type='button' onClick={signOut}>
-                      logout
-                    </button>
-                  </div>
-                }
-              />
+              {/* {user &&
+                Object.values(ROLES).find((role) => {
+                  if (role === user.role) {
+                  }
+                })} */}
+
+              {/* {user && <>{userRoutes[user.role]}</>}
+              {user && Object.keys(ROLES).find((role) => {})} */}
+              {user && (
+                <Route element={<ProtectedRoute roles={[user.role]} />}>
+                  <Route index element={<Navigate to={APP} />} />
+                  <Route path={APP}>{userRoutes[user.role]}</Route>
+                </Route>
+              )}
+
+              {/* {user?.role === ROLES.CANDIDATE && (
+                <Route element={<ProtectedRoute roles={[ROLES.CANDIDATE]} />}>
+                  <Route index element={<Navigate to={APP} />} />
+                  <Route
+                    path={APP}
+                    element={
+                      <div> HOME - CANDIDATE {renderLogoutButton()} </div>
+                    }
+                  />
+                </Route>
+              )}
+              {user?.role === ROLES.RECRUITER && (
+                <Route element={<ProtectedRoute roles={[ROLES.RECRUITER]} />}>
+                  <Route index element={<Navigate to={APP} />} />
+                  <Route
+                    path={APP}
+                    element={
+                      <div> HOME - RECRUITER {renderLogoutButton()} </div>
+                    }
+                  />
+                </Route>
+              )}
+              {user?.role === ROLES.ADMIN && (
+                <Route element={<ProtectedRoute roles={[ROLES.ADMIN]} />}>
+                  <Route index element={<Navigate to={APP} />} />
+                  <Route
+                    path={APP}
+                    element={<div> HOME - ADMIN {renderLogoutButton()} </div>}
+                  />
+                </Route>
+              )} */}
             </Route>
             <Route path={UNKNOWN} element={<Navigate to={BASE_ROOT} />} />
           </>

@@ -9,10 +9,10 @@ export const TypographyStyleOverrides: ThemeComponentTypes['MuiTypography'] = {
       h4: 'h4',
       h5: 'h5',
       h6: 'h6',
-      subtitle1: 'h4',
-      subtitle2: 'h5',
+      // subtitle1: 'h4',
+      // subtitle2: 'h5',
       body1: 'p',
-      body2: 'span',
+      body2: 'p',
     },
   },
 }

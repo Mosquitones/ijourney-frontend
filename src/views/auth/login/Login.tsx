@@ -1,15 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useLayoutEffect } from 'react'
 
-import { LoadingButton } from '@mui/lab'
-import { Button, Input, Link, Typography } from '@mui/material'
-import { useFormik } from 'formik'
+import { Google } from '@mui/icons-material'
+import {
+  Box,
+  Divider,
+  Link,
+  SvgIcon,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { Formik, useFormik } from 'formik'
 import { useTranslation } from 'react-i18next'
 
+import { Button, Input, Logo } from 'components'
 import { useAuth } from 'contexts'
 import { ROUTES } from 'router'
 
-import { FormStackStyles, LoginHeaderStyles } from './Login.styles'
+import * as S from './Login.styles'
 import { LoginFormPropTypes } from './Login.types'
 import { LoginFormSchema } from './utils/LoginForm.schema'
 
@@ -23,8 +31,6 @@ export default function LoginPage() {
       password: '',
     },
     validationSchema: LoginFormSchema,
-    validateOnChange: false,
-    validateOnBlur: false,
     onSubmit: ({ email: loginId, password }) => {
       signIn({ loginId, password })
     },
@@ -41,47 +47,104 @@ export default function LoginPage() {
   // }, [userInfoQuery])
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <LoginHeaderStyles>
-        <Typography color='primary.main' fontWeight='bold' variant='subtitle1'>
-          {t('auth.login')}
+    <S.Form onSubmit={formik.handleSubmit}>
+      <Logo extended containerProps={{ mb: 2 }} />
+      <Typography
+        fontWeight={({ typography }) => typography.fontWeightBold}
+        variant='h1'
+      >
+        Entrar
+      </Typography>
+      <Typography variant='body1' color='gray'>
+        Encontre a sua próxima oportunidade!
+      </Typography>
+      <Button variant='outlined' color='info' type='button'>
+        <SvgIcon component={Google} fontSize='small' sx={{ mr: 1.5 }} />
+        Entrar com Google
+      </Button>
+
+      <Divider sx={{ color: 'gray' }}>
+        <Typography variant='body2' color='gray'>
+          ou cadastre com e-mail
         </Typography>
-      </LoginHeaderStyles>
-      <FormStackStyles spacing={2.5} p={3}>
-        <Input
-          type='text'
-          name='email'
-          placeholder={t('auth.emailPlaceholder')}
-          // label={t('auth.email')}
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          // helperText={formik.errors.email}
-          error={!!formik.errors.email}
-        />
-        <Input
-          type='password'
-          name='password'
-          // label={t('auth.password')}
-          autoComplete='current-password'
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          // helperText={formik.errors.password}
-          error={!!formik.errors.password}
-        />
-        <Link href={`/${ROUTES.LOGIN}/${ROUTES.FORGOT_PASSWORD}`}>
-          {t('auth.forgotYourPassword')}
-        </Link>
-        <LoadingButton
-          type='submit'
-          variant='contained'
-          color='primary'
-          fullWidth
-          disabled={isLoggingIn}
-          loading={isLoggingIn}
+      </Divider>
+      <Input
+        {...formik.getFieldProps('email')}
+        error={formik.touched.email && !!formik.errors.email}
+        helperText={formik.touched.email ? formik.errors.email : undefined}
+        label='E-mail'
+        placeholder='email@examplo.com'
+        fullWidth
+      />
+      <Input
+        {...formik.getFieldProps('password')}
+        error={formik.touched.password && !!formik.errors.password}
+        helperText={
+          formik.touched.password ? formik.errors.password : undefined
+        }
+        label='Senha'
+        placeholder='********'
+        fullWidth
+        type='password'
+      />
+      <Link
+        href='#'
+        color='inherit'
+        textAlign='right'
+        width='max-content'
+        right={0}
+      >
+        Esqueceu a senha?
+      </Link>
+      <Button variant='contained' fullWidth type='submit'>
+        Entrar
+      </Button>
+      <Box
+        maxWidth={500}
+        display='flex'
+        flexDirection='column'
+        gap={4}
+        margin='0 auto'
+        textAlign='center'
+      >
+        <Typography
+          color='text.primary'
+          fontWeight={({ typography }) => typography.fontWeightBold}
         >
-          {t('auth.login')}
-        </LoadingButton>
-      </FormStackStyles>
-    </form>
+          Não possui conta?{' '}
+          <Link href='#' color='inherit'>
+            Cadastre-se agora
+          </Link>
+        </Typography>
+      </Box>
+      {/* <Box
+        maxWidth={500}
+        display='flex'
+        flexDirection='column'
+        gap={4}
+        margin='0 auto'
+        textAlign='center'
+      >
+        <Typography color='text.secondary'>
+          Continuando você aceita nossos{' '}
+          <Link href='#' color='inherit' minWidth='max-content'>
+            termos e condições
+          </Link>{' '}
+          e nossa{' '}
+          <Link href='#' color='inherit' minWidth='max-content'>
+            política de privacidade
+          </Link>
+        </Typography>
+        <Typography
+          color='text.primary'
+          fontWeight={({ typography }) => typography.fontWeightBold}
+        >
+          Não possui conta?{' '}
+          <Link href='#' color='inherit'>
+            Cadastre-se agora
+          </Link>
+        </Typography>
+      </Box> */}
+    </S.Form>
   )
 }

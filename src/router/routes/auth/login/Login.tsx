@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 
-import { Outlet, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import { ROUTES } from 'router'
 
@@ -10,14 +10,7 @@ export const renderLoginRoutes = () => {
   const { LOGIN } = ROUTES
 
   return (
-    <Route
-      path={LOGIN}
-      element={
-        <div>
-          layout <Outlet />
-        </div>
-      }
-    >
+    <Route path={LOGIN}>
       <Route index element={<Login />} />
     </Route>
   )

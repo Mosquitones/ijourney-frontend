@@ -1,13 +1,11 @@
 export const ROLES = {
-  SALES_TEAM: 'sales_team',
-  TEACHER: 'teacher',
-  STUDENT: 'student',
-  BACK_OFFICE: 'back_office',
+  RECRUITER: 'recruiter',
+  ADMIN: 'admin',
+  CANDIDATE: 'candidate',
+  COMPANY: 'company',
 } as const
 
 export type UserRoleTypes = (typeof ROLES)[keyof typeof ROLES]
-
-type TeacherTypes = 'Teacher' | 'TeacherManager' | 'TeacherGuest'
 
 interface RegistrationTypes {
   applicationId: string
@@ -43,9 +41,6 @@ export interface UserInfoTypes {
   name: string
   createdAt: Date
   updatedAt: Date
-  roles: UserRoleTypes[]
-  feideToken: string
-  teacherType: TeacherTypes
-  fusionauthId: string
-  fusionauthAccessToken: string
+  role: UserRoleTypes
+  image?: string
 }

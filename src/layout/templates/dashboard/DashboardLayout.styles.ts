@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const LayoutStyles = styled.div`
+export const Layout = styled.div`
   display: flex;
   flex-direction: column;
 
@@ -8,12 +8,10 @@ export const LayoutStyles = styled.div`
   height: auto;
 `
 
-export const LayoutMainStyles = styled.main`
+export const Main = styled.main`
   flex: 1;
   display: flex;
   flex-direction: column;
-
-  padding-top: 8.1rem;
 
   width: 100%;
 `

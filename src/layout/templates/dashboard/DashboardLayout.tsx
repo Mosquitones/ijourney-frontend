@@ -2,15 +2,17 @@ import React from 'react'
 
 import { Outlet } from 'react-router-dom'
 
-import { LayoutMainStyles, LayoutStyles } from './DashboardLayout.styles'
+import { Header } from './components'
+import * as S from './DashboardLayout.styles'
 
 export const DashboardLayout: React.FC = () => {
   return (
-    <LayoutStyles>
+    <S.Layout>
       {/* <SkipLinkComponent /> */}
-      <LayoutMainStyles>
+      <Header />
+      <S.Main>
         <Outlet />
-      </LayoutMainStyles>
-    </LayoutStyles>
+      </S.Main>
+    </S.Layout>
   )
 }

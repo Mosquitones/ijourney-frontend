@@ -10,9 +10,15 @@ export const ROUTES = {
   TWO_FACTOR: '2fa',
   FORGOT_PASSWORD: 'forgot-password',
 
+  // App - Dashboard
+  APP: 'app',
+
   // Dashboard
-  PLANS: 'plans',
-  DISCOUNT_CODES: 'discount-codes',
+  POSITIONS: 'positions',
+  APPLIED_POSITIONS: 'applied-positions',
+  COURSES: 'courses',
+  ABOUT_US: 'about-us',
+  REPORTS: 'reports',
 
   // General
   NEW: 'new',

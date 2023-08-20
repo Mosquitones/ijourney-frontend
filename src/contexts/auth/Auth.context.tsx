@@ -4,7 +4,6 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react'
@@ -22,7 +21,6 @@ import {
   ROLES,
   UserInfoTypes,
 } from 'services'
-import { timeToMilliseconds } from 'utils'
 
 import { AuthContextTypes } from './Auth.context.types'
 
@@ -30,24 +28,39 @@ export const AuthContext = createContext({} as AuthContextTypes)
 
 export const useAuth = () => useContext(AuthContext)
 
-const DUMMY_USER: UserInfoTypes = {
-  id: 17,
-  name: 'Dummy User',
+const BASE_INFO: Pick<UserInfoTypes, 'createdAt' | 'updatedAt'> = {
   createdAt: new Date('2022-07-04T15:10:48.192Z'),
   updatedAt: new Date('2022-07-04T15:10:48.192Z'),
-  roles: [ROLES.BACK_OFFICE],
-  teacherType: 'TeacherManager',
-  fusionauthId: '5139c950-bcdd-4ad0-9f2c-d998cd857357',
-  fusionauthAccessToken: 'fake-fusion-auth-access-token',
-  feideToken: 'fake-feide-auth-access-token',
 }
 
-const TWO_HOURS_IN_MILLISECONDS = timeToMilliseconds({ hours: 2 })
+const CANDIDATE_DUMMY_USER: UserInfoTypes = {
+  ...BASE_INFO,
+  id: 0,
+  name: 'Candidate',
+  role: ROLES.CANDIDATE,
+}
+
+const RECRUITER_DUMMY_USER: UserInfoTypes = {
+  ...BASE_INFO,
+  id: 1,
+  name: 'Recruiter',
+  role: ROLES.RECRUITER,
+}
+
+const ADMIN_DUMMY_USER: UserInfoTypes = {
+  ...BASE_INFO,
+  id: 2,
+  name: 'Admin',
+  role: ROLES.ADMIN,
+}
 
 export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const [user, setUser] = useState<AuthContextTypes['user']>(null)
+  const [user, setUser] = useLocalStorage<AuthContextTypes['user']>(
+    'user',
+    null
+  )
   const [cookies, setCookie, removeCookie] = useCookies(['access_token'])
   const [sessionDateStorage, setSessionDateStorage] = useLocalStorage<
     number | null
@@ -55,15 +68,19 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
 
   const { alert } = useFeedback()
 
-  const deleteSessionDateStorage = () => {
+  const deleteSessionDateStorage = useCallback(() => {
     setSessionDateStorage(null)
-  }
+  }, [setSessionDateStorage])
 
-  const deleteAccessTokenCookie = () => {
+  const deleteUserSessionStorage = useCallback(() => {
+    setUser(null)
+  }, [setUser])
+
+  const deleteAccessTokenCookie = useCallback(() => {
     removeCookie('access_token', {
       path: '/',
     })
-  }
+  }, [removeCookie])
 
   const logoutQuery = useMutation(
     ['/logout', { method: 'GET' }],
@@ -125,26 +142,38 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     [sessionDateStorage, cookies.access_token]
   )
 
+  const renderFunctions = useCallback(() => {
+    setSessionDateStorage(new Date().getTime())
+    setCookie('access_token', crypto.randomUUID(), {
+      path: '/',
+    })
+  }, [setCookie, setSessionDateStorage])
+
   const signIn = useCallback(
     (payload: AuthLoginPayloadTypes) => {
-      fusionAuthLoginQuery.mutateAsync(payload)
+      if (payload.loginId === 'candidate@ey.com') {
+        setUser(CANDIDATE_DUMMY_USER)
+        renderFunctions()
+      } else if (payload.loginId === 'recruiter@ey.com') {
+        setUser(RECRUITER_DUMMY_USER)
+        renderFunctions()
+      } else if (payload.loginId === 'admin@ey.com') {
+        setUser(ADMIN_DUMMY_USER)
+        renderFunctions()
+      }
     },
-    [fusionAuthLoginQuery]
+    [renderFunctions, setUser]
   )
 
   const signOut = useCallback(() => {
-    logoutQuery.mutateAsync()
-  }, [logoutQuery])
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (cookies.access_token) {
-  //       revalidateTokenQuery.mutateAsync()
-  //     }
-  //   }, TWO_HOURS_IN_MILLISECONDS)
-
-  //   return () => clearInterval(interval)
-  // }, [cookies.access_token, revalidateTokenQuery])
+    deleteSessionDateStorage()
+    deleteAccessTokenCookie()
+    deleteUserSessionStorage()
+  }, [
+    deleteAccessTokenCookie,
+    deleteSessionDateStorage,
+    deleteUserSessionStorage,
+  ])
 
   const auth = useMemo(
     () => ({
