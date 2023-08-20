@@ -1,4 +1,11 @@
+import { LinkBehavior } from '../_accessors/LinkBehavior'
 import { ThemeComponentTypes } from '../types'
+
+export const ButtonBaseStyleOverrides: ThemeComponentTypes['MuiButtonBase'] = {
+  defaultProps: {
+    LinkComponent: LinkBehavior,
+  },
+}
 
 export const ButtonStyleOverrides: ThemeComponentTypes['MuiButton'] = {
   defaultProps: {
@@ -14,6 +21,7 @@ export const ButtonStyleOverrides: ThemeComponentTypes['MuiButton'] = {
       fontWeight: 'bold',
       fontSize: '1.4rem',
       minHeight: '4rem',
+      boxShadow: 'none',
     },
   },
   variants: [

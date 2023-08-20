@@ -5,6 +5,7 @@ import { UseDisclosureTypes } from 'hooks'
 export interface NavItemTypes {
   label: string
   path: string
+  isDefaultPath?: boolean
   icon: ElementType
   filledIcon?: ElementType
   onClick?: () => void

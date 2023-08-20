@@ -53,6 +53,7 @@ export const useNavItems = () => {
       {
         label: 'Vagas',
         ...POSITION_ITEM_PROPERTIES,
+        isDefaultPath: true,
       },
       {
         label: 'Vagas Aplicadas',
@@ -67,6 +68,7 @@ export const useNavItems = () => {
       {
         label: 'Minhas Vagas',
         ...POSITION_ITEM_PROPERTIES,
+        isDefaultPath: true,
       },
       {
         label: 'Relatórios',

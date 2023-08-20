@@ -28,7 +28,12 @@ import {
   SvgIcon,
   Typography,
 } from '@mui/material'
-import { NavLink, Link as RouterLink, useLocation } from 'react-router-dom'
+import {
+  NavLink,
+  Link as RouterLink,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
 
 import { Logo } from 'components'
 import { useAuth, useLayout } from 'contexts'
@@ -42,6 +47,7 @@ import * as S from './Header.styles'
 export const Header: React.FC = () => {
   const device = useIsDevice()
   const location = useLocation()
+  const navigate = useNavigate()
   const { user } = useAuth()
   const { userNavItems } = useLayout()
 
@@ -49,17 +55,17 @@ export const Header: React.FC = () => {
 
   const isMobileScreen = device.from.sm
 
+  const defaultPath = userNavItems?.find((item) => item.isDefaultPath)
+
   return (
     <S.Header>
       <Container>
         <S.Wrapper>
-          <ButtonBase
-            LinkComponent={RouterLink}
-            href={`/${ROUTES.APP}`}
-            disableRipple
-          >
-            <Logo extended={isMobileScreen} />
-          </ButtonBase>
+          {defaultPath && (
+            <ButtonBase href={defaultPath.path} disableRipple>
+              <Logo extended={isMobileScreen} />
+            </ButtonBase>
+          )}
 
           {isMobileScreen ? (
             <S.Nav>
@@ -81,7 +87,7 @@ export const Header: React.FC = () => {
               fontWeight={({ typography }) => typography.fontWeightBold}
             >
               {userNavItems?.find((item) => item.path === location.pathname)
-                ?.label || 'Desconhecida'}
+                ?.label || 'Desconhecido'}
             </Typography>
           )}
           <Box display='flex' alignItems='center' gap={{ xs: 1, md: 3 }}>

@@ -5,6 +5,7 @@ export const palette: Theme['palette'] = {
     white: '#FFFFFF',
     black: '#000000',
   },
+  divider: 'rgba(0, 0, 0, 0.12)',
   primary: {
     100: '##FEF9CE',
     200: '##FEF19E',

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="850.063" height="210.88" viewBox="0 0 850.063 210.88">
+  <defs>
+    <style>
+      .cls-1, .cls-3, .cls-4, .cls-5 {
+        fill: none;
+      }
+
+      .cls-2 {
+        isolation: isolate;
+        clip-path: url(#clip-path);
+      }
+
+      .cls-3 {
+        stroke: #f7ca0e;
+        stroke-width: 101px;
+      }
+
+      .cls-4 {
+        stroke: #ffe600;
+      }
+
+      .cls-4, .cls-5 {
+        stroke-width: 113px;
+      }
+
+      .cls-5 {
+        stroke: #000;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect class="cls-1" y="96" width="850.063" height="210.88"/>
+    </clipPath>
+  </defs>
+  <g id="Scroll_Group_3" data-name="Scroll Group 3" class="cls-2" transform="translate(0 -96)">
+    <g id="Group_338" data-name="Group 338" transform="translate(-1070.856 -297.16)">
+      <path id="Path_134" data-name="Path 134" class="cls-3" d="M3085.206,485.486,3268.6,384.547" transform="translate(-2010.938 479.596) rotate(-9)"/>
+      <path id="Path_135" data-name="Path 135" class="cls-4" d="M3446.737,656.307l336.313-215.035-140.833-93.185" transform="translate(-1990)"/>
+      <path id="Path_136" data-name="Path 136" class="cls-5" d="M3376.21,358.414l-10.075-21.048,92.7,98.1-143.363,118.06,114.364,136.868L3755.9,544.638l194.59,132.889" transform="translate(-1996.706)"/>
+    </g>
+  </g>
+</svg>

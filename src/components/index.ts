@@ -1,3 +1,4 @@
-export * from './button/Button'
+export * from './forms'
+
 export * from './logo/Logo'
-export * from './input/Input'
+export * from './banner/Banner'
