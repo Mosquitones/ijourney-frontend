@@ -16,3 +16,5 @@ export const DashboardLayout: React.FC = () => {
     </S.Layout>
   )
 }
+
+export * from './components'

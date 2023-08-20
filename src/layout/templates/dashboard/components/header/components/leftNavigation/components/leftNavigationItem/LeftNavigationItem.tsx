@@ -27,7 +27,7 @@ export const LeftNavigationItem: React.FC<LeftNavigationPropTypes> = ({
     if (location.pathname !== item.path) {
       setTimeout(() => {
         navigate(item.path, { replace: true })
-      }, 250)
+      }, 50)
     }
   }
 
@@ -72,3 +72,5 @@ export const LeftNavigationItem: React.FC<LeftNavigationPropTypes> = ({
     </S.NavLink>
   )
 }
+
+export * from './LeftNavigationItem.types'

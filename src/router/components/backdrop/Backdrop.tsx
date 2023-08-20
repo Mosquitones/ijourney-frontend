@@ -7,7 +7,7 @@ import { BackdropPropTypes } from './Backdrop.types'
 export const BackdropComponent: React.FC<BackdropPropTypes> = ({
   open,
   onClick,
-  color = 'secondary',
+  color = 'primary',
 }) => (
   <Backdrop data-testid='backdropComponent' open={open} onClick={onClick}>
     <CircularProgress color={color} />

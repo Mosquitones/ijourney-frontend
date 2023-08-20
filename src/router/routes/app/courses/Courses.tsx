@@ -1,17 +1,16 @@
-import React, { lazy } from 'react'
+import React from 'react'
 
 import { Route } from 'react-router-dom'
+import CoursesPage from 'views/app/courses/Courses'
 
 import { ROUTES } from 'router'
-
-const Courses = lazy(() => import('views/app/courses/Courses'))
 
 export const renderCourseRoutes = () => {
   const { COURSES } = ROUTES
 
   return (
-    <Route path={COURSES} key={COURSES}>
-      <Route index element={<Courses />} />
+    <Route path={COURSES}>
+      <Route index element={<CoursesPage />} />
     </Route>
   )
 }

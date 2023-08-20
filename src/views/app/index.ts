@@ -1,0 +1,5 @@
+export * from './about-us/AboutUs'
+export * from './applied-positions/AppliedPositions'
+export * from './courses/Courses'
+export * from './reports/Reports'
+export * from './positions/Positions'

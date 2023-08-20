@@ -23,7 +23,6 @@ export const NavLinkItem = styled.div<{ isActive: boolean }>`
 
   p {
     color: ${({ theme }) => theme.palette.text.secondary};
-    font-weight: ${({ theme }) => theme.typography.fontWeightNormal};
 
     transition: all 0.2s ease-in-out;
   }
@@ -32,11 +31,13 @@ export const NavLinkItem = styled.div<{ isActive: boolean }>`
     background-color: ${({ theme }) => theme.palette.grey[50]};
   }
 
+  transition: all 0.2s ease-in-out;
+
   ${({ isActive }) =>
     isActive &&
     css`
       p {
-        font-weight: ${({ theme }) => theme.typography.fontWeightBold};
+        text-shadow: 0 0 0.1rem ${({ theme }) => theme.palette.primary.main};
         color: ${({ theme }) => theme.palette.primary.main};
       }
 

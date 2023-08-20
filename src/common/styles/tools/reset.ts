@@ -35,13 +35,13 @@ export const genericReset = () => css`
       input,
       textarea,
       button,
-      .MuiButtonBase-root,
       .MuiAccordion-root,
       .MuiSelect-select,
       [tabindex='-1']
     ):focus {
-    outline: 0.2rem solid ${({ theme }) => theme.palette.info.main} !important;
-    outline-offset: -0.2rem;
+    --line-width: 0.2rem;
+    outline: var(--line-width) solid ${({ theme }) => theme.palette.info.main} !important;
+    outline-offset: calc(var(--line-width) * -1);
     box-shadow: none;
   }
 

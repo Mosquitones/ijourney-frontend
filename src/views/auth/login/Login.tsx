@@ -73,6 +73,7 @@ export default function LoginPage() {
         error={formik.touched.email && !!formik.errors.email}
         helperText={formik.touched.email ? formik.errors.email : undefined}
         label='E-mail'
+        autoComplete='email'
         placeholder='email@examplo.com'
         fullWidth
       />
@@ -85,6 +86,7 @@ export default function LoginPage() {
         label='Senha'
         placeholder='********'
         fullWidth
+        autoComplete='current-password'
         type='password'
       />
       <Link
