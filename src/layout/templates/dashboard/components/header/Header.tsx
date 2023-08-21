@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
 
   const drawerHandlers = useDisclosure()
 
-  const isMobileScreen = device.from.sm
+  const isDesktopScreen = device.from.sm
 
   const defaultPath = userNavItems?.find((item) => item.isDefaultPath)
 
@@ -68,16 +68,29 @@ export const Header: React.FC = () => {
         <S.Wrapper>
           {defaultPath && (
             <ButtonBase href={defaultPath.path} disableRipple>
-              <Logo extended={isMobileScreen} />
+              <Logo extended={isDesktopScreen} />
             </ButtonBase>
           )}
 
-          {isMobileScreen ? (
+          {isDesktopScreen ? (
             <S.Nav>
               {userNavItems?.map((item) => (
-                <NavLink key={item.path} to={item.path}>
+                <NavLink
+                  tabIndex={item.disabled ? -1 : 0}
+                  key={item.path}
+                  to={item.path}
+                  onClick={(e) => {
+                    if (item.disabled) e.preventDefault()
+                  }}
+                  aria-disabled={item.disabled}
+                >
                   {({ isActive }) => (
-                    <S.NavLinkItem isActive={isActive}>
+                    <S.NavLinkItem
+                      isActive={isActive}
+                      style={{
+                        cursor: item.disabled ? 'not-allowed' : 'pointer',
+                      }}
+                    >
                       <Typography>{item.label}</Typography>
                     </S.NavLinkItem>
                   )}
@@ -96,7 +109,7 @@ export const Header: React.FC = () => {
             </Typography>
           )}
           <Box display='flex' alignItems='center' gap={{ xs: 1, md: 3 }}>
-            {isMobileScreen ? (
+            {isDesktopScreen ? (
               <>
                 <Tooltip title={notificationsLabel(NOTIFICATIONS_VALUE)}>
                   <IconButton>

@@ -115,7 +115,7 @@ export default function PositionIdPage() {
             ))}
           </Banner.Tabs>
         </Banner.Container>
-        <Container sx={{ py: 3 }}>
+        <Container sx={{ py: 6 }}>
           {TABS.map((tab) => (
             <TabPanel key={tab.value} value={tab.value}>
               {tab.content}

@@ -1,7 +1,7 @@
 export const MARKDOWN_TEXT = `
 
 ~~~js
-console.log('Markdown test!')
+console.log('Markdown with JS code test!')
 ~~~
 
 *🌱🌿 Topsort is a data-driven, next-generation auction-based advertising tool and set of APIs. We’re navigating the post-cookie world by providing a product data-driven set of technology to drive effective monetization via sponsored listings, banners, and offsite advertising, without compromising user data or building a walled garden with cookies.*

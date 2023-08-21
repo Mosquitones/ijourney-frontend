@@ -32,6 +32,8 @@ import { useIsDevice } from 'hooks'
 
 import { MainFilters } from '../positions/components'
 
+import { CourseCard } from './components'
+
 export default function CoursesPage() {
   const [selectedTab, setSelectedTab] = useState(String(0))
 
@@ -83,7 +85,9 @@ export default function CoursesPage() {
             ))}
           </Banner.Tabs>
         </Banner.Container>
-        <Container sx={{ py: 3 }}>
+        <Container
+          sx={{ py: 4, display: 'flex', flexDirection: 'column', gap: 4 }}
+        >
           <Box
             display='flex'
             flexDirection='row'
@@ -102,7 +106,18 @@ export default function CoursesPage() {
           </Box>
           {TABS.map((tab) => (
             <TabPanel key={tab.value} value={tab.value}>
-              {tab.content}
+              <Grid container columnSpacing={2} rowSpacing={6}>
+                {[...Array(10)].map((_, index) => {
+                  const key = crypto.randomUUID()
+
+                  return (
+                    <Grid item key={key} xs={12} sm={6} md={4}>
+                      <CourseCard href={key} />
+                    </Grid>
+                  )
+                })}
+              </Grid>
+              {/* {tab.content} */}
             </TabPanel>
           ))}
         </Container>

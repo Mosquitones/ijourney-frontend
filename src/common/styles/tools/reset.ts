@@ -112,4 +112,8 @@ export const genericReset = () => css`
     width: 100%;
     max-width: 100%;
   }
+
+  .MuiTabPanel-root {
+    padding: 0 !important;
+  }
 `

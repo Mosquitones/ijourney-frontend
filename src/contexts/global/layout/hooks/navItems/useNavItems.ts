@@ -39,6 +39,7 @@ export const useNavItems = () => {
     path: `/${ROUTES.APP}/${ROUTES.ABOUT_US}`,
     icon: BusinessOutlined,
     filledIcon: BusinessTwoTone,
+    disabled: true,
   }
 
   const APP_MOCK_ITEM: NavItemTypes = {

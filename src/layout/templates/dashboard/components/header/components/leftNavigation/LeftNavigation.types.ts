@@ -8,6 +8,7 @@ export interface NavItemTypes {
   isDefaultPath?: boolean
   icon: ElementType
   filledIcon?: ElementType
+  disabled?: boolean
   onClick?: () => void
 }
 

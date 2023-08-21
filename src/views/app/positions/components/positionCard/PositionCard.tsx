@@ -25,7 +25,7 @@ export const PositionCard: React.FC<ButtonProps> = (props) => {
   const isDevice = useIsDevice()
 
   return (
-    <S.Button {...props}>
+    <S.Button {...props} fullWidth>
       <S.Paper>
         <S.Header>
           <S.HeaderMainContent>

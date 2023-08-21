@@ -46,7 +46,9 @@ export default function DescriptionPage() {
         </Typography>
         <ChipList />
       </Box>
-      <MarkdownViewer markdown={MARKDOWN_TEXT} />
+      <Box display='flex' flexDirection='column' gap={3}>
+        <MarkdownViewer markdown={MARKDOWN_TEXT} />
+      </Box>
       <Box display='flex' gap={2}>
         <Button variant='contained' color='black'>
           Aplicar para vaga
