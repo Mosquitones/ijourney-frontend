@@ -19,7 +19,7 @@ import {
 import { Banner, Button, Input } from 'components'
 import { useIsDevice } from 'hooks'
 
-import { AdditionalFilters, MainFilters } from './components'
+import { AdditionalFilters, MainFilters, PositionCard } from './components'
 import * as S from './Positions.styles'
 
 const DEFAULT_PADDINGS: Partial<BoxProps> = {
@@ -79,9 +79,11 @@ export default function PositionsPage() {
             >
               22 Oportunidades encontradas
             </Typography>
-            {/* {[...Array(10)].map((_, i) => (
-              
-            ))} */}
+            <Box display='flex' flexDirection='column' gap={2}>
+              {[...Array(10)].map((_, i) => (
+                <PositionCard key={Math.random() * i * Math.random()} />
+              ))}
+            </Box>
           </Grid>
         </Grid>
       </Container>

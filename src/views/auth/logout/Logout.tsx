@@ -11,6 +11,8 @@ import { timeToMilliseconds } from 'utils'
 
 import { LogoutLayoutStyles } from './Logout.styles'
 
+export const GET_LOGOUT_ROUTE = () => `/${ROUTES.AUTH}/${ROUTES.LOGOUT}`
+
 const TWO_SECONDS = timeToMilliseconds({ seconds: 2 })
 
 export default function LogoutPage() {

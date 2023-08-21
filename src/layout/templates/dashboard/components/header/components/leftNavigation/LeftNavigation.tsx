@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 
 import { Logo } from 'components'
-import { ROUTES } from 'router'
+import { GET_LOGOUT_ROUTE } from 'views'
 
 import { LeftNavigationItem } from './components'
 import { LeftNavigationPropTypes } from './LeftNavigation.types'
@@ -68,7 +68,7 @@ export const LeftNavigationComponent: React.FC<LeftNavigationPropTypes> = ({
           <List>
             <LeftNavigationItem
               item={{
-                path: `/${ROUTES.AUTH}/${ROUTES.LOGOUT}`,
+                path: GET_LOGOUT_ROUTE(),
                 label: 'Desconectar',
                 icon: Logout,
               }}

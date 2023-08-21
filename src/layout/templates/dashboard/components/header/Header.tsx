@@ -1,32 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import {
-  AddchartOutlined,
-  AddchartTwoTone,
-  BusinessOutlined,
-  BusinessTwoTone,
-  DashboardOutlined,
-  DashboardTwoTone,
-  InboxOutlined,
-  Menu,
-  MoveToInboxTwoTone,
-  NotificationsOutlined,
-  SchoolOutlined,
-  SchoolTwoTone,
-  Work,
-  WorkOutlineOutlined,
-  WorkTwoTone,
-} from '@mui/icons-material'
+import { Menu, NotificationsOutlined } from '@mui/icons-material'
 import {
   Avatar,
+  Badge,
   Box,
   ButtonBase,
   Container,
   IconButton,
+  Slide,
   SvgIcon,
+  Tooltip,
   Typography,
+  useScrollTrigger,
 } from '@mui/material'
 import {
   NavLink,
@@ -41,9 +29,14 @@ import { useDisclosure, useIsDevice } from 'hooks'
 import { ROUTES } from 'router'
 import { UserRoleTypes } from 'services'
 
-import { LeftNavigationComponent, NavItemTypes } from './components'
+import {
+  AccountSettings,
+  LeftNavigationComponent,
+  NavItemTypes,
+} from './components'
 import * as S from './Header.styles'
 
+const NOTIFICATIONS_VALUE = 100
 export const Header: React.FC = () => {
   const device = useIsDevice()
   const location = useLocation()
@@ -57,8 +50,18 @@ export const Header: React.FC = () => {
 
   const defaultPath = userNavItems?.find((item) => item.isDefaultPath)
 
+  const trigger = useScrollTrigger({ threshold: 200 })
+
+  function notificationsLabel(count: number) {
+    if (count === 0) return 'nenhuma notificação'
+
+    if (count > 99) return 'mais de 99 notificações'
+
+    return `${count} notificações`
+  }
+
   return (
-    <S.Header>
+    <S.Header showOnScroll={!trigger}>
       <Container>
         <S.Wrapper>
           {defaultPath && (
@@ -93,14 +96,14 @@ export const Header: React.FC = () => {
           <Box display='flex' alignItems='center' gap={{ xs: 1, md: 3 }}>
             {isMobileScreen ? (
               <>
-                <IconButton>
-                  <SvgIcon component={NotificationsOutlined} />
-                </IconButton>
-                <Avatar
-                  sx={{ bgcolor: ({ palette }) => palette.primary.main }}
-                  alt={user?.name}
-                  src={user?.image}
-                />
+                <Tooltip title={notificationsLabel(NOTIFICATIONS_VALUE)}>
+                  <IconButton>
+                    <Badge badgeContent={NOTIFICATIONS_VALUE} color='primary'>
+                      <SvgIcon component={NotificationsOutlined} />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                <AccountSettings />
               </>
             ) : (
               <>

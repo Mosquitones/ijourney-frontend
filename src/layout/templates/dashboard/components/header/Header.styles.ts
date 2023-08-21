@@ -1,8 +1,20 @@
 import styled, { css } from 'styled-components'
 
-export const Header = styled.header`
+export const Header = styled.header<{ showOnScroll?: boolean }>`
+  position: sticky;
+  top: -7.2rem;
+
+  z-index: ${({ theme }) => theme.zIndex.appBar};
   background-color: ${({ theme }) => theme.palette.background.default};
   border-bottom: 0.1rem solid ${({ theme }) => theme.palette.divider};
+
+  transition: all 0.2s ease-in-out;
+
+  ${({ showOnScroll }) =>
+    showOnScroll &&
+    css`
+      top: 0;
+    `}
 `
 
 export const Wrapper = styled.div`

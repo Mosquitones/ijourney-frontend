@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
 import { Outlet } from 'react-router-dom'
@@ -9,6 +10,7 @@ export const DashboardLayout: React.FC = () => {
   return (
     <S.Layout>
       {/* <SkipLinkComponent /> */}
+
       <Header />
       <S.Main>
         <Outlet />

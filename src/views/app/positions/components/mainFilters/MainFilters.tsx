@@ -24,21 +24,21 @@ import { AdditionalFilters } from '../additionalFilters/AdditionalFilters'
 
 import * as S from './MainFilters.styles'
 
-const CONTAINER_PROPS_AND_PADDING = {
-  flex: 1,
-  p: 2,
-} as const
-
-const SVG_ICON_PROPS: Partial<SvgIconProps> = {
-  fontSize: 'small',
-  sx: {
-    color: ({ palette }) => palette.grey[300],
-  },
-}
-
 export const MainFilters: React.FC = () => {
   const isDevice = useIsDevice()
   const filterHandlers = useDisclosure()
+
+  const CONTAINER_AND_INPUT_PADDING_PROPS = {
+    flex: 1,
+    p: isDevice.from.sm ? 2 : 1,
+  } as const
+
+  const SVG_ICON_PROPS: Partial<SvgIconProps> = {
+    fontSize: 'small',
+    sx: {
+      color: ({ palette }) => palette.grey[300],
+    },
+  }
 
   const renderFindButton = () => <Button variant='contained'>Encontrar</Button>
 
@@ -104,7 +104,7 @@ export const MainFilters: React.FC = () => {
       )}
       <S.Paper>
         <S.InputBase
-          sx={{ ...CONTAINER_PROPS_AND_PADDING }}
+          sx={{ ...CONTAINER_AND_INPUT_PADDING_PROPS }}
           placeholder={
             isDevice.from.sm
               ? 'Pesquise pelo nome ou palavra-chave'
@@ -119,7 +119,7 @@ export const MainFilters: React.FC = () => {
           flexItem
         />
         <Box
-          {...CONTAINER_PROPS_AND_PADDING}
+          {...CONTAINER_AND_INPUT_PADDING_PROPS}
           display='flex'
           alignItems='center'
           justifyContent='space-between'

@@ -14,6 +14,7 @@ import {
   InputStyleOverrides,
 } from './input/input.theme'
 import { LinkStyleOverrides } from './link/link.theme'
+import { MenuItemStyleOverrides } from './menuItem/menuItem.theme'
 import { ModalStyleOverrides } from './modal/modal.theme'
 import { PaperStyleOverrides } from './paper/paper.theme'
 import { SkeletonStyleOverrides } from './skeleton/skeleton.theme'
@@ -34,4 +35,5 @@ export const MuiComponents: ThemeOptions['components'] = {
   MuiPaper: PaperStyleOverrides,
   MuiFormLabel: FormLabelStyleOverrides,
   MuiFormControl: FormControlStyleOverrides,
+  MuiMenuItem: MenuItemStyleOverrides,
 }

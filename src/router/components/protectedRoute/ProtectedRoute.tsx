@@ -3,14 +3,14 @@ import React from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import { useAuth } from 'contexts'
-import { ROUTES } from 'router'
+import { GET_LOGOUT_ROUTE } from 'views'
 
 import { AccessDeniedComponent } from './components'
 import { ProtectedRoutePropTypes } from './ProtectedRoute.types'
 
 export const ProtectedRoute: React.FC<ProtectedRoutePropTypes> = ({
   roles,
-  redirectPath = `/${ROUTES.AUTH}/${ROUTES.LOGIN}`,
+  redirectPath = GET_LOGOUT_ROUTE(),
 }) => {
   const { user, isUserAuthenticated } = useAuth()
   const location = useLocation()
