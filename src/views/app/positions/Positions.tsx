@@ -14,6 +14,7 @@ import {
   Select,
   SvgIcon,
   Typography,
+  useScrollTrigger,
 } from '@mui/material'
 
 import { Banner, Button, Input } from 'components'
@@ -30,6 +31,8 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 export default function PositionsPage() {
   const isDevice = useIsDevice()
 
+  const trigger = useScrollTrigger({ threshold: 200 })
+
   return (
     <S.Page>
       <Banner.Container>
@@ -44,7 +47,13 @@ export default function PositionsPage() {
       <Container sx={{ py: 3 }}>
         <Grid container columnSpacing={2}>
           <Grid item xs={0} sm={3.5} display={{ xs: 'none', sm: 'block' }}>
-            <Paper>
+            <Paper
+              sx={{
+                position: 'sticky',
+                top: !trigger ? 90 : 16,
+                transition: 'all 0.3s ease-in-out',
+              }}
+            >
               <Box
                 {...DEFAULT_PADDINGS}
                 display='flex'
@@ -80,7 +89,7 @@ export default function PositionsPage() {
               22 Oportunidades encontradas
             </Typography>
             <Box display='flex' flexDirection='column' gap={2}>
-              {[...Array(10)].map((_, i) => (
+              {[...Array(20)].map((_, i) => (
                 <PositionCard key={Math.random() * i * Math.random()} />
               ))}
             </Box>
