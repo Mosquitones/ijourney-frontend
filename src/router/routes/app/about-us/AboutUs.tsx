@@ -10,7 +10,9 @@ export const renderAboutUsRoutes = () => {
 
   return (
     <Route path={ABOUT_US}>
-      <Route index element={<AboutUsPage />} />
+      <Route index Component={AboutUsPage} />
+      {/* <Route path={ID} Component={PositionIdPage} /> */}
+      {/* <Route path={NEW} Component={NewPlanPage} /> */}
     </Route>
   )
 }

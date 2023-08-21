@@ -10,7 +10,9 @@ export const renderAppliedPositionRoutes = () => {
 
   return (
     <Route path={APPLIED_POSITIONS}>
-      <Route index element={<AppliedPositionsPage />} />
+      <Route index Component={AppliedPositionsPage} />
+      {/* <Route path={ID} Component={PositionIdPage} /> */}
+      {/* <Route path={NEW} Component={NewPlanPage} /> */}
     </Route>
   )
 }

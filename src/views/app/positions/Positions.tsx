@@ -21,7 +21,6 @@ import { Banner, Button, Input } from 'components'
 import { useIsDevice } from 'hooks'
 
 import { AdditionalFilters, MainFilters, PositionCard } from './components'
-import * as S from './Positions.styles'
 
 const DEFAULT_PADDINGS: Partial<BoxProps> = {
   py: 2,
@@ -34,7 +33,7 @@ export default function PositionsPage() {
   const trigger = useScrollTrigger({ threshold: 200 })
 
   return (
-    <S.Page>
+    <>
       <Banner.Container>
         <Banner.Wrapper maxWidth='sm'>
           <Banner.Title>Encontre o emprego dos sonhos</Banner.Title>
@@ -96,6 +95,6 @@ export default function PositionsPage() {
           </Grid>
         </Grid>
       </Container>
-    </S.Page>
+    </>
   )
 }
