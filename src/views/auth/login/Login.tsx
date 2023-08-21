@@ -55,7 +55,7 @@ export default function LoginPage() {
       >
         Entrar
       </Typography>
-      <Typography variant='body1' color='gray'>
+      <Typography variant='body1' color='text.secondary'>
         Encontre a sua próxima oportunidade!
       </Typography>
       <Button variant='outlined' color='info' type='button'>
@@ -63,9 +63,9 @@ export default function LoginPage() {
         Entrar com Google
       </Button>
 
-      <Divider sx={{ color: 'gray' }}>
-        <Typography variant='body2' color='gray'>
-          ou cadastre com e-mail
+      <Divider sx={{ color: 'text.secondary' }}>
+        <Typography variant='body2' color='text.secondary'>
+          ou entre com e-mail
         </Typography>
       </Divider>
       <Input
@@ -89,15 +89,11 @@ export default function LoginPage() {
         autoComplete='current-password'
         type='password'
       />
-      <Link
-        href='#'
-        color='inherit'
-        textAlign='right'
-        width='max-content'
-        right={0}
-      >
-        Esqueceu a senha?
-      </Link>
+      <Box display='flex' alignItems='flex-end' justifyContent='flex-end'>
+        <Link href='#' color='text.secondary'>
+          Esqueceu a senha?
+        </Link>
+      </Box>
       <Button variant='contained' fullWidth type='submit'>
         Entrar
       </Button>

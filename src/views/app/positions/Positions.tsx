@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { PlaceOutlined, SearchOutlined } from '@mui/icons-material'
 import {
@@ -30,8 +30,6 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 export default function PositionsPage() {
   const isDevice = useIsDevice()
 
-  const trigger = useScrollTrigger({ threshold: 200 })
-
   return (
     <>
       <Banner.Container>
@@ -49,7 +47,7 @@ export default function PositionsPage() {
             <Paper
               sx={{
                 position: 'sticky',
-                top: !trigger ? 90 : 16,
+                top: '1.5rem',
                 transition: 'all 0.3s ease-in-out',
               }}
             >
@@ -88,9 +86,11 @@ export default function PositionsPage() {
               22 Oportunidades encontradas
             </Typography>
             <Box display='flex' flexDirection='column' gap={2}>
-              {[...Array(20)].map((_, i) => (
-                <PositionCard key={Math.random() * i * Math.random()} />
-              ))}
+              {[...Array(20)].map((_, i) => {
+                const key = crypto.randomUUID()
+
+                return <PositionCard key={key} href={key} />
+              })}
             </Box>
           </Grid>
         </Grid>

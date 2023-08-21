@@ -30,10 +30,6 @@ export const AdditionalFilters: React.FC = () => {
           name='date-posting'
           placeholder='Qualquer período'
         />
-        {/* <Select placeholder='Qualquer período' native>
-          <option value='10'>Ten</option>
-          <option value='20'>Twenty</option>
-        </Select> */}
         {false && <FormHelperText>Helper Text</FormHelperText>}
       </FormControl>
 

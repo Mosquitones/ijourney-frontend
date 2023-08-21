@@ -21,8 +21,6 @@ export const AuthTemplate: React.FC = () => {
       <S.Content
         bgcolor={({ palette }) => palette.background.paper}
         flex={{ sm: 1 }}
-        // height={{ xs: '20vh' }}
-        // maxHeight={{ xs: '20%', sm: '100%' }}
       >
         <img src={topImg} alt='top' id='top-img' />
         <Box>

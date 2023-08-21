@@ -80,7 +80,6 @@ const generateFontFace = (
 }
 
 export const genericTypography = () => css`
-  /* Open Sans */
   ${generateFontFace('Open Sans', {
     fontWeight: 'light',
   })}

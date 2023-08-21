@@ -7,16 +7,24 @@ import {
   Place,
   QueryBuilder,
 } from '@mui/icons-material'
-import { Avatar, Box, Chip, SvgIcon, Typography } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  ButtonProps,
+  Chip,
+  SvgIcon,
+  Typography,
+} from '@mui/material'
 
 import { useIsDevice } from 'hooks'
 
 import * as S from './PositionCard.styles'
 
-export const PositionCard: React.FC = () => {
+export const PositionCard: React.FC<ButtonProps> = (props) => {
   const isDevice = useIsDevice()
+
   return (
-    <S.Button>
+    <S.Button {...props}>
       <S.Paper>
         <S.Header>
           <S.HeaderMainContent>
@@ -39,7 +47,6 @@ export const PositionCard: React.FC = () => {
               <Box
                 display='flex'
                 flexWrap='wrap'
-                // overflow='auto'
                 flexDirection='row'
                 gap={1}
                 alignItems='center'

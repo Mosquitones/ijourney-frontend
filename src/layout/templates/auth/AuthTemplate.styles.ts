@@ -38,7 +38,6 @@ export const Content = styled(Box)`
   }
 
   ${from.sm} {
-    /* flex: 1; */
     height: 100vh;
 
     img {
@@ -53,11 +52,9 @@ export const TextBox = styled.div`
   display: flex;
   flex-direction: column;
 
-  /* border: 1px solid red; */
   gap: 2rem;
 
   position: absolute;
-  /* z-index: -1; */
   bottom: 0;
   z-index: 1;
   width: 100%;
@@ -66,15 +63,8 @@ export const TextBox = styled.div`
 
   background-color: ${({ theme }) => theme.palette.background.paper};
 
-  /* right: 3vw; */
-
-  /* width: 100ch; */
-
-  /* max-width: 65%; */
-
   ${from.sm} {
     gap: 3rem;
-    /* position: absolute; */
     z-index: 0;
     bottom: 17vh;
     padding: 2vw 2vw 2vw 15vw;

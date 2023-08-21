@@ -37,6 +37,8 @@ import {
 import * as S from './Header.styles'
 
 const NOTIFICATIONS_VALUE = 100
+
+export const GET_HEADER_TRIGGER = () => useScrollTrigger({ threshold: 200 })
 export const Header: React.FC = () => {
   const device = useIsDevice()
   const location = useLocation()
@@ -50,8 +52,6 @@ export const Header: React.FC = () => {
 
   const defaultPath = userNavItems?.find((item) => item.isDefaultPath)
 
-  const trigger = useScrollTrigger({ threshold: 200 })
-
   function notificationsLabel(count: number) {
     if (count === 0) return 'nenhuma notificação'
 
@@ -59,6 +59,8 @@ export const Header: React.FC = () => {
 
     return `${count} notificações`
   }
+
+  const trigger = GET_HEADER_TRIGGER()
 
   return (
     <S.Header showOnScroll={!trigger}>
