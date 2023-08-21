@@ -94,7 +94,7 @@ export default function LoginPage() {
           Esqueceu a senha?
         </Link>
       </Box>
-      <Button variant='contained' fullWidth type='submit'>
+      <Button variant='contained' fullWidth type='submit' color='black'>
         Entrar
       </Button>
       <Box

@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material'
 
+import { ChipList } from 'components'
 import { useIsDevice } from 'hooks'
 
 import * as S from './PositionCard.styles'
@@ -44,26 +45,7 @@ export const PositionCard: React.FC<ButtonProps> = (props) => {
               >
                 Company
               </Typography>
-              <Box
-                display='flex'
-                flexWrap='wrap'
-                flexDirection='row'
-                gap={1}
-                alignItems='center'
-              >
-                {[...Array(5)].map((_, i) => (
-                  <>
-                    {i !== 0 && isDevice.from.sm && (
-                      <Circle
-                        sx={{ fontSize: '0.5rem', color: 'text.secondary' }}
-                      />
-                    )}
-                    <Chip
-                      label={<Typography variant='body2'>Item</Typography>}
-                    />
-                  </>
-                ))}
-              </Box>
+              <ChipList />
             </Box>
           </S.HeaderMainContent>
           <S.HeaderInfoContent>

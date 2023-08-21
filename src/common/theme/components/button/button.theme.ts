@@ -11,7 +11,7 @@ export const ButtonStyleOverrides: ThemeComponentTypes['MuiButton'] = {
   defaultProps: {
     type: 'button',
     style: {
-      fontSize: '1.5rem',
+      fontSize: '1.6rem',
     },
   },
   styleOverrides: {
@@ -19,7 +19,6 @@ export const ButtonStyleOverrides: ThemeComponentTypes['MuiButton'] = {
       padding: '0.8rem 1.6rem',
       textTransform: 'none',
       fontWeight: 'bold',
-      fontSize: '1.4rem',
       minHeight: '4rem',
       boxShadow: 'none',
     },

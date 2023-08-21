@@ -18,6 +18,7 @@ export type CustomTheme = {
     warning: CustomPaletteColor
     success: CustomPaletteColor
     grey: CustomPaletteColor
+    black: CustomPaletteColor
     common: Partial<CommonColors>
     text: Partial<TypeText>
     info: CustomPaletteColor

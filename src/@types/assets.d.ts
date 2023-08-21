@@ -12,3 +12,8 @@ declare module '*.svg' {
   const src: string
   export default src
 }
+
+declare module '*.md' {
+  const value: string
+  export default value
+}

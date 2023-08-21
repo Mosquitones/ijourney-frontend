@@ -74,6 +74,12 @@ export const palette: Theme['palette'] = {
     secondary: '#69707E',
     disabled: '#8D8D8D',
   },
+  black: {
+    main: '#000000',
+    dark: '#000000',
+    light: '#000000',
+    contrastText: '#FFFFFF',
+  },
   grey: {
     A100: '#FEFEFD',
     A200: '#F8F7F5',

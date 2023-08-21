@@ -30,6 +30,8 @@ import {
 import { Banner, Button, Input } from 'components'
 import { useIsDevice } from 'hooks'
 
+import DescriptionPage from './tabs/description/Description'
+
 export default function PositionIdPage() {
   const [selectedTab, setSelectedTab] = useState(String(0))
 
@@ -39,7 +41,7 @@ export default function PositionIdPage() {
     {
       value: String(0),
       label: 'Descrição',
-      content: 'Descrição',
+      content: <DescriptionPage />,
     },
     {
       value: String(1),

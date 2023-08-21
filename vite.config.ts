@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: Number(env.PORT) || 3000,
     },
+    assetsInclude: ['**/*.md'],
     resolve: {
       alias: absolutePathAliases,
     },

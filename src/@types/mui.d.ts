@@ -20,3 +20,9 @@ declare module '@mui/material/styles' {
     typography?: CustomTheme['typography']
   }
 }
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    black: true
+  }
+}
