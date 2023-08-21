@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef } from 'react'
 
-import { PlaceOutlined, SearchOutlined } from '@mui/icons-material'
 import {
   Box,
   BoxProps,
@@ -9,15 +8,11 @@ import {
   Container,
   Divider,
   Grid,
-  InputBase,
   Paper,
-  Select,
-  SvgIcon,
   Typography,
-  useScrollTrigger,
 } from '@mui/material'
 
-import { Banner, Button, Input } from 'components'
+import { Banner, Button } from 'components'
 import { useIsDevice } from 'hooks'
 
 import { AdditionalFilters, MainFilters, PositionCard } from './components'
