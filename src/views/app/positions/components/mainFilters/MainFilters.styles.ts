@@ -20,6 +20,7 @@ export const Paper = styled(MUIPaper)`
 `
 export const InputBase = styled(MUIInputBase)`
   gap: 0.8rem;
+  width: 100%;
 
   .MuiInputBase-input {
     ::placeholder {

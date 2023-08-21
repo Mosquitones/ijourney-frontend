@@ -30,6 +30,8 @@ import {
 import { Banner, Button, Input } from 'components'
 import { useIsDevice } from 'hooks'
 
+import { MainFilters } from '../positions/components'
+
 export default function CoursesPage() {
   const [selectedTab, setSelectedTab] = useState(String(0))
 
@@ -82,6 +84,22 @@ export default function CoursesPage() {
           </Banner.Tabs>
         </Banner.Container>
         <Container sx={{ py: 3 }}>
+          <Box
+            display='flex'
+            flexDirection='row'
+            alignItems='center'
+            justifyContent='space-between'
+          >
+            {isDevice.from.sm && (
+              <Typography
+                fontWeight={({ typography }) => typography.fontWeightBold}
+                variant='h4'
+              >
+                Cursos
+              </Typography>
+            )}
+            <MainFilters hideLocationFilters />
+          </Box>
           {TABS.map((tab) => (
             <TabPanel key={tab.value} value={tab.value}>
               {tab.content}

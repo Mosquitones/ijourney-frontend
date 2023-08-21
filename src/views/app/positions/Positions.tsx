@@ -76,7 +76,7 @@ export default function PositionsPage() {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={8.5}>
-            <MainFilters />
+            <MainFilters fullWidth />
             <Typography
               my={2}
               fontWeight={({ typography }) => typography.fontWeightBold}

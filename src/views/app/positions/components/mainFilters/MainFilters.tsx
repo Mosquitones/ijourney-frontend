@@ -17,20 +17,26 @@ import {
   SvgIconProps,
   Typography,
 } from '@mui/material'
+import { is } from 'date-fns/locale'
 
 import { useDisclosure, useIsDevice } from 'hooks'
 
 import { AdditionalFilters } from '../additionalFilters/AdditionalFilters'
 
 import * as S from './MainFilters.styles'
+import { MainFiltersPropTypes } from './MainFilters.types'
 
-export const MainFilters: React.FC = () => {
+export const MainFilters: React.FC<MainFiltersPropTypes> = ({
+  hideLocationFilters = false,
+  fullWidth = false,
+}) => {
   const isDevice = useIsDevice()
   const filterHandlers = useDisclosure()
 
   const CONTAINER_AND_INPUT_PADDING_PROPS = {
     flex: 1,
     p: isDevice.from.sm ? 2 : 1,
+    gap: 2,
   } as const
 
   const SVG_ICON_PROPS: Partial<SvgIconProps> = {
@@ -42,8 +48,14 @@ export const MainFilters: React.FC = () => {
 
   const renderFindButton = () => <Button variant='contained'>Encontrar</Button>
 
+  const renderInternalButton = () => (
+    <Box my={-2} mr={-0.5}>
+      {renderFindButton()}
+    </Box>
+  )
+
   return (
-    <>
+    <Box width={fullWidth || isDevice.to.sm ? '100%' : 'initial'}>
       {isDevice.to.sm && (
         <>
           <Box
@@ -102,22 +114,12 @@ export const MainFilters: React.FC = () => {
           </Dialog>
         </>
       )}
-      <S.Paper>
-        <S.InputBase
-          sx={{ ...CONTAINER_AND_INPUT_PADDING_PROPS }}
-          placeholder={
-            isDevice.from.sm
-              ? 'Pesquise pelo nome ou palavra-chave'
-              : 'Nome ou palavra-chave'
-          }
-          startAdornment={
-            <SvgIcon {...SVG_ICON_PROPS} component={SearchOutlined} />
-          }
-        />
-        <Divider
-          orientation={isDevice.from.sm ? 'vertical' : 'horizontal'}
-          flexItem
-        />
+      <S.Paper
+        sx={{
+          width: fullWidth || isDevice.to.sm ? '100%' : 'fit-content',
+          minWidth: !fullWidth && isDevice.from.sm ? '60rem' : 'initial',
+        }}
+      >
         <Box
           {...CONTAINER_AND_INPUT_PADDING_PROPS}
           display='flex'
@@ -125,17 +127,42 @@ export const MainFilters: React.FC = () => {
           justifyContent='space-between'
         >
           <S.InputBase
-            placeholder='Cidade ou estado'
+            fullWidth={fullWidth}
+            placeholder={
+              isDevice.from.sm
+                ? 'Pesquise pelo nome ou palavra-chave'
+                : 'Nome ou palavra-chave'
+            }
             startAdornment={
-              <SvgIcon {...SVG_ICON_PROPS} component={PlaceOutlined} />
+              <SvgIcon {...SVG_ICON_PROPS} component={SearchOutlined} />
             }
           />
-          {isDevice.from.sm && (
-            <Box my={-2} mr={-0.5}>
-              {renderFindButton()}
-            </Box>
-          )}
+          {hideLocationFilters && isDevice.from.sm && renderInternalButton()}
         </Box>
+
+        {!hideLocationFilters && (
+          <>
+            <Divider
+              orientation={isDevice.from.sm ? 'vertical' : 'horizontal'}
+              flexItem
+            />
+            <Box
+              {...CONTAINER_AND_INPUT_PADDING_PROPS}
+              display='flex'
+              alignItems='center'
+              justifyContent='space-between'
+            >
+              <S.InputBase
+                fullWidth={fullWidth}
+                placeholder='Cidade ou estado'
+                startAdornment={
+                  <SvgIcon {...SVG_ICON_PROPS} component={PlaceOutlined} />
+                }
+              />
+              {isDevice.from.sm && renderInternalButton()}
+            </Box>
+          </>
+        )}
         {isDevice.to.sm && (
           <>
             <Divider orientation='horizontal' flexItem />
@@ -143,6 +170,6 @@ export const MainFilters: React.FC = () => {
           </>
         )}
       </S.Paper>
-    </>
+    </Box>
   )
 }
