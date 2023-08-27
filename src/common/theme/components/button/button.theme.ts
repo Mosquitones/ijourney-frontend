@@ -13,6 +13,7 @@ export const ButtonStyleOverrides: ThemeComponentTypes['MuiButton'] = {
     style: {
       fontSize: '1.6rem',
     },
+    LinkComponent: LinkBehavior,
   },
   styleOverrides: {
     root: {

@@ -19,6 +19,7 @@ import {
 } from '@mui/material'
 import { is } from 'date-fns/locale'
 
+import { DialogTitleComponent } from 'components'
 import { useDisclosure, useIsDevice } from 'hooks'
 
 import { AdditionalFilters } from '../additionalFilters/AdditionalFilters'
@@ -78,28 +79,12 @@ export const MainFilters: React.FC<MainFiltersPropTypes> = ({
             fullScreen
             open={filterHandlers.isOpen}
             onClose={filterHandlers.onClose}
-            scroll='body'
+            scroll='paper'
           >
-            <DialogTitle>
-              <Typography
-                variant='h3'
-                fontWeight={({ typography }) => typography.fontWeightBold}
-              >
-                Filtros
-              </Typography>
-              <IconButton
-                aria-label='close'
-                onClick={filterHandlers.onClose}
-                sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 8,
-                  color: (theme) => theme.palette.grey[500],
-                }}
-              >
-                <Close />
-              </IconButton>
-            </DialogTitle>
+            <DialogTitleComponent
+              title='Filtros'
+              onClose={filterHandlers.onClose}
+            />
             <DialogContent dividers>
               <AdditionalFilters />
             </DialogContent>

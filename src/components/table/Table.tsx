@@ -101,26 +101,9 @@ export const TableComponent = <TData extends TDataObjectTypes<TData>>({
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-  const tableData = useMemo(() => {
-    if (isLoading) return Array<TData>(15).fill({} as TData)
-
-    return data
-  }, [isLoading, data])
-
-  // const tableColumns = useMemo(() => {
-  //   if (isLoading) {
-  //     return columns.map((column) => ({
-  //       ...column,
-  //       cell: () => <Skeleton />,
-  //     }))
-  //   }
-
-  //   return columns
-  // }, [isLoading, columns])
-
   const table = useReactTable({
-    data: tableData,
-    columns: columns,
+    data,
+    columns,
     getRowCanExpand: renderSubComponent?.getRowCanExpand,
     state: {
       columnFilters,
@@ -227,6 +210,10 @@ export const TableComponent = <TData extends TDataObjectTypes<TData>>({
               <>
                 <TableRow
                   key={row.id}
+                  sx={{
+                    outline: '0.1rem solid transparent',
+                    border: '0.1rem solid transparent',
+                  }}
                   {...(onRowClick && {
                     tabIndex: 0,
                     role: 'button',
@@ -237,8 +224,6 @@ export const TableComponent = <TData extends TDataObjectTypes<TData>>({
                     sx: {
                       cursor: 'pointer',
                       '&:hover': {
-                        // box-shadow:  $ !important;
-                        // {({ theme }) => theme.palette.common.black}12
                         outline: ({ palette }) =>
                           `0.1rem solid ${palette.primary.main}`,
                         border: ({ palette }) =>

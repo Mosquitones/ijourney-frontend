@@ -39,7 +39,10 @@ import {
 } from 'components'
 import { useIsDevice } from 'hooks'
 
+import { CandidateDetailsDialog } from './components'
+
 type CandidateTypes = {
+  id: number
   position: number
   name: string
   location: string
@@ -50,6 +53,7 @@ type CandidateTypes = {
 
 export default function CandidatesPage() {
   const isDevice = useIsDevice()
+  const [candidateId, setSelectedCandidateId] = useState<number | null>(null)
 
   const columnHelper = createColumnHelper<CandidateTypes>()
 
@@ -98,6 +102,7 @@ export default function CandidatesPage() {
 
   const data: CandidateTypes[] = [
     {
+      id: 0,
       position: 1,
       name: 'John Doe',
       location: 'London',
@@ -106,6 +111,7 @@ export default function CandidatesPage() {
       points: 580,
     },
     {
+      id: 1,
       position: 2,
       name: 'Brandon Gustavo',
       location: 'London',
@@ -114,6 +120,7 @@ export default function CandidatesPage() {
       points: 10,
     },
     {
+      id: 2,
       position: 3,
       name: 'Myke Baguncinha',
       location: 'London',
@@ -122,6 +129,7 @@ export default function CandidatesPage() {
       points: 10,
     },
     {
+      id: 3,
       position: 4,
       name: 'Renato Toguro',
       location: 'London',
@@ -154,7 +162,15 @@ export default function CandidatesPage() {
         columns={columns}
         data={data}
         onRowClick={(row) => {
-          console.log(row)
+          setSelectedCandidateId(row.original.id)
+        }}
+      />
+
+      <CandidateDetailsDialog
+        candidateId={candidateId || undefined}
+        isOpen={typeof candidateId === 'number'}
+        onClose={() => {
+          setSelectedCandidateId(null)
         }}
       />
     </Box>
