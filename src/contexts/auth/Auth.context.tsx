@@ -20,6 +20,7 @@ import {
   AuthLoginPayloadTypes,
   ROLES,
   UserInfoTypes,
+  UserRoleTypes,
 } from 'services'
 
 import { AuthContextTypes } from './Auth.context.types'
@@ -95,6 +96,17 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       },
     }
   )
+
+  const isUserRole = useMemo(() => {
+    const check: AuthContextTypes['isUserRole'] = {
+      admin: user?.role === ROLES.ADMIN,
+      recruiter: user?.role === ROLES.RECRUITER,
+      candidate: user?.role === ROLES.CANDIDATE,
+      company: user?.role === ROLES.COMPANY,
+    }
+
+    return check
+  }, [user?.role])
 
   // const userInfoQuery = useMutation(
   //   ['/user/info', { method: 'GET' }],
@@ -183,6 +195,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       },
       // userInfoQuery,
       isUserAuthenticated,
+      isUserRole,
       isLoggingIn,
       signIn,
       signOut,
@@ -190,6 +203,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     [
       user,
       cookies.access_token,
+      isUserRole,
       // userInfoQuery,
       isUserAuthenticated,
       isLoggingIn,

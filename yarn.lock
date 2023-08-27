@@ -1712,7 +1712,7 @@
     "@svgr/hast-util-to-babel-ast" "^6.5.1"
     "svg-parser" "^2.0.4"
 
-"@tanstack/react-table@8.8.5":
+"@tanstack/react-table@^8.8.5":
   "integrity" "sha512-g/t21E/ICHvaCOJOhsDNr5QaB/6aDQEHFbx/YliwwU/CJThMqG+dS28vnToIBV/5MBgpeXoGRi2waDJVJlZrtg=="
   "resolved" "https://registry.npmjs.org/@tanstack/react-table/-/react-table-8.8.5.tgz"
   "version" "8.8.5"

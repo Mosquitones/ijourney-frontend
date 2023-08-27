@@ -5,6 +5,7 @@ import {
   ApiResponseTypes,
   AuthLoginPayloadTypes,
   UserInfoTypes,
+  UserRoleTypes,
 } from 'services'
 
 type _UserInfoQueryTypes = UseMutationResult<
@@ -19,6 +20,7 @@ export interface AuthContextTypes {
   cookies: {
     accessToken?: string
   }
+  isUserRole: { [key in UserRoleTypes]: boolean }
   // userInfoQuery: UserInfoQueryTypes
   isUserAuthenticated: boolean
   isLoggingIn: boolean

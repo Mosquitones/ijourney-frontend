@@ -28,34 +28,22 @@ import {
 } from '@mui/material'
 
 import { Banner, Button, Input } from 'components'
+import { useAuth } from 'contexts'
 import { useIsDevice } from 'hooks'
+import { ROLES } from 'services'
 
+import CandidatesPage from './tabs/candidates/Candidates'
 import DescriptionPage from './tabs/description/Description'
+import { getTabsBasedOnRole } from './utils/getTabBasedOnRole'
 
 export default function PositionIdPage() {
+  const { user } = useAuth()
   const [selectedTab, setSelectedTab] = useState(String(0))
 
   const isDevice = useIsDevice()
 
-  const TABS = [
-    {
-      value: String(0),
-      label: 'Descrição',
-      content: <DescriptionPage />,
-    },
-    {
-      value: String(1),
-      label: 'Pessoas',
-      content: 'Pessoas',
-      disabled: true,
-    },
-    {
-      value: String(2),
-      label: 'Cultura e Beneficios',
-      content: 'Cultura e Beneficios',
-      disabled: true,
-    },
-  ]
+  const tabs = getTabsBasedOnRole(user?.role)
+
   return (
     <>
       <TabContext value={selectedTab}>
@@ -110,13 +98,13 @@ export default function PositionIdPage() {
             onChange={(_, newValue) => setSelectedTab(newValue)}
             aria-label='scrollable force tabs example'
           >
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
               <Banner.Tab key={tab.value} {...tab} />
             ))}
           </Banner.Tabs>
         </Banner.Container>
         <Container sx={{ py: 6 }}>
-          {TABS.map((tab) => (
+          {tabs.map((tab) => (
             <TabPanel key={tab.value} value={tab.value}>
               {tab.content}
             </TabPanel>
