@@ -83,19 +83,19 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     })
   }, [removeCookie])
 
-  const logoutQuery = useMutation(
-    ['/logout', { method: 'GET' }],
-    AuthenticationServices.logout,
-    {
-      onSuccess: () => {
-        deleteSessionDateStorage()
-        deleteAccessTokenCookie()
-      },
-      onError: (error: AxiosError<unknown>) => {
-        alert.showError(error.message)
-      },
-    }
-  )
+  // const logoutQuery = useMutation(
+  //   ['/logout', { method: 'GET' }],
+  //   AuthenticationServices.logout,
+  //   {
+  //     onSuccess: () => {
+  //       deleteSessionDateStorage()
+  //       deleteAccessTokenCookie()
+  //     },
+  //     onError: (error: AxiosError<unknown>) => {
+  //       alert.showError(error.message)
+  //     },
+  //   }
+  // )
 
   const isUserRole = useMemo(() => {
     const check: AuthContextTypes['isUserRole'] = {
@@ -126,28 +126,28 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
   //   }
   // )
 
-  const fusionAuthLoginQuery = useMutation(
-    ['/fusionauth/login', { method: 'POST' }],
-    AuthenticationServices.post,
-    {
-      onSuccess: () => {
-        // userInfoQuery.mutate()
-      },
-      onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
-        alert.showError(error.response?.data.message || error.message)
-      },
-    }
-  )
+  // const fusionAuthLoginQuery = useMutation(
+  //   ['/fusionauth/login', { method: 'POST' }],
+  //   AuthenticationServices.post,
+  //   {
+  //     onSuccess: () => {
+  //       // userInfoQuery.mutate()
+  //     },
+  //     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
+  //       alert.showError(error.response?.data.message || error.message)
+  //     },
+  //   }
+  // )
 
   // const revalidateTokenQuery = useMutation(
   //   ['/fusionauth/validateToken', { method: 'GET' }],
   //   AuthenticationServices.validateToken
   // )
 
-  const isLoggingIn = useMemo(
-    () => fusionAuthLoginQuery.isLoading,
-    [fusionAuthLoginQuery.isLoading]
-  )
+  // const isLoggingIn = useMemo(
+  //   () => fusionAuthLoginQuery.isLoading,
+  //   [fusionAuthLoginQuery.isLoading]
+  // )
 
   const isUserAuthenticated = useMemo(
     () => Boolean(sessionDateStorage && cookies.access_token),
@@ -196,7 +196,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       // userInfoQuery,
       isUserAuthenticated,
       isUserRole,
-      isLoggingIn,
+      // isLoggingIn,
       signIn,
       signOut,
     }),
@@ -206,7 +206,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       isUserRole,
       // userInfoQuery,
       isUserAuthenticated,
-      isLoggingIn,
+      // isLoggingIn,
       signIn,
       signOut,
     ]

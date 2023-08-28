@@ -26,16 +26,6 @@ export const Header = styled.div`
   }
 `
 
-export const HeaderMainContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-
-  ${from.sm} {
-    flex-direction: row;
-  }
-`
-
 export const HeaderInfoContent = styled.div`
   display: flex;
   gap: 0.8rem;

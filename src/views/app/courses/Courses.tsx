@@ -34,36 +34,37 @@ import { MainFilters } from '../positions/components'
 
 import { CourseCard } from './components'
 
+const TABS = [
+  {
+    value: 'db3796c0-3c5c-4820-88c8-8acbf3fa10f8',
+    label: 'Gerais',
+    content: 'Gerais',
+  },
+  {
+    value: 'c6161324-2300-436a-9017-232029190680',
+    label: 'Front-end',
+    content: 'Front-end',
+    disabled: true,
+  },
+  {
+    value: '79242fd3-c2c7-4747-bfee-780b93a91852',
+    label: 'Back-end',
+    content: 'Back-end',
+    disabled: true,
+  },
+  {
+    value: '3aa3e3a1-df67-4f47-82d3-b8e600b6b69c',
+    label: 'Marketing',
+    content: 'Marketing',
+    disabled: true,
+  },
+]
+
 export default function CoursesPage() {
-  const [selectedTab, setSelectedTab] = useState(String(0))
+  const [selectedTab, setSelectedTab] = useState(TABS[0].value)
 
   const isDevice = useIsDevice()
 
-  const TABS = [
-    {
-      value: String(0),
-      label: 'Gerais',
-      content: 'Gerais',
-    },
-    {
-      value: String(1),
-      label: 'Front-end',
-      content: 'Front-end',
-      disabled: true,
-    },
-    {
-      value: String(2),
-      label: 'Back-end',
-      content: 'Back-end',
-      disabled: true,
-    },
-    {
-      value: String(3),
-      label: 'Marketing',
-      content: 'Marketing',
-      disabled: true,
-    },
-  ]
   return (
     <>
       <TabContext value={selectedTab}>

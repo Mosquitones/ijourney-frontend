@@ -8,9 +8,6 @@ export const Drawer = styled(MUIDrawer)`
 
     border: none;
     border-radius: 0;
-
-    /* box-shadow: -2.2rem 1.3rem 3.1rem
-      ${({ theme }) => theme.palette.common.black}16; */
   }
 
   .MuiBackdrop-root {
@@ -19,7 +16,7 @@ export const Drawer = styled(MUIDrawer)`
 
   ${from.sm} {
     .MuiDrawer-paper {
-      max-width: 50rem;
+      max-width: 45rem;
     }
   }
 `

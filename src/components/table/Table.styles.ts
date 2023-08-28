@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Table } from '@mui/material'
 import { from } from 'common/theme'
 import styled from 'styled-components'
 
+import { TablePropTypes } from './Table.types'
+
 export const TableStyles = styled(Table)<{
   headerBgColor?: string | null
+  rowBgColor?: TablePropTypes<{}>['color']
 }>`
   --padding: 1.6rem 2.4rem;
   --border-width: 0.1rem;
@@ -13,8 +17,10 @@ export const TableStyles = styled(Table)<{
   --header-background-color: ${({ headerBgColor, theme }) =>
     headerBgColor || theme.palette.common.white};
 
-  --row-contrast-background-color: ${({ theme }) =>
-    theme.palette.background.paper};
+  --row-contrast-background-color: ${({ rowBgColor, theme }) =>
+    rowBgColor
+      ? `${theme.palette[rowBgColor].main}10`
+      : theme.palette.background.paper};
 
   width: 100%;
 
@@ -125,6 +131,10 @@ export const TableStyles = styled(Table)<{
 
     tbody {
       tr {
+        :first-child {
+          border-top: var(--border);
+        }
+
         :not(:last-child) {
           border-bottom: var(--border);
         }

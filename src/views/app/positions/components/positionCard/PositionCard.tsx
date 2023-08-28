@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material'
 
-import { ChipList } from 'components'
+import { ChipList, Position } from 'components'
 import { useIsDevice } from 'hooks'
 
 import * as S from './PositionCard.styles'
@@ -28,26 +28,7 @@ export const PositionCard: React.FC<ButtonProps> = (props) => {
     <S.Button {...props} fullWidth>
       <S.Paper>
         <S.Header>
-          <S.HeaderMainContent>
-            <Avatar
-              sx={{
-                bgcolor: ({ palette }) => palette.primary.main,
-                width: 54,
-                height: 54,
-              }}
-              variant='rounded'
-            >
-              <BusinessCenter />
-            </Avatar>
-            <Box display='flex' flexDirection='column' gap={1}>
-              <Typography
-                fontWeight={({ typography }) => typography.fontWeightBold}
-              >
-                Company
-              </Typography>
-              <ChipList />
-            </Box>
-          </S.HeaderMainContent>
+          <Position.Header />
           <S.HeaderInfoContent>
             <Box display='flex' gap={1} alignItems='center'>
               <SvgIcon component={Place} sx={{ fontSize: '1.8rem' }} />

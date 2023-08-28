@@ -6,13 +6,7 @@ import { RowTopic } from './components'
 
 export const TopicList: React.FC = () => {
   return (
-    <Box
-      display='flex'
-      flexWrap='wrap'
-      flexDirection='row'
-      gap={2}
-      alignItems='center'
-    >
+    <Box display='flex' flexWrap='wrap' flexDirection='column' gap={2}>
       {[...Array(5)].map((_, i) => (
         <RowTopic
           key={crypto.randomUUID() + i}

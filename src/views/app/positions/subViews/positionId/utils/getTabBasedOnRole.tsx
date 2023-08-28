@@ -2,8 +2,8 @@ import React from 'react'
 
 import { UserRoleTypes } from 'services'
 
-import CandidatesPage from '../tabs/candidates/Candidates'
-import DescriptionPage from '../tabs/description/Description'
+import CandidatesTab from '../tabs/candidates/Candidates'
+import DescriptionTab from '../tabs/description/Description'
 
 type TabTypes = {
   value: string
@@ -13,19 +13,19 @@ type TabTypes = {
 }
 
 const DESCRIPTION_TAB: TabTypes = {
-  value: String(0),
+  value: 'd7cb546d-71ab-4b00-8540-7ad9bdb3f476',
   label: 'Descrição',
-  content: <DescriptionPage />,
+  content: <DescriptionTab />,
 }
 
 const CANDIDATES_TAB: TabTypes = {
-  value: String(1),
+  value: 'adbfbf36-239a-4c57-b963-6c459819ba45',
   label: 'Candidatos',
-  content: <CandidatesPage />,
+  content: <CandidatesTab />,
 }
 
 const CULTURE_BENEFITS_TAB: TabTypes = {
-  value: String(2),
+  value: 'db674ef1-013f-49d3-92ac-b6d5db7aa09d',
   label: 'Cultura e Benefícios',
   content: 'Cultura e Benefícios',
   disabled: true,

@@ -22,8 +22,8 @@ export interface AuthContextTypes {
   }
   isUserRole: { [key in UserRoleTypes]: boolean }
   // userInfoQuery: UserInfoQueryTypes
-  isUserAuthenticated: boolean
-  isLoggingIn: boolean
+  // isUserAuthenticated: boolean
+  // isLoggingIn: boolean
   signIn: (payload: AuthLoginPayloadTypes) => void
   signOut: () => void
 }

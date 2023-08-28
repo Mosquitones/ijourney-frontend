@@ -16,6 +16,7 @@ export const ROUTES = {
   // Dashboard
   POSITIONS: 'positions',
   APPLIED_POSITIONS: 'applied-positions',
+  CLASSIFICATION: 'classification',
   COURSES: 'courses',
   ABOUT_US: 'about-us',
   REPORTS: 'reports',

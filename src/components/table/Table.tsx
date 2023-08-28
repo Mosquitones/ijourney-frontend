@@ -92,6 +92,8 @@ export const TableComponent = <TData extends TDataObjectTypes<TData>>({
   sx,
   headerBgColor,
   onRowClick,
+  color,
+  focused,
   emptyContent,
   ...rest
 }: TablePropTypes<TData>) => {
@@ -126,16 +128,20 @@ export const TableComponent = <TData extends TDataObjectTypes<TData>>({
   return (
     <TableContainer
       sx={{
-        border: ({ palette }) => `0.1rem solid ${palette.divider}`,
+        ...sx,
+        border: ({ palette }) =>
+          `${focused ? '0.3rem' : '0.1rem'} solid ${
+            color ? palette[color].main : palette.divider
+          }`,
         borderRadius: '0.5rem',
         overflow: 'hidden',
-        ...sx,
       }}
     >
       <TableStyles
         {...rest}
         width={table.getCenterTotalSize()}
         headerBgColor={headerBgColor ? headerBgColor(theme) : null}
+        rowBgColor={color}
       >
         {rest['aria-label'] && <caption>{rest['aria-label']}</caption>}
         <TableHead>

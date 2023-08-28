@@ -32,7 +32,7 @@ import { useIsDevice } from 'hooks'
 
 import { MARKDOWN_TEXT } from './markdown.util'
 
-export default function DescriptionPage() {
+export default function DescriptionTab() {
   const isDevice = useIsDevice()
 
   return (

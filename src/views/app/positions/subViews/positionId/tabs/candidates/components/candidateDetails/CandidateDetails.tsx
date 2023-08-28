@@ -25,7 +25,7 @@ import {
 } from '@mui/material'
 import { AdditionalFilters } from 'views/app/positions/components'
 
-import { DialogTitleComponent, TopicList } from 'components'
+import { DialogTitleComponent, Position, TopicList } from 'components'
 import { useDisclosure, useIsDevice } from 'hooks'
 
 import * as S from './CandidateDetails.styles'
@@ -86,19 +86,6 @@ const ButtonComponent: React.FC<
   )
 }
 
-const DetailTextComponent: React.FC<{ title: string; value: string }> = ({
-  title,
-  value,
-}) => {
-  return (
-    <Typography variant='body1' color='text.secondary' display='flex' gap={1}>
-      <Typography fontWeight={({ typography }) => typography.fontWeightBold}>
-        {title}
-      </Typography>
-      {value}
-    </Typography>
-  )
-}
 export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
   isOpen,
   onClose,
@@ -157,37 +144,9 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
         flexDirection='column'
         gap={5}
       >
-        <Box display='flex' flexDirection='column' gap={2}>
-          <Typography
-            variant='body1'
-            fontWeight={({ typography }) => typography.fontWeightBold}
-          >
-            Detalhes da aplicação
-          </Typography>
-          <TopicList />
-        </Box>
-        <Box display='flex' flexDirection='column' gap={2}>
-          <Typography
-            variant='body1'
-            fontWeight={({ typography }) => typography.fontWeightBold}
-          >
-            Pontuações
-          </Typography>
-          <TopicList />
-        </Box>
-        <Box display='flex' flexDirection='column' gap={2}>
-          <Typography
-            variant='body1'
-            fontWeight={({ typography }) => typography.fontWeightBold}
-          >
-            Detalhes
-          </Typography>
-          <Box display='flex' flexDirection='column' gap={0.5}>
-            <DetailTextComponent title='Aplicado em:' value='15 Jun' />
-            <DetailTextComponent title='Vence em:' value='30 Jul' />
-            <DetailTextComponent title='Criado por:' value='Anderson Ramires' />
-          </Box>
-        </Box>
+        <Position.Status title='Detalhes da aplicação' />
+        <Position.Score />
+        <Position.Details />
       </Box>
       <Box position='sticky' bottom={0} bgcolor='white'>
         <Divider />

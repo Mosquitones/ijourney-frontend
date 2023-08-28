@@ -38,11 +38,11 @@ import { getTabsBasedOnRole } from './utils/getTabBasedOnRole'
 
 export default function PositionIdPage() {
   const { user } = useAuth()
-  const [selectedTab, setSelectedTab] = useState(String(0))
+  const tabs = getTabsBasedOnRole(user?.role)
+
+  const [selectedTab, setSelectedTab] = useState(tabs[0].value)
 
   const isDevice = useIsDevice()
-
-  const tabs = getTabsBasedOnRole(user?.role)
 
   return (
     <>

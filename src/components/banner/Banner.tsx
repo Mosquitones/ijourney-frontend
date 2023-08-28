@@ -18,7 +18,7 @@ import { useIsDevice } from 'hooks'
 
 import * as S from './Banner.styles'
 
-const getPreviousRoute = (pathname: string) => {
+const _getPreviousRoute = (pathname: string) => {
   const segments = pathname.split('/').filter((segment) => segment !== '')
 
   if (segments.length > 1) {
@@ -32,10 +32,7 @@ const getPreviousRoute = (pathname: string) => {
 const Wrapper: React.FC<
   PropsWithChildren<BoxProps & { renderBackButton?: boolean }>
 > = ({ children, renderBackButton, ...rest }) => {
-  const location = useLocation()
-
-  const previousRoute = getPreviousRoute(location.pathname)
-  const ariaLabel = `Voltar para ${previousRoute}`
+  const ariaLabel = 'Voltar para página anterior'
 
   return (
     <S.Wrapper {...rest}>
