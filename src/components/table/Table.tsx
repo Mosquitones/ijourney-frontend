@@ -134,7 +134,7 @@ export const TableComponent = <TData extends TDataObjectTypes<TData>>({
             color ? palette[color].main : palette.divider
           }`,
         borderRadius: '0.5rem',
-        overflow: 'hidden',
+        overflow: 'auto',
       }}
     >
       <TableStyles

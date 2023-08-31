@@ -1,4 +1,4 @@
-import { Paper as MUIPaper, Button as MuiButton } from '@mui/material'
+import { Box, Paper as MUIPaper, Button as MuiButton } from '@mui/material'
 import { from } from 'common/theme'
 import styled from 'styled-components'
 
@@ -7,15 +7,16 @@ export const Button = styled(MuiButton)`
   text-align: left;
 `
 
-export const Paper = styled(MUIPaper)`
+export const Paper = styled(MUIPaper)``
+
+export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2.4rem;
   gap: 1.6rem;
-  width: 100%;
+  padding: 2.4rem;
 `
 
-export const Header = styled.div`
+export const Header = styled(Box)`
   display: flex;
   gap: 1.6rem;
   justify-content: space-between;
@@ -26,7 +27,7 @@ export const Header = styled.div`
   }
 `
 
-export const HeaderInfoContent = styled.div`
+export const HeaderInfoContent = styled(Box)`
   display: flex;
   gap: 0.8rem;
 
@@ -47,3 +48,14 @@ export const HeaderInfoContent = styled.div`
 `
 
 export const Body = styled.div``
+
+export const Footer = styled.div`
+  display: flex;
+  /* flex-wrap: wrap; */
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.palette.background.paper};
+
+  ${from.md} {
+    flex-direction: row;
+  }
+`

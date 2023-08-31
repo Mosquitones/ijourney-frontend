@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef } from 'react'
 
+import { Add } from '@mui/icons-material'
 import {
   Box,
   BoxProps,
   ButtonBase,
   Container,
   Divider,
+  Fab,
   Grid,
   Paper,
+  Tooltip,
   Typography,
 } from '@mui/material'
 
-import { Banner, Button } from 'components'
+import { Banner, Button, FloatingActionButton } from 'components'
+import { useAuth } from 'contexts'
 import { useIsDevice } from 'hooks'
 
 import { AdditionalFilters, MainFilters, PositionCard } from './components'
@@ -24,9 +28,16 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 
 export default function PositionsPage() {
   const isDevice = useIsDevice()
+  const { isUserRole } = useAuth()
 
   return (
     <>
+      {!isUserRole.candidate && (
+        <FloatingActionButton
+          icon={Add}
+          tooltip='Clique para Adicionar uma vaga'
+        />
+      )}
       <Banner.Container>
         <Banner.Wrapper maxWidth='sm'>
           <Banner.Title>Encontre o emprego dos sonhos</Banner.Title>

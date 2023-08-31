@@ -32,13 +32,14 @@ export const genericReset = () => css`
   }
 
   *:not(
-      input,
+      /* input,
       textarea,
       button,
       .MuiAccordion-root,
-      .MuiSelect-select,
+      .MuiSelect-select, */
       [tabindex='-1']
     ):focus {
+    z-index: 1;
     --line-width: 0.2rem;
     outline: var(--line-width) solid ${({ theme }) => theme.palette.info.main} !important;
     outline-offset: calc(var(--line-width) * -1);

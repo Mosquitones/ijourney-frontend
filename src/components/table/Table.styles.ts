@@ -96,13 +96,15 @@ export const TableStyles = styled(Table)<{
           font-size: ${({ theme }) => theme.typography.body1.fontSize};
           text-transform: capitalize;
 
-          position: sticky;
-          left: 0;
-          z-index: 1;
-
           border-right: var(--border);
 
           background-color: var(--header-background-color);
+
+          ${from.sm} {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+          }
         }
       }
     }

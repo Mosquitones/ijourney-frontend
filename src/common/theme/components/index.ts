@@ -9,6 +9,7 @@ import { ChipStyleOverrides } from './chip/chip.theme'
 import { DividerStyleOverrides } from './divider/divider.theme'
 import { FormControlStyleOverrides } from './formControl/formControl.theme'
 import { FormLabelStyleOverrides } from './formLabel/formLabel.theme'
+import { IconButtonStyleOverrides } from './iconButton/iconButton.theme'
 import {
   InputLabelStyleOverrides,
   InputStyleOverrides,
@@ -36,4 +37,5 @@ export const MuiComponents: ThemeOptions['components'] = {
   MuiFormLabel: FormLabelStyleOverrides,
   MuiFormControl: FormControlStyleOverrides,
   MuiMenuItem: MenuItemStyleOverrides,
+  MuiIconButton: IconButtonStyleOverrides,
 }
