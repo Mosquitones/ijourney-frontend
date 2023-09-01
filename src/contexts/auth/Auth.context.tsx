@@ -48,9 +48,16 @@ const RECRUITER_DUMMY_USER: UserInfoTypes = {
   role: ROLES.RECRUITER,
 }
 
-const ADMIN_DUMMY_USER: UserInfoTypes = {
+const COMPANY_DUMMY_USER: UserInfoTypes = {
   ...BASE_INFO,
   id: 2,
+  name: 'Company',
+  role: ROLES.COMPANY,
+}
+
+const ADMIN_DUMMY_USER: UserInfoTypes = {
+  ...BASE_INFO,
+  id: 3,
   name: 'Admin',
   role: ROLES.ADMIN,
 }
@@ -173,6 +180,9 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
         renderFunctions()
       } else if (payload.loginId === 'admin@ey.com') {
         setUser(ADMIN_DUMMY_USER)
+        renderFunctions()
+      } else if (payload.loginId === 'company@ey.com') {
+        setUser(COMPANY_DUMMY_USER)
         renderFunctions()
       }
     },

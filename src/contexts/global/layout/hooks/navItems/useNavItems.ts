@@ -42,7 +42,14 @@ export const useNavItems = () => {
     disabled: true,
   }
 
-  const APP_MOCK_ITEM: NavItemTypes = {
+  const REPORT_ITEM: NavItemTypes = {
+    label: 'Relatórios',
+    path: `/${ROUTES.APP}/${ROUTES.REPORTS}`,
+    icon: AddchartOutlined,
+    filledIcon: AddchartTwoTone,
+  }
+
+  const _APP_MOCK_ITEM: NavItemTypes = {
     label: 'App',
     path: `/${ROUTES.APP}/${ROUTES.APP}`,
     icon: DashboardOutlined,
@@ -71,17 +78,20 @@ export const useNavItems = () => {
         ...POSITION_ITEM_PROPERTIES,
         isDefaultPath: true,
       },
-      {
-        label: 'Relatórios',
-        path: `/${ROUTES.APP}/${ROUTES.REPORTS}`,
-        icon: AddchartOutlined,
-        filledIcon: AddchartTwoTone,
-      },
+      REPORT_ITEM,
+      // COURSE_ITEM,
+      ABOUT_US_ITEM,
+    ],
+    company: [
+      { ...REPORT_ITEM, isDefaultPath: true },
       COURSE_ITEM,
       ABOUT_US_ITEM,
     ],
-    admin: [APP_MOCK_ITEM],
-    company: [APP_MOCK_ITEM],
+    admin: [
+      { ...REPORT_ITEM, isDefaultPath: true },
+      COURSE_ITEM,
+      ABOUT_US_ITEM,
+    ],
   }
 
   return navItems

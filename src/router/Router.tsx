@@ -49,14 +49,22 @@ export const Router: React.FC = () => {
       redirectToDefaultRoute(ROUTES.POSITIONS),
       renderPositionRoutes(),
       renderReportRoutes(),
+      // renderCourseRoutes(),
+      renderAboutUsRoutes(),
+    ],
+    company: [
+      redirectToDefaultRoute(ROUTES.REPORTS),
+      // renderPositionRoutes(),
+      renderReportRoutes(),
       renderCourseRoutes(),
       renderAboutUsRoutes(),
     ],
     admin: [
-      // renderCourseRoutes()
-    ],
-    company: [
-      // renderCourseRoutes()
+      redirectToDefaultRoute(ROUTES.REPORTS),
+      // renderPositionRoutes(),
+      renderReportRoutes(),
+      renderCourseRoutes(),
+      renderAboutUsRoutes(),
     ],
   }
 
