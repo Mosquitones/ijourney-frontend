@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import './i18n/i18n'
 
 import React, { Suspense } from 'react'
@@ -17,42 +18,42 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
 })
 
-export const App: React.FC = () => (
-  <AnimatePresence mode='wait'>
-    <Suspense fallback={<BackdropComponent open />}>
-      <ErrorBoundary>
-        <CookiesProvider>
-          <QueryClientProvider client={queryClient}>
-            <SnackbarProvider
-              maxSnack={5}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              autoHideDuration={6000}
-            >
-              <MotionConfig
-                transition={{
-                  type: 'spring',
-                  damping: 10,
-                  mass: 0.75,
-                  stiffness: 100,
-                  duration: 0.35,
+export const App: React.FC = () => {
+  return (
+    <AnimatePresence mode='wait'>
+      <Suspense fallback={<BackdropComponent open />}>
+        <ErrorBoundary>
+          <CookiesProvider>
+            <QueryClientProvider client={queryClient}>
+              <SnackbarProvider
+                maxSnack={5}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
                 }}
+                autoHideDuration={6000}
               >
-                <GlobalContextWrapper>
-                  <MuiThemeWrapper>
+                <MotionConfig
+                  transition={{
+                    type: 'spring',
+                    damping: 10,
+                    mass: 0.75,
+                    stiffness: 100,
+                    duration: 0.35,
+                  }}
+                >
+                  <GlobalContextWrapper>
                     <>
                       <GlobalStyles />
                       <Router />
                     </>
-                  </MuiThemeWrapper>
-                </GlobalContextWrapper>
-              </MotionConfig>
-            </SnackbarProvider>
-          </QueryClientProvider>
-        </CookiesProvider>
-      </ErrorBoundary>
-    </Suspense>
-  </AnimatePresence>
-)
+                  </GlobalContextWrapper>
+                </MotionConfig>
+              </SnackbarProvider>
+            </QueryClientProvider>
+          </CookiesProvider>
+        </ErrorBoundary>
+      </Suspense>
+    </AnimatePresence>
+  )
+}

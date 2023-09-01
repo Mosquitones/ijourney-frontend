@@ -5,6 +5,9 @@ export const genericReset = () => css`
     scrollbar-width: thin;
     scrollbar-color: ${({ theme }) =>
       `${theme.palette.grey.A700} ${theme.palette.common.white}`};
+
+    transition: color 0.3s ease-out, background-color 0.3s ease-out,
+      border-color 0.3s ease-out, box-shadow 0.3s ease-out;
   }
 
   *::-webkit-scrollbar {

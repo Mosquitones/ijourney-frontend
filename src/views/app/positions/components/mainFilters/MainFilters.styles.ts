@@ -1,6 +1,7 @@
 import { InputBase as MUIInputBase, Paper as MUIPaper } from '@mui/material'
-import { from, to } from 'common/theme'
 import styled from 'styled-components'
+
+import { from, to } from 'utils'
 
 export const Paper = styled(MUIPaper)`
   display: flex;

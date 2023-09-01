@@ -28,7 +28,6 @@ export type CustomTheme = {
     divider?: string
     action?: Partial<TypeAction>
     background: Partial<TypeBackground>
-    getContrastText?: (background: string) => string
   }
   mixins: {
     header?: MixinsOptions['toolbar']

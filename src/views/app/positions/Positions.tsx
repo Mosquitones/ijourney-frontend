@@ -13,11 +13,13 @@ import {
   Paper,
   Tooltip,
   Typography,
+  useTheme,
 } from '@mui/material'
 
-import { Banner, Button, FloatingActionButton } from 'components'
-import { useAuth } from 'contexts'
-import { useIsDevice } from 'hooks'
+import { Banner, Button, FloatingActionButton, Input } from 'components'
+import { useAuth, useLayout } from 'contexts'
+import { useDebounce, useIsDevice } from 'hooks'
+import { hexToRgba } from 'utils'
 
 import { AdditionalFilters, MainFilters, PositionCard } from './components'
 
@@ -29,6 +31,8 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 export default function PositionsPage() {
   const isDevice = useIsDevice()
   const { isUserRole } = useAuth()
+  const { appColor, colors, setAppColor } = useLayout()
+  const theme = useTheme()
 
   return (
     <>

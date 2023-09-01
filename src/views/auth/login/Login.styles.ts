@@ -1,5 +1,6 @@
-import { from } from 'common/theme'
 import styled from 'styled-components'
+
+import { from } from 'utils'
 
 export const Form = styled.form`
   position: relative;

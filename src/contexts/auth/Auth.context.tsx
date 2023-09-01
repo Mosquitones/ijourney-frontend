@@ -149,6 +149,8 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
   //   [fusionAuthLoginQuery.isLoading]
   // )
 
+  const isLoggingIn = false
+
   const isUserAuthenticated = useMemo(
     () => Boolean(sessionDateStorage && cookies.access_token),
     [sessionDateStorage, cookies.access_token]
@@ -196,7 +198,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       // userInfoQuery,
       isUserAuthenticated,
       isUserRole,
-      // isLoggingIn,
+      isLoggingIn,
       signIn,
       signOut,
     }),
@@ -206,7 +208,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       isUserRole,
       // userInfoQuery,
       isUserAuthenticated,
-      // isLoggingIn,
+      isLoggingIn,
       signIn,
       signOut,
     ]

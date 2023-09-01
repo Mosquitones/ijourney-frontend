@@ -1,6 +1,7 @@
 import { Box, Paper as MUIPaper, Button as MuiButton } from '@mui/material'
-import { from } from 'common/theme'
 import styled from 'styled-components'
+
+import { from } from 'utils'
 
 export const Button = styled(MuiButton)`
   padding: 0 !important;

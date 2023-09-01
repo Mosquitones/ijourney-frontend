@@ -32,5 +32,8 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: absolutePathAliases,
     },
+    build: {
+      chunkSizeWarningLimit: 3200,
+    },
   }
 })

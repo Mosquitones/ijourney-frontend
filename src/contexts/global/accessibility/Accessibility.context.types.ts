@@ -1,8 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { ThemeOptions } from '@mui/material'
 import { CustomPaletteColor } from 'common/utils'
-import { NavItemTypes } from 'layout'
 
 type AvailableColors =
   | 'blue'
@@ -20,11 +18,9 @@ export type ColorTypes = {
   paletteColor: CustomPaletteColor
 }
 
-export interface LayoutContextTypes {
-  userNavItems: NavItemTypes[] | null
+export interface AccessibilityContextTypes {
   colors: ColorTypes[]
-  // appPaletteColors: ColorTypes
+  appPaletteColors: ColorTypes
   appColor: AvailableColors
-  setAppColor: Dispatch<SetStateAction<LayoutContextTypes['appColor']>>
-  setTheme: Dispatch<SetStateAction<ThemeOptions>>
+  setAppColor: Dispatch<SetStateAction<AccessibilityContextTypes['appColor']>>
 }

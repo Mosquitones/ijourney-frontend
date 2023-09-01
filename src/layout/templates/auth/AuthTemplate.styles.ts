@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
-import { from } from 'common/theme'
 import styled from 'styled-components'
+
+import { from } from 'utils'
 
 export const AuthTemplate = styled.div`
   display: flex;

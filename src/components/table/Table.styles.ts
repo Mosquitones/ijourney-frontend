@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Table } from '@mui/material'
-import { from } from 'common/theme'
 import styled from 'styled-components'
+
+import { from } from 'utils'
 
 import { TablePropTypes } from './Table.types'
 

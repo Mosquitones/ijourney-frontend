@@ -49,7 +49,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonPropTypes> = ({
         >
           <SvgIcon
             component={icon}
-            sx={{ color: ({ palette }) => palette.common.white }}
+            sx={{ color: ({ palette }) => palette.primary.contrastText }}
           />
         </Fab>
       </Tooltip>

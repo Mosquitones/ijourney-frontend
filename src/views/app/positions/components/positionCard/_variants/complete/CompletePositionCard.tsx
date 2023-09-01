@@ -76,6 +76,7 @@ const PositionInfo: React.FC<{
           {title}
           {titleAdditionalInfo && (
             <Typography
+              component='span'
               variant='body2'
               fontWeight={({ typography }) => typography.fontWeightBold}
               color={({ palette }) => palette.success.dark}

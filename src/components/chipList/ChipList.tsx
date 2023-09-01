@@ -17,12 +17,18 @@ export const ChipList: React.FC = () => {
       alignItems='center'
     >
       {[...Array(5)].map((_, i) => (
-        <>
+        <Box
+          key={crypto.randomUUID() + i}
+          display='flex'
+          flexWrap='wrap'
+          gap={1}
+          alignItems='center'
+        >
           {i !== 0 && isDevice.from.sm && (
             <Circle sx={{ fontSize: '0.5rem', color: 'text.secondary' }} />
           )}
           <Chip label={<Typography variant='body2'>Item</Typography>} />
-        </>
+        </Box>
       ))}
     </Box>
   )

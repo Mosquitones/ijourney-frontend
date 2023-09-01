@@ -1,6 +1,7 @@
 import { Drawer as MUIDrawer } from '@mui/material'
-import { from } from 'common/theme'
 import styled from 'styled-components'
+
+import { from } from 'utils'
 
 export const Drawer = styled(MUIDrawer)`
   .MuiDrawer-paper {
