@@ -16,6 +16,22 @@ export const useAccessibility = () => useContext(AccessibilityContext)
 export const AccessibilityContextWrapper: FCWithChildren = ({ children }) => {
   const hexColor = `#${import.meta.env.VITE_APP_PRIMARY_COLOR}`
 
+  const availableColors = useMemo(
+    () => [
+      '#f89e0d',
+      `#f7ca0e`,
+      '#a5f80d',
+      '#2ECA72',
+      '#0ddcf8',
+      '#0d96f8',
+      '#0d28f8',
+      '#a50df8',
+      '#f80d96',
+      '#f80d0d',
+    ],
+    []
+  )
+
   const [color, setColor] = useLocalStorage<AccessibilityContextTypes['color']>(
     'app_main_color',
     {
@@ -28,8 +44,9 @@ export const AccessibilityContextWrapper: FCWithChildren = ({ children }) => {
     () => ({
       color,
       setColor,
+      availableColors,
     }),
-    [color, setColor]
+    [availableColors, color, setColor]
   )
 
   return (

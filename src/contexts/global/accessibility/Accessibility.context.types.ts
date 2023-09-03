@@ -5,5 +5,6 @@ type ColorTypes = {
 
 export interface AccessibilityContextTypes {
   color: ColorTypes
+  availableColors: ColorTypes['hex'][]
   setColor: (value: ColorTypes) => void
 }

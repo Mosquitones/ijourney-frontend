@@ -12,7 +12,7 @@ import { AppColorMenuItemTypes } from './AppColor.types'
 export const AppColorMenuItem: React.FC<AppColorMenuItemTypes> = ({
   handleClose: onClose,
 }) => {
-  const { setColor, color } = useAccessibility()
+  const { setColor, color, availableColors } = useAccessibility()
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLLIElement | null>(null)
 
@@ -46,18 +46,7 @@ export const AppColorMenuItem: React.FC<AppColorMenuItemTypes> = ({
         }}
       >
         <Block
-          colors={[
-            '#f89e0d',
-            `#f7ca0e`,
-            '#a5f80d',
-            '#0df867',
-            '#0ddcf8',
-            '#0d96f8',
-            '#0d28f8',
-            '#a50df8',
-            '#f80d96',
-            '#f80d0d',
-          ]}
+          colors={availableColors}
           color={color.hex}
           onChange={({ rgba, hex }) => {
             const rgbaColor = `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`
