@@ -21,7 +21,7 @@ export const Logo: React.FC<LogoPropTypes> = ({ extended, containerProps }) => {
           color='black'
           fontWeight={({ typography }) => typography.fontWeightBold}
         >
-          iJournEY
+          iJourney
         </Typography>
       )}
     </S.Container>

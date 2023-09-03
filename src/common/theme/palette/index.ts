@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Theme } from '@mui/material'
 
+import { hexToRgba } from 'utils'
+
 import { getPaletteColors } from './utils'
 
 const PRIMARY_PALETTE_COLORS = getPaletteColors(
-  `#${import.meta.env.VITE_APP_PRIMARY_COLOR}`
+  hexToRgba(`#${import.meta.env.VITE_APP_PRIMARY_COLOR}`)
 )
-const SECONDARY_PALETTE_COLORS = getPaletteColors('#63A5EA')
-const SUCCESS_PALETTE_COLORS = getPaletteColors('#34DD1E')
-const ERROR_PALETTE_COLORS = getPaletteColors('#FF515A')
-const WARNING_PALETTE_COLORS = getPaletteColors('#FFCC00')
-const INFO_PALETTE_COLORS = getPaletteColors('#5990FF')
 
 export const palette: Theme['palette'] = {
   common: {
@@ -19,11 +16,106 @@ export const palette: Theme['palette'] = {
   },
   divider: 'rgba(0, 0, 0, 0.12)',
   primary: PRIMARY_PALETTE_COLORS,
-  secondary: SECONDARY_PALETTE_COLORS,
-  success: SUCCESS_PALETTE_COLORS,
-  error: ERROR_PALETTE_COLORS,
-  warning: WARNING_PALETTE_COLORS,
-  info: INFO_PALETTE_COLORS,
+  secondary: {
+    50: '#63a5ea',
+    100: '#63a5ea',
+    200: '#63a5ea',
+    300: '#c0dbf6',
+    400: '#63a5ea',
+    500: '#63a5ea',
+    600: '#5994d2',
+    700: '#4f84bb',
+    800: '#4573a3',
+    900: '#3b638c',
+    A100: '#c0dbf6',
+    A200: '#d0e4f8',
+    A400: '#dfedfa',
+    A700: '#eff6fc',
+    light: '#c0dbf6',
+    main: '#63a5ea',
+    dark: '#4f84bb',
+    contrastText: '#ffffff',
+  },
+  success: {
+    50: '#34dd1e',
+    100: '#34dd1e',
+    200: '#34dd1e',
+    300: '#adf1a5',
+    400: '#34dd1e',
+    500: '#34dd1e',
+    600: '#2ec61b',
+    700: '#29b018',
+    800: '#249a15',
+    900: '#1f8412',
+    A100: '#adf1a5',
+    A200: '#c2f4bb',
+    A400: '#d6f8d2',
+    A700: '#eafbe8',
+    light: '#adf1a5',
+    main: '#34dd1e',
+    dark: '#29b018',
+    contrastText: '#ffffff',
+  },
+  error: {
+    50: '#ff515a',
+    100: '#ff515a',
+    200: '#ff515a',
+    300: '#ffb9bd',
+    400: '#ff515a',
+    500: '#ff515a',
+    600: '#e54851',
+    700: '#cc4048',
+    800: '#b2383e',
+    900: '#993036',
+    A100: '#ffb9bd',
+    A200: '#ffcacd',
+    A400: '#ffdcde',
+    A700: '#ffedee',
+    light: '#ffb9bd',
+    main: '#ff515a',
+    dark: '#cc4048',
+    contrastText: '#ffffff',
+  },
+  warning: {
+    50: '#ffcc00',
+    100: '#ffcc00',
+    200: '#ffcc00',
+    300: '#ffea99',
+    400: '#ffcc00',
+    500: '#ffcc00',
+    600: '#e5b700',
+    700: '#cca300',
+    800: '#b28e00',
+    900: '#997a00',
+    A100: '#ffea99',
+    A200: '#ffefb2',
+    A400: '#fff4cc',
+    A700: '#fff9e5',
+    light: '#ffea99',
+    main: '#ffcc00',
+    dark: '#cca300',
+    contrastText: '#ffffff',
+  },
+  info: {
+    50: '#5990ff',
+    100: '#5990ff',
+    200: '#5990ff',
+    300: '#bcd2ff',
+    400: '#5990ff',
+    500: '#5990ff',
+    600: '#5081e5',
+    700: '#4773cc',
+    800: '#3e64b2',
+    900: '#355699',
+    A100: '#bcd2ff',
+    A200: '#cdddff',
+    A400: '#dde8ff',
+    A700: '#eef3ff',
+    light: '#bcd2ff',
+    main: '#5990ff',
+    dark: '#4773cc',
+    contrastText: '#ffffff',
+  },
   text: {
     primary: '#000000',
     secondary: '#69707E',

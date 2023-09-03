@@ -31,7 +31,7 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 export default function PositionsPage() {
   const isDevice = useIsDevice()
   const { isUserRole } = useAuth()
-  const { appColor, colors, setAppColor } = useLayout()
+  // const { appColor, colors, setAppColor } = useLayout()
   const theme = useTheme()
 
   return (
@@ -54,13 +54,7 @@ export default function PositionsPage() {
       <Container sx={{ py: 3 }}>
         <Grid container columnSpacing={2}>
           <Grid item xs={0} sm={3.5} display={{ xs: 'none', sm: 'block' }}>
-            <Paper
-              sx={{
-                position: 'sticky',
-                top: '1.5rem',
-                transition: 'all 0.3s ease-in-out',
-              }}
-            >
+            <Paper>
               <Box
                 {...DEFAULT_PADDINGS}
                 display='flex'

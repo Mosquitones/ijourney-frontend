@@ -2,12 +2,19 @@ import { css } from 'styled-components'
 
 export const genericReset = () => css`
   * {
+    --animation-duration: 0.3s;
+    --animation-timing-function: ease-in-out;
+
     scrollbar-width: thin;
     scrollbar-color: ${({ theme }) =>
       `${theme.palette.grey.A700} ${theme.palette.common.white}`};
 
-    transition: color 0.3s ease-out, background-color 0.3s ease-out,
-      border-color 0.3s ease-out, box-shadow 0.3s ease-out;
+    transition: fill var(--animation-duration) var(--animation-timing-function),
+      color var(--animation-duration) var(--animation-timing-function),
+      background-color var(--animation-duration)
+        var(--animation-timing-function),
+      border-color var(--animation-duration) var(--animation-timing-function),
+      box-shadow var(--animation-duration) var(--animation-timing-function);
   }
 
   *::-webkit-scrollbar {
@@ -42,8 +49,9 @@ export const genericReset = () => css`
       .MuiSelect-select, */
       [tabindex='-1']
     ):focus {
-    z-index: 1;
     --line-width: 0.2rem;
+
+    z-index: 1;
     outline: var(--line-width) solid ${({ theme }) => theme.palette.info.main} !important;
     outline-offset: calc(var(--line-width) * -1);
     box-shadow: none;
@@ -74,6 +82,12 @@ export const genericReset = () => css`
   html,
   body,
   #root {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv11', 'salt', 'ss01', 'ss03', 'cv01', 'cv02',
+      'cv03', 'cv04', 'cv05', 'cv06', 'cv09', 'cv10';
+
     font-family: ${({ theme }) => theme.typography.fontFamily};
     font-size: 62.5%;
   }

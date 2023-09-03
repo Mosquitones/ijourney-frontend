@@ -43,10 +43,12 @@ export const App: React.FC = () => {
                   }}
                 >
                   <GlobalContextWrapper>
-                    <>
-                      <GlobalStyles />
-                      <Router />
-                    </>
+                    <MuiThemeWrapper>
+                      <>
+                        <GlobalStyles />
+                        <Router />
+                      </>
+                    </MuiThemeWrapper>
                   </GlobalContextWrapper>
                 </MotionConfig>
               </SnackbarProvider>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { PropsWithChildren } from 'react'
 
 import { KeyboardBackspaceOutlined } from '@mui/icons-material'
@@ -12,22 +11,8 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material'
-import { useLocation } from 'react-router-dom'
-
-import { useIsDevice } from 'hooks'
 
 import * as S from './Banner.styles'
-
-const _getPreviousRoute = (pathname: string) => {
-  const segments = pathname.split('/').filter((segment) => segment !== '')
-
-  if (segments.length > 1) {
-    segments.pop()
-    return `/${segments.join('/')}`
-  }
-
-  return '/'
-}
 
 const Wrapper: React.FC<
   PropsWithChildren<BoxProps & { renderBackButton?: boolean }>
@@ -94,8 +79,6 @@ const Tabs: React.FC<PropsWithChildren<TabsProps>> = ({
   children,
   ...rest
 }) => {
-  const isDevice = useIsDevice()
-
   return (
     <S.Tabs
       {...rest}

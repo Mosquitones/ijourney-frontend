@@ -1,5 +1,3 @@
-import { css } from 'styled-components'
-
 import openSans700 from '../../../assets/fonts/openSans/OpenSans-Bold.ttf'
 import openSans800 from '../../../assets/fonts/openSans/OpenSans-ExtraBold.ttf'
 import openSans300 from '../../../assets/fonts/openSans/OpenSans-Light.ttf'
@@ -68,7 +66,7 @@ const generateFontFace = (
   const fontPath = font.weights[fontWeight]
   const fontFormat = font.format
 
-  return css`
+  return `
     @font-face {
       font-family: ${fontName};
       font-weight: ${fontWeight};
@@ -79,7 +77,7 @@ const generateFontFace = (
   `
 }
 
-export const genericTypography = () => css`
+export const genericTypography = () => `
   ${generateFontFace('Open Sans', {
     fontWeight: 'light',
   })}
@@ -93,8 +91,8 @@ export const genericTypography = () => css`
     fontWeight: 'semiBold',
   })}
     ${generateFontFace('Open Sans', {
-    fontWeight: 'bold',
-  })}
+      fontWeight: 'bold',
+    })}
   ${generateFontFace('Open Sans', {
     fontWeight: 'extraBold',
   })}

@@ -1,4 +1,6 @@
-import { ThemeOptions } from '@mui/material'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { CssBaseline, ThemeOptions } from '@mui/material'
+import { genericTypography } from 'common/styles'
 
 import {
   ButtonBaseStyleOverrides,
@@ -6,6 +8,7 @@ import {
 } from './button/button.theme'
 import { CheckboxStyleOverrides } from './checkbox/checkbox.theme'
 import { ChipStyleOverrides } from './chip/chip.theme'
+import { CssBaselineStyleOverrides } from './cssBaseline/cssBaseline.theme'
 import { DividerStyleOverrides } from './divider/divider.theme'
 import { FormControlStyleOverrides } from './formControl/formControl.theme'
 import { FormLabelStyleOverrides } from './formLabel/formLabel.theme'
@@ -38,4 +41,5 @@ export const MuiComponents: ThemeOptions['components'] = {
   MuiFormControl: FormControlStyleOverrides,
   MuiMenuItem: MenuItemStyleOverrides,
   MuiIconButton: IconButtonStyleOverrides,
+  MuiCssBaseline: CssBaselineStyleOverrides,
 }

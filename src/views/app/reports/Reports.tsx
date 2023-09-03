@@ -61,6 +61,7 @@ export default function ReportsPage() {
         {TABS.map((tab) => (
           <TabPanel key={tab.value} value={tab.value}>
             <img
+              loading='lazy'
               src={dashboardImage}
               width='100%'
               height='auto'

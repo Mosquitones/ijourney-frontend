@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 
-import {
-  BusinessCenter,
-  KeyboardBackspaceOutlined,
-  PlaceOutlined,
-  SearchOutlined,
-} from '@mui/icons-material'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
   Avatar,

@@ -1,23 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 
 import { FCWithChildren } from '@types'
-import { getPaletteColors } from 'common/theme/palette/utils'
-import { useAuth } from 'contexts/auth/Auth.context'
 
-import { useDebounce, useLocalStorage } from 'hooks'
+import { useLocalStorage } from 'hooks'
+import { hexToRgba } from 'utils'
 
-import {
-  ColorTypes,
-  AccessibilityContextTypes,
-} from './Accessibility.context.types'
-import { useColors } from './hooks'
+import { AccessibilityContextTypes } from './Accessibility.context.types'
 
 export const AccessibilityContext = createContext(
   {} as AccessibilityContextTypes
@@ -26,33 +14,22 @@ export const AccessibilityContext = createContext(
 export const useAccessibility = () => useContext(AccessibilityContext)
 
 export const AccessibilityContextWrapper: FCWithChildren = ({ children }) => {
-  const colors = useColors()
+  const hexColor = `#${import.meta.env.VITE_APP_PRIMARY_COLOR}`
 
-  const DEFAULT_COLOR = colors[colors.length - 1]
-
-  const [appPaletteColors, setAppPaletteColors] = useLocalStorage<
-    typeof DEFAULT_COLOR
-  >('palette_color', DEFAULT_COLOR)
-
-  const [appColor, setAppColor] = useState<(typeof appPaletteColors)['id']>(
-    appPaletteColors.id
-  )
-
-  useEffect(() => {
-    const foundColor = colors.find((color) => color.id === appColor)
-    if (foundColor && foundColor.id !== appPaletteColors.id) {
-      setAppPaletteColors(foundColor)
+  const [color, setColor] = useLocalStorage<AccessibilityContextTypes['color']>(
+    'app_main_color',
+    {
+      rgba: hexToRgba(hexColor),
+      hex: hexColor,
     }
-  }, [appColor, appPaletteColors.id, colors, setAppPaletteColors])
+  )
 
   const value = useMemo(
     () => ({
-      appPaletteColors,
-      appColor,
-      colors,
-      setAppColor,
+      color,
+      setColor,
     }),
-    [appColor, appPaletteColors, colors]
+    [color, setColor]
   )
 
   return (

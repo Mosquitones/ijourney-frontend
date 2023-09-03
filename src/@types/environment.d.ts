@@ -4,7 +4,7 @@ export interface ProcessEnvTypes {
   VITE_WEB_DESCRIPTION: string
   VITE_PREVIEW_IMG: string
   VITE_API_URL: string
-  VITE_APP_PRIMARY_COLOR: 'F7CA0E'
+  VITE_APP_PRIMARY_COLOR: '2ECA72'
 }
 
 declare global {

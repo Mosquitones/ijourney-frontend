@@ -36,35 +36,44 @@ export const typography: TypographyThemeOverrides = {
   },
   h1: {
     fontSize: '3.6rem',
+    // fontSize: '4.6ex',
   },
   h2: {
     fontSize: '3.2rem',
+    // fontSize: '4.2ex',
   },
   h3: {
     fontSize: '2.8rem',
+    // fontSize: '3.8ex',
   },
   h4: {
     fontSize: '2.4rem',
+    // fontSize: '3.4ex',
   },
   h5: {
     fontSize: '2rem',
+    // fontSize: '3ex',
   },
   h6: {
-    // fontSize: '1.8rem',
+    // fontSize: '2.8ex',
   },
   body1: {
     fontSize: '1.6rem',
+    // fontSize: '2.6ex',
   },
   body2: {
     fontSize: '1.4rem',
+    // fontSize: '2.4ex',
   },
   button: {
     fontSize: '1.8rem',
+    // fontSize: '2.8ex',
   },
-  caption: {},
   subtitle1: {
     fontSize: '1.8rem',
+    // fontSize: '2.8ex',
   },
+  caption: {},
   subtitle2: {},
   overline: {},
 }
