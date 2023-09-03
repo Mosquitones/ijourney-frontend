@@ -8,7 +8,9 @@ export const Button = styled(MuiButton)`
   text-align: left;
 `
 
-export const Paper = styled(MUIPaper)``
+export const Paper = styled(MUIPaper)`
+  width: 100%;
+`
 
 export const Wrapper = styled.div`
   display: flex;

@@ -3,15 +3,12 @@ import { ApiResponseTypes, UserTypes, api } from 'services'
 import { LoginPayloadTypes } from './Login.types'
 
 const login = async (payload: LoginPayloadTypes) => {
-  const response = await api.post<ApiResponseTypes<UserTypes>>(
+  const { data: axiosResponse } = await api.post<ApiResponseTypes<UserTypes>>(
     `/users/login`,
-    payload,
-    {
-      withCredentials: false,
-    }
+    payload
   )
 
-  return response.data.body.data
+  return axiosResponse.data
 }
 
 export default {

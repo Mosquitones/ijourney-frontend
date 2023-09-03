@@ -113,7 +113,7 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
         })
       },
       onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
-        alert.showError(error.response?.data.body.message || error.message)
+        alert.showError(error.response?.data.message || error.message)
       },
     }
   )
@@ -128,7 +128,11 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
   //   [fusionAuthLoginQuery.isLoading]
   // )
 
-  const isLoggingIn = loginQuery.isLoading
+  const isLoggingIn = loginQuery.isError
+    ? false
+    : loginQuery.isSuccess
+    ? true
+    : loginQuery.isLoading
 
   const isUserAuthenticated = useMemo(
     () => Boolean(sessionDateStorage && cookies.access_token),

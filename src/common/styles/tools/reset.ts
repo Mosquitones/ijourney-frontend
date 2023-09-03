@@ -53,8 +53,9 @@ export const genericReset = () => css`
 
     z-index: 1;
     outline: var(--line-width) solid ${({ theme }) => theme.palette.info.main} !important;
-    outline-offset: calc(var(--line-width) * -1);
-    box-shadow: none;
+    /* outline-offset: calc(var(--line-width) * -1);   */
+    outline-offset: var(--line-width);
+    border-radius: 0.5rem;
   }
 
   body,

@@ -19,6 +19,8 @@ import {
   SvgIcon,
   Typography,
 } from '@mui/material'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import { ChipList, Position } from 'components'
 import { useIsDevice } from 'hooks'
@@ -26,15 +28,20 @@ import { useIsDevice } from 'hooks'
 import { PositionBody } from '../../components'
 import * as S from '../../PositionCard.styles'
 
-export const BasicPositionCard: React.FC<ButtonProps> = (props) => {
+import { BasicPositionCardPropTypes } from './BasicPositionCard.types'
+
+export const BasicPositionCard: React.FC<BasicPositionCardPropTypes> = ({
+  position,
+  ...rest
+}) => {
   const isDevice = useIsDevice()
 
   return (
-    <S.Button {...props} fullWidth>
+    <S.Button {...rest} fullWidth>
       <S.Paper>
         <S.Wrapper>
           <S.Header>
-            <Position.Header />
+            <Position.Header title={position.title} chips={['aaaaa', 'bbbb']} />
             <S.HeaderInfoContent>
               <Box display='flex' gap={1} alignItems='center'>
                 <SvgIcon component={Place} sx={{ fontSize: '1.8rem' }} />
@@ -42,7 +49,7 @@ export const BasicPositionCard: React.FC<ButtonProps> = (props) => {
                   fontWeight={({ typography }) => typography.fontWeightBold}
                   variant='body2'
                 >
-                  Vila Mariana, São Paulo
+                  {position.city}, {position.state}
                 </Typography>
               </Box>
               <Box display='flex' gap={1} alignItems='center'>
@@ -53,16 +60,16 @@ export const BasicPositionCard: React.FC<ButtonProps> = (props) => {
                   />
                 )}
                 <Typography color='text.secondary' variant='body2'>
-                  Postado há 5 min atrás
+                  Postado{' '}
+                  {formatDistanceToNow(new Date(position.creationDate), {
+                    addSuffix: true,
+                    locale: ptBR,
+                  })}
                 </Typography>
               </Box>
             </S.HeaderInfoContent>
           </S.Header>
-          <PositionBody
-            description='Within this role, you will be creating content for a wide range of local
-        and international clients. This role is suited to Bali based creatives
-        looking to work in-house.'
-          />
+          <PositionBody description={position.shortDescription} />
         </S.Wrapper>
       </S.Paper>
     </S.Button>

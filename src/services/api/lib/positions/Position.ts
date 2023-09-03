@@ -3,11 +3,11 @@ import { ApiResponseTypes, api } from 'services'
 import { PositionTypes } from './Position.types'
 
 const findAll = async () => {
-  const response = await api.get<ApiResponseTypes<PositionTypes[]>>(
+  const { data: response } = await api.get<ApiResponseTypes<PositionTypes[]>>(
     `/positions`
   )
 
-  return response.data.body.data
+  return response.data
 }
 
 export default {

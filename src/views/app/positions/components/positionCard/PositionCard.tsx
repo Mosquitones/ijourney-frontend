@@ -5,12 +5,20 @@ import { useAuth } from 'contexts'
 import { PositionCardVariant } from './_variants/Variants'
 import { PositionCardTypes } from './PositionCard.types'
 
-export const PositionCard: React.FC<PositionCardTypes> = (props) => {
+export const PositionCard: React.FC<PositionCardTypes> = ({
+  position,
+  href,
+}) => {
   const { isUserRole } = useAuth()
 
   if (!isUserRole.CANDIDATE) {
-    return <PositionCardVariant.Complete seeButtonProps={props} />
+    return (
+      <PositionCardVariant.Complete
+        seeButtonProps={{ href }}
+        position={position}
+      />
+    )
   }
 
-  return <PositionCardVariant.Basic {...props} />
+  return <PositionCardVariant.Basic href={href} position={position} />
 }

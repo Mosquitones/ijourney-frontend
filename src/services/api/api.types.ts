@@ -17,14 +17,10 @@ export interface PaginatedApiParamsTypes {
 }
 
 export type ApiResponseTypes<T> = {
-  headers: {}
-  body: {
-    data: T
-    status: number
-    message: string
-  }
-  statusCode: string
-  statusCodeValue: number
+  message: string
+  data: T
+  statusCode: number
+  statusMessage: string
 }
 
 export interface PaginatedResponse<T>

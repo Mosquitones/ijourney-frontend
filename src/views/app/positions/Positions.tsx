@@ -6,19 +6,24 @@ import {
   Box,
   BoxProps,
   ButtonBase,
+  CircularProgress,
   Container,
   Divider,
   Fab,
   Grid,
+  LinearProgress,
   Paper,
+  Skeleton,
   Tooltip,
   Typography,
   useTheme,
 } from '@mui/material'
+import { useQuery } from 'react-query'
 
 import { Banner, Button, FloatingActionButton, Input } from 'components'
 import { useAuth, useLayout } from 'contexts'
 import { useDebounce, useIsDevice } from 'hooks'
+import { PositionServices } from 'services'
 import { hexToRgba } from 'utils'
 
 import { AdditionalFilters, MainFilters, PositionCard } from './components'
@@ -31,6 +36,11 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 export default function PositionsPage() {
   const isDevice = useIsDevice()
   const { isUserRole } = useAuth()
+
+  const positionsQuery = useQuery(
+    ['/positions', { method: 'GET' }],
+    PositionServices.findAll
+  )
   // const { appColor, colors, setAppColor } = useLayout()
   const theme = useTheme()
 
@@ -42,7 +52,7 @@ export default function PositionsPage() {
           tooltip='Clique para Adicionar uma vaga'
         />
       )}
-      <Banner.Container>
+      <Banner.Container isLoading={positionsQuery.isLoading}>
         <Banner.Wrapper maxWidth='sm'>
           <Banner.Title>Encontre o emprego dos sonhos</Banner.Title>
           <Banner.Description>
@@ -87,14 +97,29 @@ export default function PositionsPage() {
               variant='body2'
               color='text.secondary'
             >
-              22 Oportunidades encontradas
+              {positionsQuery.data?.length && positionsQuery.data.length >= 0
+                ? `${positionsQuery.data.length} oportunidade(s) encontrada(s)`
+                : 'Nenhuma oportunidade encontrada'}
             </Typography>
-            <Box display='flex' flexDirection='column' gap={2}>
-              {[...Array(20)].map((_, i) => {
-                const key = crypto.randomUUID()
 
-                return <PositionCard key={key} href={key} />
-              })}
+            <Box display='flex' flexDirection='column' gap={2}>
+              {positionsQuery.isLoading
+                ? [...Array(5)].map((_, i) => (
+                    <Skeleton
+                      key={crypto.randomUUID() + i}
+                      height={130}
+                      width='100%'
+                      variant='rounded'
+                      animation='wave'
+                    />
+                  ))
+                : positionsQuery.data?.map((position) => (
+                    <PositionCard
+                      key={position.id}
+                      href={String(position.id)}
+                      position={position}
+                    />
+                  ))}
             </Box>
           </Grid>
         </Grid>

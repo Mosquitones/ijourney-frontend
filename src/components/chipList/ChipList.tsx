@@ -5,7 +5,9 @@ import { Box, Chip, Typography } from '@mui/material'
 
 import { useIsDevice } from 'hooks'
 
-export const ChipList: React.FC = () => {
+import { ChipListPropTypes } from './ChipList.types'
+
+export const ChipList: React.FC<ChipListPropTypes> = ({ chips }) => {
   const isDevice = useIsDevice()
 
   return (
@@ -16,7 +18,7 @@ export const ChipList: React.FC = () => {
       gap={1}
       alignItems='center'
     >
-      {[...Array(5)].map((_, i) => (
+      {chips.map((chip, i) => (
         <Box
           key={crypto.randomUUID() + i}
           display='flex'
@@ -27,9 +29,11 @@ export const ChipList: React.FC = () => {
           {i !== 0 && isDevice.from.sm && (
             <Circle sx={{ fontSize: '0.5rem', color: 'text.secondary' }} />
           )}
-          <Chip label={<Typography variant='body2'>Item</Typography>} />
+          <Chip label={<Typography variant='body2'>{chip}</Typography>} />
         </Box>
       ))}
     </Box>
   )
 }
+
+export * from './ChipList.types'

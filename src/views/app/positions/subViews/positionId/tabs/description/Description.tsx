@@ -44,7 +44,7 @@ export default function DescriptionTab() {
         >
           WebFlow Developer (Frontend) at EY Academy
         </Typography>
-        <ChipList />
+        <ChipList chips={['aaaa', 'bbbbb']} />
       </Box>
       <Box display='flex' flexDirection='column' gap={3}>
         <MarkdownViewer markdown={MARKDOWN_TEXT} />

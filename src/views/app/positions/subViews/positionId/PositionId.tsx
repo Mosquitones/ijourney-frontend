@@ -26,6 +26,7 @@ import {
   Typography,
   useScrollTrigger,
 } from '@mui/material'
+import { useMutation } from 'react-query'
 
 import { Banner, Button, Input } from 'components'
 import { useAuth } from 'contexts'
@@ -39,6 +40,10 @@ import { getTabsBasedOnRole } from './utils/getTabBasedOnRole'
 export default function PositionIdPage() {
   const { user } = useAuth()
   const tabs = getTabsBasedOnRole(user?.userType)
+
+  // const positionIdQuery = useMutation(() => {}, {
+  //   onSuccess: () => {},
+  // })
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
 

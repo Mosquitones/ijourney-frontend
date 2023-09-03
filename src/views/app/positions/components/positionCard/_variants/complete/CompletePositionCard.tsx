@@ -27,12 +27,16 @@ import {
   SvgIconProps,
   Typography,
 } from '@mui/material'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import { ChipList, Position } from 'components'
 import { useIsDevice } from 'hooks'
 
 import { PositionBody } from '../../components'
 import * as S from '../../PositionCard.styles'
+
+import { CompletePositionCardPropTypes } from './CompletePositionCard.types'
 
 const Icon: React.FC<{ icon: React.ElementType } & SvgIconProps> = ({
   icon,
@@ -79,7 +83,7 @@ const PositionInfo: React.FC<{
               component='span'
               variant='body2'
               fontWeight={({ typography }) => typography.fontWeightBold}
-              color={({ palette }) => palette.success.dark}
+              color={({ palette }) => palette.primary.main}
             >
               {titleAdditionalInfo}
             </Typography>
@@ -93,16 +97,23 @@ const PositionInfo: React.FC<{
   )
 }
 
-export const CompletePositionCard: React.FC<{
-  seeButtonProps: { href: string } & IconButtonProps
-}> = ({ seeButtonProps }) => {
+console.log(ptBR)
+export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
+  seeButtonProps,
+  position,
+}) => {
   const isDevice = useIsDevice()
+
+  const currencyFormatter = new Intl.NumberFormat(ptBR.code, {
+    style: 'currency',
+    currency: 'BRL',
+  })
 
   return (
     <S.Paper>
       <S.Wrapper>
         <S.Header>
-          <Position.Header />
+          <Position.Header title={position.title} chips={['aaaa', 'ssss']} />
           <S.HeaderInfoContent>
             <Box display='flex' ml={-1}>
               {[
@@ -124,25 +135,21 @@ export const CompletePositionCard: React.FC<{
             </Box>
           </S.HeaderInfoContent>
         </S.Header>
-        <PositionBody
-          description='Within this role, you will be creating content for a wide range of local
-        and international clients. This role is suited to Bali based creatives
-        looking to work in-house.'
-        />
+        <PositionBody description={position.shortDescription} />
       </S.Wrapper>
       <Divider />
 
       <S.Footer>
-        <Box display='flex' gap={4} py={2} px={3} flex={1.5}>
+        <Box display='flex' gap={4} py={2} px={3} flex={1}>
           <PositionInfo
             icon={CalendarMonthOutlined}
             title='Data'
-            value={new Date().toLocaleDateString()}
+            value={format(new Date(position.creationDate), 'dd/MM/yyyy')}
           />
           <PositionInfo
             icon={PaidOutlined}
             title='Orçamento'
-            value='R$1.2K - R$1.5K'
+            value={currencyFormatter.format(position.salaryRange)}
           />
         </Box>
         <Divider
@@ -150,16 +157,16 @@ export const CompletePositionCard: React.FC<{
           flexItem
         />
         <Box display='flex' gap={3} py={2} px={3} flex={1}>
-          {/* <PositionInfo
-            title={String(70)}
-            // titleAdditionalInfo='(43 novos)'
-            value='Aplicações'  
-          /> */}
-          {/* <Divider orientation='vertical' flexItem /> */}
+          <PositionInfo
+            title={String(40)}
+            value='Aplicações'
+            // titleAdditionalInfo='/40'
+          />
+          <Divider orientation='vertical' flexItem />
           <PositionInfo
             title={String(5)}
             value='Selecionados'
-            titleAdditionalInfo='/40'
+            // titleAdditionalInfo='/40'
           />
           <Divider orientation='vertical' flexItem />
           <PositionInfo

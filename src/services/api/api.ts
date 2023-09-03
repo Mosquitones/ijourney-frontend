@@ -4,7 +4,7 @@ import { serviceInterceptors } from 'services/utils'
 
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/api`,
-  withCredentials: true,
+  withCredentials: false,
   headers: {
     Language: i18next.language,
     'Access-Control-Allow-Origin': '*', // Required for CORS support to work

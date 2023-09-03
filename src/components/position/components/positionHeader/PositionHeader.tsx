@@ -6,8 +6,12 @@ import { Avatar, Box, Typography } from '@mui/material'
 import { ChipList } from 'components'
 
 import * as S from './PositionHeader.styles'
+import { PositionHeaderPropTypes } from './PositionHeader.types'
 
-export const PositionHeader: React.FC = () => {
+export const PositionHeader: React.FC<PositionHeaderPropTypes> = ({
+  title,
+  chips,
+}) => {
   return (
     <S.HeaderMainContent>
       <Avatar
@@ -22,9 +26,9 @@ export const PositionHeader: React.FC = () => {
       </Avatar>
       <Box display='flex' flexDirection='column' gap={1}>
         <Typography fontWeight={({ typography }) => typography.fontWeightBold}>
-          Company
+          {title}
         </Typography>
-        <ChipList />
+        <ChipList chips={chips} />
       </Box>
     </S.HeaderMainContent>
   )

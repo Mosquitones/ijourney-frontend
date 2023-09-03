@@ -6,6 +6,7 @@ import {
   BoxProps,
   Chip,
   Container,
+  LinearProgress,
   TabProps,
   TabsProps,
   Tooltip,
@@ -53,11 +54,17 @@ const Wrapper: React.FC<
   )
 }
 
-const BannerContainer: React.FC<PropsWithChildren> = ({ children }) => {
+const BannerContainer: React.FC<PropsWithChildren<{ isLoading?: boolean }>> = ({
+  children,
+  isLoading,
+}) => {
   return (
-    <S.Banner>
-      <Container>{children}</Container>
-    </S.Banner>
+    <>
+      <S.Banner>
+        <Container>{children}</Container>
+      </S.Banner>
+      {isLoading && <LinearProgress />}
+    </>
   )
 }
 

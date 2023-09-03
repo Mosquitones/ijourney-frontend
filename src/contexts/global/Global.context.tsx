@@ -14,15 +14,18 @@ import { LayoutContextWrapper } from './layout/Layout.context'
 export const GlobalContextWrapper: React.FC<PropsWithChildren> = ({
   children,
 }) => (
-  <AuthContextWrapper>
-    <LanguageContextWrapper i18nProviderProps={i18n} languages={LANGUAGES_DATA}>
-      <AccessibilityContextWrapper>
-        <FeedbackContextWrapper>
+  <FeedbackContextWrapper>
+    <AuthContextWrapper>
+      <LanguageContextWrapper
+        i18nProviderProps={i18n}
+        languages={LANGUAGES_DATA}
+      >
+        <AccessibilityContextWrapper>
           <LayoutContextWrapper>{children}</LayoutContextWrapper>
-        </FeedbackContextWrapper>
-      </AccessibilityContextWrapper>
-    </LanguageContextWrapper>
-  </AuthContextWrapper>
+        </AccessibilityContextWrapper>
+      </LanguageContextWrapper>
+    </AuthContextWrapper>
+  </FeedbackContextWrapper>
 )
 
 export * from './feedback/Feedback.context'
