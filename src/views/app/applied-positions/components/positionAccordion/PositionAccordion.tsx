@@ -41,7 +41,7 @@ export const PositionAccordion: React.FC = () => {
           flex={1}
           pr={2}
         >
-          <Position.Header />
+          <Position.Header title='aaaaaaa' chips={['aaaaa', 'bbbb']} />
           <CircularProgress value={60} />
         </Box>
       </S.AccordionSummary>
