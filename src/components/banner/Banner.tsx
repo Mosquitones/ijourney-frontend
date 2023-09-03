@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { PropsWithChildren } from 'react'
 
 import { KeyboardBackspaceOutlined } from '@mui/icons-material'
@@ -11,13 +12,26 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import * as S from './Banner.styles'
+
+const _getPreviousRoute = (pathname: string) => {
+  const segments = pathname.split('/').filter((segment) => segment !== '')
+
+  if (segments.length > 1) {
+    segments.pop()
+    return `/${segments.join('/')}`
+  }
+
+  return '/'
+}
 
 const Wrapper: React.FC<
   PropsWithChildren<BoxProps & { renderBackButton?: boolean }>
 > = ({ children, renderBackButton, ...rest }) => {
   const ariaLabel = 'Voltar para página anterior'
+  const navigate = useNavigate()
 
   return (
     <S.Wrapper {...rest}>
@@ -30,8 +44,7 @@ const Wrapper: React.FC<
             color='default'
             aria-label={ariaLabel}
             component='a'
-            href='javascript:history.back()'
-            onClick={() => null}
+            onClick={() => navigate(-1)}
           />
         </Tooltip>
       )}

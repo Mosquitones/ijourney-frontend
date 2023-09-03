@@ -15,23 +15,23 @@ export const MarkdownViewer: React.FC<MarkdownViewerPropTypes> = ({
   return (
     <ReactMarkdown
       components={{
-        li: ({ node: _, ...props }) => (
+        li: ({ node, ordered, ...props }) => (
           <li style={{ marginLeft: 16 }} {...props} />
         ),
-        code({ node: _, inline, className, children, ...props }) {
-          const match = /language-(\w+)/.exec(className || '')
-          return !inline && match ? (
+        code({ node, ...props }) {
+          const match = /language-(\w+)/.exec(props.className || '')
+          return !props.inline && match ? (
             <SyntaxHighlighter
               {...props}
               style={materialDark}
               language={match[1]}
               PreTag='div'
             >
-              {String(children).replace(/\n$/, '')}
+              {String(props.children).replace(/\n$/, '')}
             </SyntaxHighlighter>
           ) : (
-            <code {...props} className={className}>
-              {children}
+            <code {...props} className={props.className}>
+              {props.children}
             </code>
           )
         },

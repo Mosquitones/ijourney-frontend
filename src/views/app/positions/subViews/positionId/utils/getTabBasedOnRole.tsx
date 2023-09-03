@@ -45,10 +45,10 @@ export const getTabsBasedOnRole = (role?: UserRoleTypes) => {
   if (!role) return DEFAULT_TABS
 
   const tabs: { [key in UserRoleTypes]: TabTypes[] } = {
-    admin: DEFAULT_TABS,
-    recruiter: RECRUITER_TABS,
-    candidate: CANDIDATE_TABS,
-    company: DEFAULT_TABS,
+    ADMIN: DEFAULT_TABS,
+    RECRUITER: RECRUITER_TABS,
+    CANDIDATE: CANDIDATE_TABS,
+    COMPANY: DEFAULT_TABS,
   }
 
   return tabs[role]

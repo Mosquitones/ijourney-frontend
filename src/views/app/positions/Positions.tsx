@@ -36,7 +36,7 @@ export default function PositionsPage() {
 
   return (
     <>
-      {!isUserRole.candidate && (
+      {!isUserRole.CANDIDATE && (
         <FloatingActionButton
           icon={Add}
           tooltip='Clique para Adicionar uma vaga'

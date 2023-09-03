@@ -31,8 +31,8 @@ export default function LoginPage() {
       password: '',
     },
     validationSchema: LoginFormSchema,
-    onSubmit: ({ email: loginId, password }) => {
-      signIn({ loginId, password })
+    onSubmit: ({ email, password }) => {
+      signIn({ email, password })
     },
   })
 
@@ -94,7 +94,13 @@ export default function LoginPage() {
           Esqueceu a senha?
         </Link>
       </Box>
-      <Button variant='contained' fullWidth type='submit' color='black'>
+      <Button
+        variant='contained'
+        fullWidth
+        type='submit'
+        color='black'
+        loading={isLoggingIn}
+      >
         Entrar
       </Button>
       <Box

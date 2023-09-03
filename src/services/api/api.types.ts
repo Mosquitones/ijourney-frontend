@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 export interface PaginatedApiParamsTypes {
   page?: string | number
   pageSize?: number
@@ -15,24 +16,24 @@ export interface PaginatedApiParamsTypes {
   userGroupId?: string | null
 }
 
-export type ApiPropTypes = {
-  params: PaginatedApiParamsTypes
-}
-
 export type ApiResponseTypes<T> = {
-  data: T
-  statusCode: number
-  message: string
+  headers: {}
+  body: {
+    data: T
+    status: number
+    message: string
+  }
+  statusCode: string
+  statusCodeValue: number
 }
 
-export type ApiPaginationDataTypes = {
-  dataCount: number
-  pageNumber: number
-  pageSize: number
-  totalRowCount: number
-}
 export interface PaginatedResponse<T>
   extends Omit<ApiResponseTypes<T>, 'data'> {
   data: T[]
-  pagination: ApiPaginationDataTypes
+  pagination: {
+    dataCount: number
+    pageNumber: number
+    pageSize: number
+    totalRowCount: number
+  }
 }

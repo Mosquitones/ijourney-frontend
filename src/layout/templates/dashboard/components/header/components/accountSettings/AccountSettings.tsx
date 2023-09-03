@@ -38,8 +38,8 @@ export const AccountSettings: React.FC = () => {
         <IconButton sx={{ mr: -1 }} onClick={handleClick}>
           <Avatar
             sx={{ bgcolor: ({ palette }) => palette.primary.main }}
-            alt={user?.name}
-            src={user?.image}
+            alt={user?.fullName}
+            src={user?.imageUrl}
           />
         </IconButton>
       </Tooltip>

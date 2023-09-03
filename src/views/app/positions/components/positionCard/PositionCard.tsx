@@ -8,7 +8,7 @@ import { PositionCardTypes } from './PositionCard.types'
 export const PositionCard: React.FC<PositionCardTypes> = (props) => {
   const { isUserRole } = useAuth()
 
-  if (!isUserRole.candidate) {
+  if (!isUserRole.CANDIDATE) {
     return <PositionCardVariant.Complete seeButtonProps={props} />
   }
 

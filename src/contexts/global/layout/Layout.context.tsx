@@ -15,8 +15,8 @@ export const LayoutContextWrapper: FCWithChildren = ({ children }) => {
   const navItems = useNavItems()
 
   const userNavItems = useMemo(
-    () => (user?.role ? navItems[user.role] : null),
-    [navItems, user?.role]
+    () => (user?.userType ? navItems[user.userType] : null),
+    [navItems, user?.userType]
   )
 
   const value = useMemo(

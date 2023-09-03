@@ -70,7 +70,7 @@ const PositionInfo: React.FC<{
           color='text.primary'
           display='flex'
           alignItems='center'
-          gap={1}
+          gap={0.5}
           fontWeight={({ typography }) => typography.fontWeightBold}
         >
           {title}
@@ -133,7 +133,7 @@ export const CompletePositionCard: React.FC<{
       <Divider />
 
       <S.Footer>
-        <Box display='flex' gap={4} py={2} px={3} flex={2}>
+        <Box display='flex' gap={4} py={2} px={3} flex={1.5}>
           <PositionInfo
             icon={CalendarMonthOutlined}
             title='Data'
@@ -149,16 +149,24 @@ export const CompletePositionCard: React.FC<{
           orientation={isDevice.from.md ? 'vertical' : 'horizontal'}
           flexItem
         />
-        <Box display='flex' gap={3} py={2} px={3}>
-          <PositionInfo
+        <Box display='flex' gap={3} py={2} px={3} flex={1}>
+          {/* <PositionInfo
             title={String(70)}
-            titleAdditionalInfo='(43 novos)'
-            value='Aplicações'
+            // titleAdditionalInfo='(43 novos)'
+            value='Aplicações'  
+          /> */}
+          {/* <Divider orientation='vertical' flexItem /> */}
+          <PositionInfo
+            title={String(5)}
+            value='Selecionados'
+            titleAdditionalInfo='/40'
           />
           <Divider orientation='vertical' flexItem />
-          <PositionInfo title={String(5)} value='Selecionados' />
-          <Divider orientation='vertical' flexItem />
-          <PositionInfo title={String(0)} value='Contratados' />
+          <PositionInfo
+            title={String(0)}
+            value='Contratados'
+            titleAdditionalInfo='/3'
+          />
         </Box>
       </S.Footer>
     </S.Paper>

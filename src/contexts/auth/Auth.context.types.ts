@@ -3,20 +3,20 @@ import { UseMutationResult } from 'react-query'
 
 import {
   ApiResponseTypes,
-  AuthLoginPayloadTypes,
-  UserInfoTypes,
+  LoginPayloadTypes,
+  UserTypes,
   UserRoleTypes,
 } from 'services'
 
 type _UserInfoQueryTypes = UseMutationResult<
-  ApiResponseTypes<UserInfoTypes>,
+  ApiResponseTypes<UserTypes>,
   AxiosError<ApiResponseTypes<unknown>, unknown>,
   void,
   unknown
 >
 
 export interface AuthContextTypes {
-  user: UserInfoTypes | null
+  user: UserTypes | null
   cookies: {
     accessToken?: string
   }
@@ -24,6 +24,6 @@ export interface AuthContextTypes {
   // userInfoQuery: UserInfoQueryTypes
   isUserAuthenticated: boolean
   isLoggingIn: boolean
-  signIn: (payload: AuthLoginPayloadTypes) => void
+  signIn: (payload: LoginPayloadTypes) => void
   signOut: () => void
 }

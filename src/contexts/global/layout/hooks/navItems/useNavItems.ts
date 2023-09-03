@@ -57,7 +57,7 @@ export const useNavItems = () => {
   }
 
   const navItems: RouteBasedOnRoleTypes = {
-    candidate: [
+    CANDIDATE: [
       {
         label: 'Vagas',
         ...POSITION_ITEM_PROPERTIES,
@@ -72,7 +72,7 @@ export const useNavItems = () => {
       COURSE_ITEM,
       ABOUT_US_ITEM,
     ],
-    recruiter: [
+    RECRUITER: [
       {
         label: 'Minhas Vagas',
         ...POSITION_ITEM_PROPERTIES,
@@ -82,12 +82,12 @@ export const useNavItems = () => {
       // COURSE_ITEM,
       ABOUT_US_ITEM,
     ],
-    company: [
+    COMPANY: [
       { ...REPORT_ITEM, isDefaultPath: true },
       COURSE_ITEM,
       ABOUT_US_ITEM,
     ],
-    admin: [
+    ADMIN: [
       { ...REPORT_ITEM, isDefaultPath: true },
       COURSE_ITEM,
       ABOUT_US_ITEM,

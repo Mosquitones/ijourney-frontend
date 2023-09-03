@@ -15,7 +15,7 @@ export const ProtectedRoute: React.FC<ProtectedRoutePropTypes> = ({
   const { user, isUserAuthenticated } = useAuth()
   const location = useLocation()
 
-  const containsRoles = user?.role ? roles.includes(user.role) : false
+  const containsRoles = user?.userType ? roles.includes(user.userType) : false
 
   if (!isUserAuthenticated) {
     return <Navigate to={redirectPath} state={{ from: location }} replace />
