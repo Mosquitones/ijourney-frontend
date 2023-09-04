@@ -38,16 +38,6 @@ export default function LoginPage() {
     },
   })
 
-  // useEffect(() => {
-  //   if (cookies.accessToken) {
-  //     userInfoQuery.mutate()
-  //   }
-  // }, [cookies.accessToken, userInfoQuery])
-
-  // useEffect(() => {
-  //   userInfoQuery.mutate()
-  // }, [userInfoQuery])
-
   return (
     <S.Form onSubmit={formik.handleSubmit}>
       <Logo extended containerProps={{ mb: 2 }} />

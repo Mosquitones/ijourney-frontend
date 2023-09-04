@@ -45,7 +45,7 @@ export default function ClassificationPage() {
             variant='body1'
             display='flex'
             alignItems='center'
-            gap={1}
+            gap={0.8}
             fontWeight={({ typography }) => typography.fontWeightBold}
             color='text.secondary'
           >

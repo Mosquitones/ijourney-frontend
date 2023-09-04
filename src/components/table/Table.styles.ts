@@ -20,7 +20,7 @@ export const TableStyles = styled(Table)<{
 
   --row-contrast-background-color: ${({ rowBgColor, theme }) =>
     rowBgColor
-      ? `${theme.palette[rowBgColor].main}10`
+      ? `${theme.palette[rowBgColor].A700}`
       : theme.palette.background.paper};
 
   width: 100%;
