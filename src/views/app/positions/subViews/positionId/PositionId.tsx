@@ -55,7 +55,7 @@ export default function PositionIdPage() {
   })
 
   if (positionIdQuery.isLoading) return <div>Loading....</div>
-  if (!positionIdQuery.data) return <NotFoundPosition />
+  // if (!positionIdQuery.data) return <NotFoundPosition />
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
 
