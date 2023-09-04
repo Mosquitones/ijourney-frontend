@@ -6,6 +6,7 @@ export const ROUTES = {
   // Auth
   AUTH: 'auth',
   LOGIN: 'login',
+  SIGN_UP: 'signup',
   LOGOUT: 'logout',
   TWO_FACTOR: '2fa',
   FORGOT_PASSWORD: 'forgot-password',

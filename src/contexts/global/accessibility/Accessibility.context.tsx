@@ -1,20 +1,30 @@
-import React, { createContext, useContext, useMemo } from 'react'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { createContext, useContext, useEffect, useMemo } from 'react'
 
 import { FCWithChildren } from '@types'
 
 import { useLocalStorage } from 'hooks'
-import { hexToRgba } from 'utils'
 
 import { AccessibilityContextTypes } from './Accessibility.context.types'
+import { hexToRgba } from './utils'
 
 export const AccessibilityContext = createContext(
   {} as AccessibilityContextTypes
 )
 
+const hexColor = `#${import.meta.env.VITE_APP_PRIMARY_COLOR}`
+
 export const useAccessibility = () => useContext(AccessibilityContext)
 
+export const GET_PRIMARY_COLOR_IN_HEX = () => hexToRgba(hexColor)
 export const AccessibilityContextWrapper: FCWithChildren = ({ children }) => {
-  const hexColor = `#${import.meta.env.VITE_APP_PRIMARY_COLOR}`
+  const [color, setColor] = useLocalStorage<AccessibilityContextTypes['color']>(
+    'app_main_color',
+    {
+      rgba: GET_PRIMARY_COLOR_IN_HEX(),
+      hex: hexColor,
+    }
+  )
 
   const availableColors = useMemo(
     () => [
@@ -30,14 +40,6 @@ export const AccessibilityContextWrapper: FCWithChildren = ({ children }) => {
       '#f80d0d',
     ],
     []
-  )
-
-  const [color, setColor] = useLocalStorage<AccessibilityContextTypes['color']>(
-    'app_main_color',
-    {
-      rgba: hexToRgba(hexColor),
-      hex: hexColor,
-    }
   )
 
   const value = useMemo(

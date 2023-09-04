@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Theme } from '@mui/material'
 
-import { hexToRgba } from 'utils'
+import { GET_PRIMARY_COLOR_IN_HEX } from 'contexts'
 
 import { getPaletteColors } from './utils'
 
-const PRIMARY_PALETTE_COLORS = getPaletteColors(
-  hexToRgba(`#${import.meta.env.VITE_APP_PRIMARY_COLOR}`)
-)
+const PRIMARY_PALETTE_COLORS = getPaletteColors(GET_PRIMARY_COLOR_IN_HEX())
 
 export const palette: Theme['palette'] = {
   common: {

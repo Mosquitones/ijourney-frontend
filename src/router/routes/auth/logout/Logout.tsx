@@ -1,19 +1,16 @@
-import React, { lazy } from 'react'
+import React from 'react'
 
 import { Route } from 'react-router-dom'
+import LogoutPage from 'views/auth/logout/Logout'
 
 import { ROUTES } from 'router'
 
-const Login = lazy(() => import('views/auth/login/Login'))
-const Logout = lazy(() => import('views/auth/logout/Logout'))
-
 export const renderLogoutRoutes = () => {
-  const { LOGOUT, ID } = ROUTES
+  const { LOGOUT } = ROUTES
 
   return (
     <Route path={LOGOUT}>
-      <Route index element={<Logout />} />
-      <Route path={ID} element={<Login />} />
+      <Route index Component={LogoutPage} />
     </Route>
   )
 }

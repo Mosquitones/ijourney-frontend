@@ -26,6 +26,7 @@ import {
   renderLogoutRoutes,
   renderPositionRoutes,
   renderReportRoutes,
+  renderSignUpRoutes,
   ROUTES,
   RouteTypes,
 } from '.'
@@ -36,7 +37,7 @@ const redirectToDefaultRoute = (to: RouteTypes) => (
 
 export const Router: React.FC = () => {
   const { BASE_ROOT, UNKNOWN, AUTH, LOGIN, APP } = ROUTES
-  const { isUserAuthenticated, signOut, user, isUserRole } = useAuth()
+  const { isUserAuthenticated, user } = useAuth()
 
   const renderRouteBasedOnUserRole: { [key in UserRoleTypes]?: ReactNode } = {
     CANDIDATE: (
@@ -77,37 +78,46 @@ export const Router: React.FC = () => {
     ),
   }
 
+  const loginNavigate = <Navigate to={`/${AUTH}/${LOGIN}`} />
+
+  const authRoutes = (
+    <Route path={AUTH} Component={AuthTemplate}>
+      {isUserAuthenticated ? (
+        <Route index element={<Navigate to={BASE_ROOT} />} />
+      ) : (
+        <Route index element={loginNavigate} />
+      )}
+      {!isUserAuthenticated && (
+        <>
+          {renderLoginRoutes()}
+          {renderSignUpRoutes()}
+        </>
+      )}
+      {renderLogoutRoutes()}
+    </Route>
+  )
+
+  const dashboardRoutes = (
+    <Route path={BASE_ROOT} Component={DashboardLayout}>
+      {isUserAuthenticated && user ? (
+        <Route element={<ProtectedRoute roles={[user.userType]} />}>
+          <Route index element={<Navigate to={APP} />} />
+          <Route path={APP}>{renderRouteBasedOnUserRole[user.userType]}</Route>
+        </Route>
+      ) : (
+        <Route index element={loginNavigate} />
+      )}
+    </Route>
+  )
+
   const router: RouterProviderProps['router'] = createBrowserRouter(
     createRoutesFromElements(
-      <Route path={BASE_ROOT} element={<Outlet />}>
-        {isUserAuthenticated ? (
-          <Route path={AUTH}>{renderLogoutRoutes()}</Route>
-        ) : (
-          <>
-            <Route index element={<Navigate to={AUTH} />} />
-            <Route path={AUTH}>
-              <Route index element={<Navigate to={LOGIN} />} />
-              <Route Component={AuthTemplate}>
-                {renderLoginRoutes()}
-                {renderLogoutRoutes()}
-              </Route>
-            </Route>
-          </>
-        )}
-
-        <Route path={BASE_ROOT} Component={DashboardLayout}>
-          {user && (
-            <Route element={<ProtectedRoute roles={[user.userType]} />}>
-              <Route index element={<Navigate to={APP} />} />
-              <Route path={APP}>
-                {renderRouteBasedOnUserRole[user.userType]}
-              </Route>
-            </Route>
-          )}
-        </Route>
-
+      <>
+        {!isUserAuthenticated && <Route index element={loginNavigate} />}
+        {authRoutes}
+        {dashboardRoutes}
         <Route path={UNKNOWN} element={<Navigate to={BASE_ROOT} />} />
-      </Route>
+      </>
     )
   )
 

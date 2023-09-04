@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { CssBaseline, responsiveFontSizes } from '@mui/material'
 import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
@@ -32,6 +32,7 @@ export const MuiThemeWrapper: FCWithChildren<{ theme?: ThemeOptions }> = ({
   let currentTheme = createTheme(theme)
 
   currentTheme = responsiveFontSizes(currentTheme)
+
   currentTheme.palette.primary = getPaletteColors(color.rgba)
 
   return (

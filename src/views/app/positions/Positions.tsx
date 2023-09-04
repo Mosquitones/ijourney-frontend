@@ -24,7 +24,6 @@ import { Banner, Button, FloatingActionButton, Input } from 'components'
 import { useAuth, useLayout } from 'contexts'
 import { useDebounce, useIsDevice } from 'hooks'
 import { PositionServices } from 'services'
-import { hexToRgba } from 'utils'
 
 import { AdditionalFilters, MainFilters, PositionCard } from './components'
 

@@ -18,21 +18,21 @@ import { Button, Input, Logo } from 'components'
 import { useAuth } from 'contexts'
 import { ROUTES } from 'router'
 
-import * as S from './Login.styles'
-import { LoginFormPropTypes } from './Login.types'
-import { LoginFormSchema } from './utils/LoginForm.schema'
+import * as S from './SignUp.styles'
+import { SignUpFormPropTypes } from './SignUp.types'
+import { SignUpFormSchema } from './utils/SignUpForm.schema'
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { signIn, isLoggingIn, cookies } = useAuth()
 
-  const formik = useFormik<LoginFormPropTypes>({
+  const formik = useFormik<SignUpFormPropTypes>({
     initialValues: {
       email: '',
       password: '',
     },
-    validationSchema: LoginFormSchema,
+    validationSchema: SignUpFormSchema,
     onSubmit: ({ email, password }) => {
       signIn({ email, password })
     },
@@ -55,21 +55,17 @@ export default function LoginPage() {
         fontWeight={({ typography }) => typography.fontWeightBold}
         variant='h1'
       >
-        Entrar
+        Criar conta
       </Typography>
       <Typography variant='body1' color='text.secondary'>
         Encontre a sua próxima oportunidade!
       </Typography>
-      <Button variant='outlined' color='info' type='button'>
-        <SvgIcon component={Google} fontSize='small' sx={{ mr: 1.5 }} />
-        Entrar com Google
-      </Button>
 
-      <Divider sx={{ color: 'text.secondary' }}>
+      {/* <Divider sx={{ color: 'text.secondary' }}>
         <Typography variant='body2' color='text.secondary'>
           ou entre com e-mail
         </Typography>
-      </Divider>
+      </Divider> */}
       <Input
         {...formik.getFieldProps('email')}
         error={formik.touched.email && !!formik.errors.email}
@@ -117,9 +113,9 @@ export default function LoginPage() {
           color='text.primary'
           fontWeight={({ typography }) => typography.fontWeightBold}
         >
-          Não possui conta?{' '}
-          <Link href={`/${ROUTES.AUTH}/${ROUTES.SIGN_UP}`} color='inherit'>
-            Cadastre-se agora
+          Ja possui uma conta?{' '}
+          <Link href={`/${ROUTES.AUTH}/${ROUTES.LOGIN}`} color='inherit'>
+            Entre agora
           </Link>
         </Typography>
       </Box>

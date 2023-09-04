@@ -1,7 +1,5 @@
 export * from './makeQueryParams'
 export * from './timeToMilliseconds'
 export * from './breakpointHelpers'
-export * from './rgbaToHexWithoutOpacity'
-export * from './hexToRgba'
 export * from './numberFormat'
 export * from './getChips'

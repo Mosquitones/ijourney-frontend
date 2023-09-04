@@ -15,16 +15,16 @@ export const GlobalContextWrapper: React.FC<PropsWithChildren> = ({
   children,
 }) => (
   <FeedbackContextWrapper>
-    <AuthContextWrapper>
-      <LanguageContextWrapper
-        i18nProviderProps={i18n}
-        languages={LANGUAGES_DATA}
-      >
-        <AccessibilityContextWrapper>
+    <AccessibilityContextWrapper>
+      <AuthContextWrapper>
+        <LanguageContextWrapper
+          i18nProviderProps={i18n}
+          languages={LANGUAGES_DATA}
+        >
           <LayoutContextWrapper>{children}</LayoutContextWrapper>
-        </AccessibilityContextWrapper>
-      </LanguageContextWrapper>
-    </AuthContextWrapper>
+        </LanguageContextWrapper>
+      </AuthContextWrapper>
+    </AccessibilityContextWrapper>
   </FeedbackContextWrapper>
 )
 
