@@ -28,7 +28,7 @@ import {
   Typography,
   useScrollTrigger,
 } from '@mui/material'
-import { useMutation } from 'react-query'
+import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 import { Banner, EmptyContent } from 'components'
@@ -49,13 +49,13 @@ export default function PositionIdPage() {
   const { positionId } = useParams()
   const tabs = getTabsBasedOnRole(user?.userType)
 
-  const positionIdQuery = useMutation({
-    mutationKey: [`/positions/${positionId}`, { method: 'GET' }],
-    mutationFn: () => PositionServices.findById(String(positionId)),
+  const positionIdQuery = useQuery({
+    queryKey: [`/positions/${positionId}`, { method: 'GET' }],
+    queryFn: () => PositionServices.findById(String(positionId)),
   })
 
-  if (positionIdQuery.isLoading) return <div>Loading....</div>
-  // if (!positionIdQuery.data) return <NotFoundPosition />
+
+  if (!positionIdQuery.data) return <NotFoundPosition />
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
 
