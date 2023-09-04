@@ -54,7 +54,6 @@ export default function PositionIdPage() {
     queryFn: () => PositionServices.findById(String(positionId)),
   })
 
-
   if (!positionIdQuery.data) return <NotFoundPosition />
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
