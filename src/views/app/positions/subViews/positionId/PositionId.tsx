@@ -54,6 +54,7 @@ export default function PositionIdPage() {
     mutationFn: () => PositionServices.findById(String(positionId)),
   })
 
+  if (positionIdQuery.isLoading) return <div>Loading....</div>
   if (!positionIdQuery.data) return <NotFoundPosition />
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
