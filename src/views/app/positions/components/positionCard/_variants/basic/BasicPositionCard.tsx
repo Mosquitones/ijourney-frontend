@@ -24,6 +24,7 @@ import { ptBR } from 'date-fns/locale'
 
 import { ChipList, Position } from 'components'
 import { useIsDevice } from 'hooks'
+import { getChips } from 'utils'
 
 import { PositionBody } from '../../components'
 import * as S from '../../PositionCard.styles'
@@ -41,7 +42,14 @@ export const BasicPositionCard: React.FC<BasicPositionCardPropTypes> = ({
       <S.Paper>
         <S.Wrapper>
           <S.Header>
-            <Position.Header title={position.title} chips={['aaaaa', 'bbbb']} />
+            <Position.Header
+              title={position.title}
+              chips={getChips({
+                employmentType: position.employmentType,
+                locationType: position.locationType,
+                salary: position.salaryRange,
+              })}
+            />
             <S.HeaderInfoContent>
               <Box display='flex' gap={1} alignItems='center'>
                 <SvgIcon component={Place} sx={{ fontSize: '1.8rem' }} />

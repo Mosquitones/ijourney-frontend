@@ -15,7 +15,9 @@ import { GlobalContextWrapper } from './contexts'
 import { BackdropComponent, Router } from './router'
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
+  defaultOptions: {
+    queries: { refetchOnWindowFocus: false, retry: false },
+  },
 })
 
 export const App: React.FC = () => {

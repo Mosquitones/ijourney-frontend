@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 
 import {
   BusinessCenter,
+  InboxOutlined,
   KeyboardBackspaceOutlined,
   PlaceOutlined,
   SearchOutlined,
@@ -27,23 +29,32 @@ import {
   useScrollTrigger,
 } from '@mui/material'
 import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 
-import { Banner, Button, Input } from 'components'
-import { useAuth } from 'contexts'
+import { Banner, EmptyContent } from 'components'
+import { TabContextWrapper, useAuth } from 'contexts'
 import { useIsDevice } from 'hooks'
-import { ROLES } from 'services'
+import { PositionServices } from 'services'
 
-import CandidatesPage from './tabs/candidates/Candidates'
-import DescriptionPage from './tabs/description/Description'
 import { getTabsBasedOnRole } from './utils/getTabBasedOnRole'
+
+const NotFoundPosition: React.FC = () => (
+  <Box flex={1} display='flex' justifyContent='center' alignItems='center'>
+    <EmptyContent boxProps={{ mb: 3 }} />
+  </Box>
+)
 
 export default function PositionIdPage() {
   const { user } = useAuth()
+  const { positionId } = useParams()
   const tabs = getTabsBasedOnRole(user?.userType)
 
-  // const positionIdQuery = useMutation(() => {}, {
-  //   onSuccess: () => {},
-  // })
+  const positionIdQuery = useMutation({
+    mutationKey: [`/positions/${positionId}`, { method: 'GET' }],
+    mutationFn: () => PositionServices.findById(String(positionId)),
+  })
+
+  if (!positionIdQuery.data) return <NotFoundPosition />
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
 
@@ -81,19 +92,18 @@ export default function PositionIdPage() {
                     variant='body1'
                     fontWeight={({ typography }) => typography.fontWeightBold}
                   >
-                    WebFlow Developer (Frontend)
+                    {positionIdQuery.data?.title}
                   </Typography>
                   {isDevice.from.sm && (
                     <Divider orientation='vertical' flexItem />
                   )}
                   <Typography variant='body2' color='text.secondary'>
-                    Company name
+                    {positionIdQuery.data?.companyName}
                   </Typography>
                 </Box>
 
                 <Typography variant='body2' color='text.secondary'>
-                  Descrição do projeto - Lorem ipsum dolor sit amet, consetetur
-                  sadipscing elitr, sed diamr
+                  {positionIdQuery.data?.shortDescription}
                 </Typography>
               </Box>
             </Box>
@@ -101,7 +111,6 @@ export default function PositionIdPage() {
           <Banner.Tabs
             value={selectedTab}
             onChange={(_, newValue) => setSelectedTab(newValue)}
-            aria-label='scrollable force tabs example'
           >
             {tabs.map((tab) => (
               <Banner.Tab key={tab.value} {...tab} />
@@ -109,11 +118,13 @@ export default function PositionIdPage() {
           </Banner.Tabs>
         </Banner.Container>
         <Container sx={{ py: 6 }}>
-          {tabs.map((tab) => (
-            <TabPanel key={tab.value} value={tab.value}>
-              {tab.content}
-            </TabPanel>
-          ))}
+          <TabContextWrapper value={positionIdQuery.data}>
+            {tabs.map((tab) => (
+              <TabPanel key={tab.value} value={tab.value}>
+                {tab.content}
+              </TabPanel>
+            ))}
+          </TabContextWrapper>
         </Container>
       </TabContext>
     </>

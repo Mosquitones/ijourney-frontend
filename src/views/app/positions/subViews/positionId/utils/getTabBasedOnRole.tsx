@@ -27,7 +27,7 @@ const CANDIDATES_TAB: TabTypes = {
 const CULTURE_BENEFITS_TAB: TabTypes = {
   value: 'db674ef1-013f-49d3-92ac-b6d5db7aa09d',
   label: 'Cultura e Benefícios',
-  content: 'Cultura e Benefícios',
+  content: <div>Cultura e Benefícios</div>,
   disabled: true,
 }
 

@@ -48,7 +48,6 @@ export default function ReportsPage() {
         <Banner.Tabs
           value={selectedTab}
           onChange={(_, newValue) => setSelectedTab(newValue)}
-          aria-label='scrollable force tabs example'
         >
           {TABS.map((tab) => (
             <Banner.Tab key={tab.value} {...tab} />

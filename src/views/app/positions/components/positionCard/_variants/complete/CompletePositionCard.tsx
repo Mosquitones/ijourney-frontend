@@ -20,6 +20,7 @@ import {
   ButtonBaseProps,
   ButtonProps,
   Chip,
+  ChipProps,
   Divider,
   IconButton,
   IconButtonProps,
@@ -29,9 +30,17 @@ import {
 } from '@mui/material'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { getChips } from 'utils/getChips'
 
-import { ChipList, Position } from 'components'
+import { ChipList, ChipListPropTypes, Position } from 'components'
 import { useIsDevice } from 'hooks'
+import {
+  EMPLOYMENT_TYPES_MAP,
+  EmploymentTypes,
+  LOCATION_TYPES_MAP,
+  LocationTypes,
+} from 'services'
+import { currencyFormatter } from 'utils'
 
 import { PositionBody } from '../../components'
 import * as S from '../../PositionCard.styles'
@@ -97,23 +106,23 @@ const PositionInfo: React.FC<{
   )
 }
 
-console.log(ptBR)
 export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
   seeButtonProps,
   position,
 }) => {
   const isDevice = useIsDevice()
 
-  const currencyFormatter = new Intl.NumberFormat(ptBR.code, {
-    style: 'currency',
-    currency: 'BRL',
-  })
-
   return (
     <S.Paper>
       <S.Wrapper>
         <S.Header>
-          <Position.Header title={position.title} chips={['aaaa', 'ssss']} />
+          <Position.Header
+            title={position.title}
+            chips={getChips({
+              employmentType: position.employmentType,
+              locationType: position.locationType,
+            })}
+          />
           <S.HeaderInfoContent>
             <Box display='flex' ml={-1}>
               {[

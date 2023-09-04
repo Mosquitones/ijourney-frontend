@@ -18,7 +18,7 @@ export const ChipList: React.FC<ChipListPropTypes> = ({ chips }) => {
       gap={1}
       alignItems='center'
     >
-      {chips.map((chip, i) => (
+      {chips.map(({ label, ...rest }, i) => (
         <Box
           key={crypto.randomUUID() + i}
           display='flex'
@@ -29,7 +29,10 @@ export const ChipList: React.FC<ChipListPropTypes> = ({ chips }) => {
           {i !== 0 && isDevice.from.sm && (
             <Circle sx={{ fontSize: '0.5rem', color: 'text.secondary' }} />
           )}
-          <Chip label={<Typography variant='body2'>{chip}</Typography>} />
+          <Chip
+            {...rest}
+            label={<Typography variant='body2'>{label}</Typography>}
+          />
         </Box>
       ))}
     </Box>

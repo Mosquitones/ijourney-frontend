@@ -10,6 +10,15 @@ const findAll = async () => {
   return response.data
 }
 
+const findById = async (positionId: number | string) => {
+  const { data: response } = await api.get<ApiResponseTypes<PositionTypes>>(
+    `/positions/${positionId}`
+  )
+
+  return response.data
+}
+
 export default {
   findAll,
+  findById,
 }

@@ -28,12 +28,17 @@ import {
 } from '@mui/material'
 
 import { Banner, Button, ChipList, Input, MarkdownViewer } from 'components'
+import { useTabContext } from 'contexts'
 import { useIsDevice } from 'hooks'
+import { PositionTypes } from 'services'
+import { getChips } from 'utils'
 
 import { MARKDOWN_TEXT } from './markdown.util'
 
 export default function DescriptionTab() {
   const isDevice = useIsDevice()
+
+  const tabContext = useTabContext<PositionTypes>()
 
   return (
     <Box display='flex' flexDirection='column' gap={4}>
@@ -42,12 +47,18 @@ export default function DescriptionTab() {
           variant='h3'
           fontWeight={({ typography }) => typography.fontWeightBold}
         >
-          WebFlow Developer (Frontend) at EY Academy
+          {tabContext.title}
         </Typography>
-        <ChipList chips={['aaaa', 'bbbbb']} />
+        <ChipList
+          chips={getChips({
+            employmentType: tabContext.employmentType,
+            locationType: tabContext.locationType,
+            salary: tabContext.salaryRange,
+          })}
+        />
       </Box>
       <Box display='flex' flexDirection='column' gap={3}>
-        <MarkdownViewer markdown={MARKDOWN_TEXT} />
+        <MarkdownViewer markdown={tabContext.longDescription} />
       </Box>
       <Box display='flex' gap={2}>
         <Button variant='contained' color='black'>

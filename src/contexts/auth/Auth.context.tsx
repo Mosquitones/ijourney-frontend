@@ -101,22 +101,20 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     return check
   }, [user?.userType])
 
-  const loginQuery = useMutation(
-    ['/users/login', { method: 'POST' }],
-    UserServices.login.post,
-    {
-      onSuccess: (user) => {
-        setUser(user)
-        setSessionDateStorage(new Date().getTime())
-        setCookie('access_token', crypto.randomUUID(), {
-          path: '/',
-        })
-      },
-      onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
-        alert.showError(error.response?.data.message || error.message)
-      },
-    }
-  )
+  const loginQuery = useMutation({
+    mutationKey: ['/users/login', { method: 'POST' }],
+    mutationFn: UserServices.login.post,
+    onSuccess: (user) => {
+      setUser(user)
+      setSessionDateStorage(new Date().getTime())
+      setCookie('access_token', crypto.randomUUID(), {
+        path: '/',
+      })
+    },
+    onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
+      alert.showError(error.response?.data.message || error.message)
+    },
+  })
 
   // const revalidateTokenQuery = useMutation(
   //   ['/fusionauth/validateToken', { method: 'GET' }],

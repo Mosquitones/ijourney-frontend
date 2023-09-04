@@ -37,11 +37,11 @@ export default function PositionsPage() {
   const isDevice = useIsDevice()
   const { isUserRole } = useAuth()
 
-  const positionsQuery = useQuery(
-    ['/positions', { method: 'GET' }],
-    PositionServices.findAll
-  )
-  // const { appColor, colors, setAppColor } = useLayout()
+  const positionsQuery = useQuery({
+    queryKey: ['/positions', { method: 'GET' }],
+    queryFn: PositionServices.findAll,
+  })
+
   const theme = useTheme()
 
   return (
@@ -97,7 +97,9 @@ export default function PositionsPage() {
               variant='body2'
               color='text.secondary'
             >
-              {positionsQuery.data?.length && positionsQuery.data.length >= 0
+              {positionsQuery.isLoading
+                ? 'Carregando oportunidades...'
+                : positionsQuery.data?.length && positionsQuery.data.length >= 0
                 ? `${positionsQuery.data.length} oportunidade(s) encontrada(s)`
                 : 'Nenhuma oportunidade encontrada'}
             </Typography>

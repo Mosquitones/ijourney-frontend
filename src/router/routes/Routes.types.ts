@@ -26,6 +26,7 @@ export const ROUTES = {
 
   // Params
   ID: ':id',
+  POSITION_ID: ':positionId',
 } as const
 
 export type RouteTypes = (typeof ROUTES)[keyof typeof ROUTES] | 'default'
