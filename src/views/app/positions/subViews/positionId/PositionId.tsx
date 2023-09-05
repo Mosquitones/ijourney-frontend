@@ -1,6 +1,6 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   BusinessCenter,
@@ -22,6 +22,7 @@ import {
   InputBase,
   Paper,
   Select,
+  Skeleton,
   SvgIcon,
   Tab,
   Tabs,
@@ -54,16 +55,22 @@ export default function PositionIdPage() {
     queryFn: () => PositionServices.findById(String(positionId)),
   })
 
-  if (!positionIdQuery.data) return <NotFoundPosition />
-
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
 
   const isDevice = useIsDevice()
 
+  if (
+    !positionIdQuery.isLoading &&
+    !positionIdQuery.data &&
+    Boolean((positionIdQuery.error as any).response.status !== 200)
+  ) {
+    return <NotFoundPosition />
+  }
+
   return (
     <>
       <TabContext value={selectedTab}>
-        <Banner.Container>
+        <Banner.Container isLoading={positionIdQuery.isLoading}>
           <Banner.Wrapper maxWidth='sm' renderBackButton>
             <Box
               display='flex'
@@ -88,23 +95,36 @@ export default function PositionIdPage() {
                   gap={1}
                   alignItems={{ sm: 'center' }}
                 >
-                  <Typography
-                    variant='body1'
-                    fontWeight={({ typography }) => typography.fontWeightBold}
-                  >
-                    {positionIdQuery.data?.title}
-                  </Typography>
+                  {positionIdQuery.isLoading ? (
+                    <Skeleton variant='text' width={200} />
+                  ) : (
+                    <Typography
+                      variant='body1'
+                      fontWeight={({ typography }) => typography.fontWeightBold}
+                    >
+                      {positionIdQuery.data?.title}
+                    </Typography>
+                  )}
                   {isDevice.from.sm && (
                     <Divider orientation='vertical' flexItem />
                   )}
-                  <Typography variant='body2' color='text.secondary'>
-                    {positionIdQuery.data?.companyName}
-                  </Typography>
+
+                  {positionIdQuery.isLoading ? (
+                    <Skeleton variant='text' width={100} />
+                  ) : (
+                    <Typography variant='body2' color='text.secondary'>
+                      {positionIdQuery.data?.companyName}
+                    </Typography>
+                  )}
                 </Box>
 
-                <Typography variant='body2' color='text.secondary'>
-                  {positionIdQuery.data?.shortDescription}
-                </Typography>
+                {positionIdQuery.isLoading ? (
+                  <Skeleton variant='text' width={300} />
+                ) : (
+                  <Typography variant='body2' color='text.secondary'>
+                    {positionIdQuery.data?.shortDescription}
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Banner.Wrapper>
@@ -118,13 +138,15 @@ export default function PositionIdPage() {
           </Banner.Tabs>
         </Banner.Container>
         <Container sx={{ py: 6 }}>
-          <TabContextWrapper value={positionIdQuery.data}>
-            {tabs.map((tab) => (
-              <TabPanel key={tab.value} value={tab.value}>
-                {tab.content}
-              </TabPanel>
-            ))}
-          </TabContextWrapper>
+          {positionIdQuery.data && (
+            <TabContextWrapper value={positionIdQuery.data}>
+              {tabs.map((tab) => (
+                <TabPanel key={tab.value} value={tab.value}>
+                  {tab.content}
+                </TabPanel>
+              ))}
+            </TabContextWrapper>
+          )}
         </Container>
       </TabContext>
     </>

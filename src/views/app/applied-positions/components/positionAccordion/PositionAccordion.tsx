@@ -42,8 +42,10 @@ export const PositionAccordion: React.FC = () => {
           pr={2}
         >
           <Position.Header
-            title='aaaaaaa'
-            chips={[{ color: 'default', variant: 'filled', label: 'aaaa' }]}
+            title={`Vaga aplicada ${parseInt(String(Math.random() * 10))}`}
+            chips={[
+              { color: 'default', variant: 'filled', label: 'label default' },
+            ]}
           />
           <CircularProgress value={60} />
         </Box>
