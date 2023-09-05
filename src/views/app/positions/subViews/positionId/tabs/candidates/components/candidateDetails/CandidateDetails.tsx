@@ -156,7 +156,7 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
             onClick={() => null}
             variant='contained'
             sx={{
-              color: 'text.primary',
+              color: 'primary.contrastText',
               display: 'flex',
               alignItems: 'center',
               gap: 2,
