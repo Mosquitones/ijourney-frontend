@@ -7,7 +7,7 @@ export const COMPANY_ENUM = {
   ID: 1,
 } as const
 
-export const AGE_OF_THE_ELDERLY = 60
+export const AGE_OF_THE_ELDERLY = 40
 
 export const ROLE_ENUM = {
   RECRUITER: 'RECRUITER',
