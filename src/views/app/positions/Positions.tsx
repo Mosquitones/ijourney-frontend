@@ -145,7 +145,7 @@ export default function PositionsPage() {
           </Grid>
         </Grid>
       </Container>
-      <PositionModalHandler open onClose={() => null} />
+      {/* <PositionModalHandler open onClose={() => null} /> */}
     </>
   )
 }
