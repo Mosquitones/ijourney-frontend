@@ -18,12 +18,13 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { useQuery } from 'react-query'
+import { EnumValueTypes, ROLE_ENUM } from '@types'
+import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 
 import { Banner, Button, FloatingActionButton, Input } from 'components'
 import { useAuth, useLayout } from 'contexts'
 import { useDebounce, useIsDevice } from 'hooks'
-import { PositionServices } from 'services'
+import { PositionServices, PositionTypes, RecruiterServices } from 'services'
 
 import { AdditionalFilters, MainFilters, PositionCard } from './components'
 
@@ -34,14 +35,27 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 
 export default function PositionsPage() {
   const isDevice = useIsDevice()
-  const { isUserRole } = useAuth()
+  const { isUserRole, userId, userRole } = useAuth()
 
-  const positionsQuery = useQuery({
-    queryKey: ['/positions', { method: 'GET' }],
-    queryFn: PositionServices.findAll,
-  })
+  const QUERIES: {
+    [key in EnumValueTypes<typeof ROLE_ENUM>]: any
+  } = {
+    CANDIDATE: {
+      queryKey: [`/positions/candidates/${userId}`, { method: 'GET' }],
+      queryFn: () => PositionServices.candidates.get(userId),
+    },
+    RECRUITER: {
+      queryKey: [`/recruiters/${userId}/positions`, { method: 'GET' }],
+      queryFn: () => RecruiterServices.id.positions.get(userId),
+    },
+    ADMIN: {
+      queryKey: [`/positions`, { method: 'GET' }],
+      queryFn: () => PositionServices.findAll(),
+    },
+    COMPANY: {},
+  } as const
 
-  const theme = useTheme()
+  const positionsQuery = useQuery(QUERIES[userRole]) as any
 
   return (
     <>
@@ -114,7 +128,7 @@ export default function PositionsPage() {
                       animation='wave'
                     />
                   ))
-                : positionsQuery.data?.map((position) => (
+                : positionsQuery.data?.map((position: PositionTypes) => (
                     <PositionCard
                       key={position.id}
                       href={String(position.id)}

@@ -23,7 +23,8 @@ import { CircularProgress } from 'components/circularProgress/CircularProgress'
 import { useMutation, useQuery } from 'react-query'
 
 import { Button, Position } from 'components'
-import { useFeedback } from 'contexts'
+import { useAuth, useFeedback } from 'contexts'
+import { ROUTES } from 'router'
 import {
   ApiResponseTypes,
   CandidateServices,
@@ -31,26 +32,25 @@ import {
 } from 'services'
 import { getChips } from 'utils'
 
-import * as S from './PositionAccordion.styles'
-import { PositionAccordionPropTypes } from './PositionAccordion.types'
+import * as S from '../positionAccordion/PositionAccordion.styles'
 
-export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
+import { PositionAccordionPropTypes } from './PositionAccordionSaved.types'
+
+export const PositionAccordionSaved: React.FC<PositionAccordionPropTypes> = ({
   position,
 }) => {
   const { alert } = useFeedback()
+  const { userId } = useAuth()
   const recruiterIdQuery = useQuery({
     queryKey: [`/recruiters/${position.recruiterId}`, { method: 'GET' }],
     queryFn: () => RecruiterServices.id.get(position.recruiterId),
   })
 
-  const leaveFromPositionIdQuery = useMutation({
-    mutationKey: [
-      `/candidates/positions/${position.candidatePositionId}`,
-      { method: 'DELETE' },
-    ],
-    mutationFn: CandidateServices.positions.delete,
+  const deleteSavedPositionIdQuery = useMutation({
+    mutationKey: [`/candidates/positions/${position.id}`, { method: 'DELETE' }],
+    mutationFn: CandidateServices.positions.saved.delete,
     onSuccess: () => {
-      alert.showSuccess('Você saiu da vaga')
+      alert.showSuccess('Você removeu essa vaga dos salvos')
     },
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
       alert.showError(error.response?.data.message || error.message)
@@ -79,33 +79,13 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
               salary: position.salaryRange,
             })}
           />
-          {false && <CircularProgress value={60} />}
         </Box>
       </S.AccordionSummary>
       <S.AccordionDetails>
         <S.ItemContainer>
-          <Position.Status title='Status' phases={position.phases} />
-        </S.ItemContainer>
-        <Divider />
-        <S.ItemContainer>
           <Position.Requirement
             title='Requisitos'
             topicListProps={{ requirements: position.requirements }}
-          />
-        </S.ItemContainer>
-        <Divider />
-        <S.ItemContainer>
-          <Position.Score
-            header={{ title: 'Pontuações' }}
-            minScore={
-              position.requirements
-                .sort((a, b) => a.points - b.points)
-                .flatMap((requirement) => requirement.points)[0]
-            }
-            currentScore={position.requirements
-              .filter((requirement) => requirement.done)
-              .reduce((a, b) => a + b.points, 0)}
-            maxScore={position.requirements.reduce((a, b) => a + b.points, 0)}
           />
         </S.ItemContainer>
 
@@ -115,34 +95,37 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
           <Position.Details
             recruiter={recruiterIdQuery.data}
             createdAt={new Date(position.creationDate)}
-            savedAt={position?.savedAt ? new Date(position.savedAt) : undefined}
           />
         </S.ItemContainer>
 
         <Divider />
 
         <Box display='flex' alignItems='center' gap={2} py={2} px={3}>
-          <Button variant='contained' color='black'>
-            Enviar Sugestão
-          </Button>
-          <Button variant='outlined' color='black'>
-            Enviar reclamação
+          <Button
+            variant='contained'
+            color='black'
+            href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}`}
+          >
+            Visualizar vaga
           </Button>
           <Button
             variant='text'
             color='black'
             disabled={
-              leaveFromPositionIdQuery.isLoading ||
-              leaveFromPositionIdQuery.isSuccess
+              deleteSavedPositionIdQuery.isLoading ||
+              deleteSavedPositionIdQuery.isSuccess
             }
-            loading={leaveFromPositionIdQuery.isLoading}
+            loading={deleteSavedPositionIdQuery.isLoading}
             onClick={() => {
-              leaveFromPositionIdQuery.mutate(position.candidatePositionId)
+              deleteSavedPositionIdQuery.mutate({
+                candidateId: userId,
+                positionId: position.id,
+              })
             }}
           >
-            {leaveFromPositionIdQuery.isIdle && 'Deixar aplicação'}
-            {leaveFromPositionIdQuery.isLoading && 'Deixando...'}
-            {leaveFromPositionIdQuery.isSuccess && 'Deixou aplicação'}
+            {deleteSavedPositionIdQuery.isIdle && 'Remover salvo'}
+            {deleteSavedPositionIdQuery.isLoading && 'Removendo...'}
+            {deleteSavedPositionIdQuery.isSuccess && 'Removido'}
           </Button>
         </Box>
       </S.AccordionDetails>

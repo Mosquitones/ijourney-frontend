@@ -82,18 +82,20 @@ export const RowTopic: React.FC<RowTopicPropTypes> = ({
           {description}
         </Typography>
       </Box>
-      <S.Chip
-        currentHexColor={currentStyle.color || theme.palette.black.main}
-        variant='filled'
-        label={
-          <Typography
-            variant='body1'
-            fontWeight={({ typography }) => typography.fontWeightBold}
-          >
-            +{numberOfPoints}
-          </Typography>
-        }
-      />
+      {!!numberOfPoints && (
+        <S.Chip
+          currentHexColor={currentStyle.color || theme.palette.black.main}
+          variant='filled'
+          label={
+            <Typography
+              variant='body1'
+              fontWeight={({ typography }) => typography.fontWeightBold}
+            >
+              +{numberOfPoints}
+            </Typography>
+          }
+        />
+      )}
     </Box>
   )
 }

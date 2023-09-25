@@ -73,6 +73,12 @@ export const LOCATION_TYPE_ENUM = {
   HYBRID: 'HYBRID',
 } as const
 
+export const PHASE_STATUS_TYPE_ENUM = {
+  SELECTED: 'SELECTED',
+  HIRED: 'HIRED',
+  APPLIED: 'APPLIED',
+} as const
+
 export const EMPLOYMENT_TYPE_ENUM = {
   FULL_TIME: 'FULL_TIME',
   PART_TIME: 'PART_TIME',

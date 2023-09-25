@@ -148,7 +148,7 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
         <Position.Score />
         <Position.Details />
       </Box>
-      <Box position='sticky' bottom={0} bgcolor='white'>
+      <Box position='sticky' bottom={0} bgcolor='white' top='auto'>
         <Divider />
         <DialogActions sx={{ ...PADDING_PROPS }}>
           <Button

@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Divider, Link, Typography } from '@mui/material'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import { PositionDetailsPropTypes } from './PositionDetails.types'
 
@@ -20,7 +23,15 @@ const DetailTextComponent: React.FC<{
 
 export const PositionDetails: React.FC<PositionDetailsPropTypes> = ({
   title = 'Detalhes',
+  appliedAt,
+  expireAt,
+  savedAt,
+  createdAt,
+  recruiter,
 }) => {
+  const formatDate = (date: Date) =>
+    format(date, 'MM/dd/yyyy', { locale: ptBR })
+
   return (
     <Box display='flex' flexDirection='column' gap={2}>
       <Typography
@@ -30,9 +41,54 @@ export const PositionDetails: React.FC<PositionDetailsPropTypes> = ({
         {title}
       </Typography>
       <Box display='flex' flexDirection='column' gap={0.5}>
-        <DetailTextComponent title='Aplicado em:' value='15 Jun' />
-        <DetailTextComponent title='Vence em:' value='30 Jul' />
-        <DetailTextComponent title='Criado por:' value='Anderson Ramires' />
+        {appliedAt && (
+          <DetailTextComponent
+            title='Aplicado em:'
+            value={formatDate(appliedAt)}
+          />
+        )}
+        {/* {createdAt && (
+          <DetailTextComponent
+            title='Criada em:'
+            value={}
+          />
+        )} */}
+        {expireAt && (
+          <DetailTextComponent title='Vence em:' value={formatDate(expireAt)} />
+        )}
+        {recruiter && (
+          <Box display='flex' gap={1} alignItems='center'>
+            <DetailTextComponent
+              title='Criado por:'
+              value={recruiter.fullName}
+            />
+            <Divider flexItem orientation='vertical' />
+            {/* {createdAt && (
+              <DetailTextComponent
+                title='no dia '
+                value={formatDate(createdAt)}
+              />
+            )} */}
+            {createdAt && (
+              <Typography color='text.secondary' variant='body2'>
+                {formatDate(createdAt)}
+              </Typography>
+            )}
+            {savedAt && (
+              <Typography color='text.secondary' variant='body2'>
+                {formatDate(savedAt)}
+              </Typography>
+            )}
+            <Divider flexItem orientation='vertical' />
+            <Link
+              href={`mailto:${recruiter.email}`}
+              color='text.secondary'
+              underline='hover'
+            >
+              {recruiter.email}
+            </Link>
+          </Box>
+        )}
       </Box>
     </Box>
   )

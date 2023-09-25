@@ -3,6 +3,7 @@ import {
   PositionHeader,
   PositionScore,
   PositionStatus,
+  PositionRequirement,
 } from './components'
 
 export const Position = {
@@ -10,4 +11,5 @@ export const Position = {
   Details: PositionDetails,
   Score: PositionScore,
   Status: PositionStatus,
+  Requirement: PositionRequirement,
 }

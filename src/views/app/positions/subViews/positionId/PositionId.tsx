@@ -29,13 +29,14 @@ import {
   Typography,
   useScrollTrigger,
 } from '@mui/material'
-import { useQuery } from 'react-query'
+import { AxiosError } from 'axios'
+import { useMutation, useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 import { Banner, EmptyContent } from 'components'
-import { TabContextWrapper, useAuth } from 'contexts'
+import { TabContextWrapper, useAuth, useFeedback } from 'contexts'
 import { useIsDevice } from 'hooks'
-import { PositionServices } from 'services'
+import { ApiResponseTypes, CandidateServices, PositionServices } from 'services'
 
 import { getTabsBasedOnRole } from './utils/getTabBasedOnRole'
 
@@ -47,6 +48,7 @@ const NotFoundPosition: React.FC = () => (
 
 export default function PositionIdPage() {
   const { user } = useAuth()
+  const { alert } = useFeedback()
   const { positionId } = useParams()
   const tabs = getTabsBasedOnRole(user?.userType)
 

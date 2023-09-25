@@ -53,6 +53,11 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     return check
   }, [user?.userType])
 
+  const userRole = useMemo(
+    () => (user?.userType ? user.userType : ROLE_ENUM.CANDIDATE),
+    [user?.userType]
+  )
+
   const signInQuery = useMutation({
     mutationKey: ['/users/login', { method: 'POST' }],
     mutationFn: UserServices.login.post,
@@ -96,6 +101,8 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     [sessionDateStorage, cookies.access_token]
   )
 
+  const userId = user?.id ? user.id : -1
+
   const signIn: AuthContextTypes['signIn'] = useCallback(
     (payload) => {
       signInQuery.mutate(payload)
@@ -132,6 +139,8 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       signUp,
       isSigningUp,
       signOut,
+      userId,
+      userRole,
     }),
     [
       user,
@@ -144,6 +153,8 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       signUp,
       isSigningUp,
       signOut,
+      userId,
+      userRole,
     ]
   )
 

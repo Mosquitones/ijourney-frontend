@@ -7,7 +7,9 @@ import { Avatar, Typography, Divider, Container, Box } from '@mui/material'
 
 import { Banner } from 'components'
 
+import ArchiveTab from './tabs/archived/Archived'
 import OnGoingTab from './tabs/on-going/OnGoing'
+import SavedTab from './tabs/saved/Saved'
 
 const TABS = [
   {
@@ -18,8 +20,12 @@ const TABS = [
   {
     value: 'e6e95c5e-aa89-4883-9aa4-0e0ae2464aa4',
     label: 'Arquivados',
-    content: 'Arquivados',
-    disabled: true,
+    content: <ArchiveTab />,
+  },
+  {
+    value: '3c084c1a-402c-43af-ba87-88ac541b8dd9',
+    label: 'Salvos',
+    content: <SavedTab />,
   },
 ]
 export default function AppliedPositionsPage() {

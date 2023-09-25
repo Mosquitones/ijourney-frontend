@@ -3,4 +3,8 @@ export interface PositionScorePropTypes {
     title?: string
     endAdornment?: React.ReactNode
   }
+
+  minScore?: number
+  currentScore?: number
+  maxScore?: number
 }

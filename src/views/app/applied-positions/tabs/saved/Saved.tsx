@@ -40,17 +40,21 @@ import {
 } from 'components'
 import { useAuth } from 'contexts'
 import { useIsDevice } from 'hooks'
-import { CandidateServices } from 'services'
+import {
+  CandidatePositionTypes,
+  CandidateServices,
+  PositionTypes,
+} from 'services'
 
 import { PositionTabTemplate } from '../../components'
 
-export default function OnGoingTab() {
+export default function SavedTab() {
   const { userId } = useAuth()
 
   const positionsQuery = useQuery({
-    queryKey: [`/candidates/${userId}/positions`, { method: 'GET' }],
-    queryFn: () => CandidateServices.id.positions.get(userId),
+    queryKey: [`/candidates/${userId}/positions/saved`, { method: 'GET' }],
+    queryFn: () => CandidateServices.id.positions.saved.get(userId),
   })
 
-  return <PositionTabTemplate positions={positionsQuery.data} />
+  return <PositionTabTemplate positions={positionsQuery.data} variant='saved' />
 }

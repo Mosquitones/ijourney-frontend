@@ -1,2 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-export interface TopicListPropTypes {}
+import { RequirementTypes } from 'services'
+
+export interface TopicListPropTypes {
+  requirements: RequirementTypes[]
+}

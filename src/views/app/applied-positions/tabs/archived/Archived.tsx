@@ -44,12 +44,12 @@ import { CandidateServices } from 'services'
 
 import { PositionTabTemplate } from '../../components'
 
-export default function OnGoingTab() {
+export default function ArchiveTab() {
   const { userId } = useAuth()
 
   const positionsQuery = useQuery({
-    queryKey: [`/candidates/${userId}/positions`, { method: 'GET' }],
-    queryFn: () => CandidateServices.id.positions.get(userId),
+    queryKey: [`/candidates/${userId}/positions/archived`, { method: 'GET' }],
+    queryFn: () => CandidateServices.id.positions.archived.get(userId),
   })
 
   return <PositionTabTemplate positions={positionsQuery.data} />

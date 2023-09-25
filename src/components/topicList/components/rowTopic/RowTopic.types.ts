@@ -2,5 +2,5 @@
 export interface RowTopicPropTypes {
   style?: 'default' | 'success'
   description: string
-  numberOfPoints: number
+  numberOfPoints?: number
 }

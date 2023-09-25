@@ -1,3 +1,4 @@
+import { EnumValueTypes, ROLE_ENUM } from '@types'
 import { AxiosError } from 'axios'
 import { UseMutationResult } from 'react-query'
 
@@ -21,10 +22,12 @@ export interface AuthContextTypes {
     accessToken?: string
   }
   isUserRole: { [key in UserTypes['userType']]: boolean }
+  userRole: EnumValueTypes<typeof ROLE_ENUM>
   isUserAuthenticated: boolean
   signIn: (payload: LoginPayloadTypes) => void
   isSigningIn: boolean
   signUp: (payload: RegisterCandidatePayloadTypes) => void
   isSigningUp: boolean
   signOut: () => void
+  userId: UserTypes['id']
 }

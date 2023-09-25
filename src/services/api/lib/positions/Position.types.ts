@@ -1,6 +1,7 @@
 import {
   EMPLOYMENT_TYPE_ENUM,
   LOCATION_TYPE_ENUM,
+  PHASE_STATUS_TYPE_ENUM,
   EnumValueTypes,
 } from '@types'
 
@@ -10,12 +11,15 @@ export interface PhaseTypes {
   id: number
   name: string
   description: string
+  sequenceIndex: number
+  phaseStatusType: EnumValueTypes<typeof PHASE_STATUS_TYPE_ENUM>
 }
 
 export interface RequirementTypes {
   id: number
   skill: SkillTypes
   points: number
+  done: boolean
 }
 
 export interface PositionTypes {
@@ -33,4 +37,5 @@ export interface PositionTypes {
   phases: PhaseTypes[]
   requirements: RequirementTypes[]
   companyName: string
+  archived: boolean
 }

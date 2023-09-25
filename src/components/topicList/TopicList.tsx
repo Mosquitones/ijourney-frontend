@@ -3,16 +3,17 @@ import React from 'react'
 import { Box } from '@mui/material'
 
 import { RowTopic } from './components'
+import { TopicListPropTypes } from './TopicList.types'
 
-export const TopicList: React.FC = () => {
+export const TopicList: React.FC<TopicListPropTypes> = ({ requirements }) => {
   return (
     <Box display='flex' flexWrap='wrap' flexDirection='column' gap={2}>
-      {[...Array(5)].map((_, i) => (
+      {requirements?.map((requirement) => (
         <RowTopic
-          key={crypto.randomUUID() + i}
-          description='Possui certificado EY Institute'
-          numberOfPoints={120}
-          style={i === 0 ? 'success' : 'default'}
+          key={requirement.id}
+          description={requirement.skill.name}
+          numberOfPoints={requirement.points}
+          style={requirement.done ? 'success' : 'default'}
         />
       ))}
     </Box>
