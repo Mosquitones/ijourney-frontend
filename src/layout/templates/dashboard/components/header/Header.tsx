@@ -27,7 +27,6 @@ import { Logo } from 'components'
 import { useAuth, useLayout } from 'contexts'
 import { useDisclosure, useIsDevice } from 'hooks'
 import { ROUTES } from 'router'
-import { UserRoleTypes } from 'services'
 
 import {
   AccountSettings,

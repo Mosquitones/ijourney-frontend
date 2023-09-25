@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { UserRoleTypes } from 'services'
+import { EnumValueTypes, ROLE_ENUM } from '@types'
 
 import CandidatesTab from '../tabs/candidates/Candidates'
 import DescriptionTab from '../tabs/description/Description'
@@ -41,10 +41,10 @@ const RECRUITER_TABS: TabTypes[] = [
   CULTURE_BENEFITS_TAB,
 ]
 
-export const getTabsBasedOnRole = (role?: UserRoleTypes) => {
+export const getTabsBasedOnRole = (role?: EnumValueTypes<typeof ROLE_ENUM>) => {
   if (!role) return DEFAULT_TABS
 
-  const tabs: { [key in UserRoleTypes]: TabTypes[] } = {
+  const tabs: { [key in EnumValueTypes<typeof ROLE_ENUM>]: TabTypes[] } = {
     ADMIN: DEFAULT_TABS,
     RECRUITER: RECRUITER_TABS,
     CANDIDATE: CANDIDATE_TABS,

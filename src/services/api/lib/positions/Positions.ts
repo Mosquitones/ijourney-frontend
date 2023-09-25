@@ -1,6 +1,6 @@
 import { ApiResponseTypes, api } from 'services'
 
-import { PositionTypes } from './Position.types'
+import { PositionRegisterPayloadTypes, PositionTypes } from './Position.types'
 
 const findAll = async () => {
   const { data: response } = await api.get<ApiResponseTypes<PositionTypes[]>>(
@@ -18,7 +18,17 @@ const findById = async (positionId: number | string) => {
   return response.data
 }
 
+const create = async (payload: PositionRegisterPayloadTypes) => {
+  const { data: response } = await api.post<ApiResponseTypes<PositionTypes>>(
+    `/positions/register`,
+    payload
+  )
+
+  return response.data
+}
+
 export default {
   findAll,
   findById,
+  post: create,
 }

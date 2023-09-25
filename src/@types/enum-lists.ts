@@ -49,7 +49,7 @@ export const EMPLOYMENT_TYPE_LIST = [
 export const LOCATION_TYPE_LIST = [
   {
     key: LOCATION_TYPE_ENUM.ON_SITE,
-    label: 'Local',
+    label: 'Presencial',
   },
   {
     key: LOCATION_TYPE_ENUM.REMOTE,

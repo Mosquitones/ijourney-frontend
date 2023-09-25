@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef } from 'react'
 
@@ -26,7 +27,12 @@ import { useAuth, useLayout } from 'contexts'
 import { useDebounce, useIsDevice } from 'hooks'
 import { PositionServices, PositionTypes, RecruiterServices } from 'services'
 
-import { AdditionalFilters, MainFilters, PositionCard } from './components'
+import {
+  AdditionalFilters,
+  MainFilters,
+  PositionCard,
+  PositionModalHandler,
+} from './components'
 
 const DEFAULT_PADDINGS: Partial<BoxProps> = {
   py: 2,
@@ -139,6 +145,7 @@ export default function PositionsPage() {
           </Grid>
         </Grid>
       </Container>
+      <PositionModalHandler open onClose={() => null} />
     </>
   )
 }

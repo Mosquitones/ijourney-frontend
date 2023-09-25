@@ -39,3 +39,22 @@ export interface PositionTypes {
   companyName: string
   archived: boolean
 }
+
+export interface PositionRegisterPayloadTypes {
+  salaryRange: number
+  title: string
+  shortDescription: string
+  longDescription: string
+  city: string
+  state: string
+  creationDate: string
+  numOfHiredPeople: number
+  locationType: EnumValueTypes<typeof LOCATION_TYPE_ENUM> | null
+  employmentType: EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM> | null
+  recruiterId: number
+  phases: Omit<PhaseTypes, 'id'>[]
+  requirements: {
+    requiredSkillId: SkillTypes['id']
+    points: number
+  }[]
+}

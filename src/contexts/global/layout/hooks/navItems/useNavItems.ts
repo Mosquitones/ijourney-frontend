@@ -8,14 +8,14 @@ import {
   AddchartOutlined,
   AddchartTwoTone,
 } from '@mui/icons-material'
+import { EnumValueTypes, ROLE_ENUM } from '@types'
 import { NavItemTypes } from 'layout'
 // import { NavItemTypes } from 'layout/templates/dashboard/components/header/components'
 
 import { ROUTES } from 'router'
-import { UserRoleTypes } from 'services'
 
 type RouteBasedOnRoleTypes = {
-  [key in UserRoleTypes]: NavItemTypes[]
+  [key in EnumValueTypes<typeof ROLE_ENUM>]: NavItemTypes[]
 }
 
 type NavItemWithoutLabel = Omit<NavItemTypes, 'label'>

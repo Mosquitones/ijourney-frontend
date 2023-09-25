@@ -2,6 +2,7 @@
 import React, { ReactNode, Suspense } from 'react'
 
 import { CircularProgress } from '@mui/material'
+import { EnumValueTypes, ROLE_ENUM } from '@types'
 import { AuthTemplate, DashboardLayout } from 'layout'
 import {
   createBrowserRouter,
@@ -14,7 +15,6 @@ import {
 } from 'react-router-dom'
 
 import { useAuth } from 'contexts'
-import { ROLES, UserRoleTypes } from 'services'
 
 import {
   BackdropComponent,
@@ -39,7 +39,9 @@ export const Router: React.FC = () => {
   const { BASE_ROOT, UNKNOWN, AUTH, LOGIN, APP } = ROUTES
   const { isUserAuthenticated, user } = useAuth()
 
-  const renderRouteBasedOnUserRole: { [key in UserRoleTypes]?: ReactNode } = {
+  const renderRouteBasedOnUserRole: {
+    [key in EnumValueTypes<typeof ROLE_ENUM>]?: ReactNode
+  } = {
     CANDIDATE: (
       <>
         {redirectToDefaultRoute(ROUTES.POSITIONS)}
