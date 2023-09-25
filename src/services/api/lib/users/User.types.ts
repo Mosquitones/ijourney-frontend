@@ -1,22 +1,23 @@
-export const ROLES = {
-  RECRUITER: 'RECRUITER',
-  ADMIN: 'ADMIN',
-  CANDIDATE: 'CANDIDATE',
-  COMPANY: 'COMPANY',
-} as const
+import {
+  EnumValueTypes,
+  GENDER_ENUM,
+  ROLE_ENUM,
+  VULNERABILITY_ENUM,
+} from '@types'
 
-export type UserRoleTypes = (typeof ROLES)[keyof typeof ROLES]
+import { SkillTypes } from '../skills'
 
 export interface UserTypes {
   id: number
   fullName: string
-  imageUrl: string
+  picture: string
   email: string
   password: string
-  userType: UserRoleTypes
+  userType: EnumValueTypes<typeof ROLE_ENUM>
   dateOfBirth: Date
-  gender: 'MALE' | 'FEMININE'
-  phoneNumber: string
-  cpf: string
+  gender: EnumValueTypes<typeof GENDER_ENUM>
   companyId: number
+  phoneNumber: string
+  vulnerabilityList: EnumValueTypes<typeof VULNERABILITY_ENUM>[]
+  skills: SkillTypes[]
 }

@@ -49,7 +49,7 @@ export const AuthTemplate: React.FC = () => {
         flexItem
       />
 
-      <S.Content flex={{ sm: 1 }}>
+      <S.Content flex={{ sm: 1 }} overflow='auto'>
         <Outlet />
       </S.Content>
     </S.AuthTemplate>

@@ -13,6 +13,7 @@ export const Form = styled.form`
 
   ${from.sm} {
     margin: 0 auto;
+    /* padding: 4.8rem 0; */
     top: 50%;
     transform: translateY(-50%);
   }

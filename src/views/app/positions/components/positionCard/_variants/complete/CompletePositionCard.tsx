@@ -34,12 +34,6 @@ import { getChips } from 'utils/getChips'
 
 import { ChipList, ChipListPropTypes, Position } from 'components'
 import { useIsDevice } from 'hooks'
-import {
-  EMPLOYMENT_TYPES_MAP,
-  EmploymentTypes,
-  LOCATION_TYPES_MAP,
-  LocationTypes,
-} from 'services'
 import { currencyFormatter } from 'utils'
 
 import { PositionBody } from '../../components'

@@ -18,6 +18,7 @@ export const Button: FCWithChildren<ButtonPropTypes> = ({
       sx={{
         fontWeight,
         borderRadius: rounded ? 100 : '0.5rem',
+        transition: 'all 0.2s ease',
         ...rest.sx,
       }}
       {...rest}

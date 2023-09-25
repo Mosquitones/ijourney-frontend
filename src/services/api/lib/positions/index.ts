@@ -1,4 +1,4 @@
-import positionMethods from './Position'
+import positionMethods from './Positions'
 
 export const PositionServices = {
   ...positionMethods,

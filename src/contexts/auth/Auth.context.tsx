@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react'
 
+import { GENDER_ENUM, ROLE_ENUM } from '@types'
 import { AxiosError } from 'axios'
 import { useFeedback } from 'contexts/global/Global.context'
 import { useCookies } from 'react-cookie'
@@ -16,10 +17,9 @@ import { useMutation } from 'react-query'
 import { useLocalStorage } from 'hooks'
 import {
   ApiResponseTypes,
-  ROLES,
   UserTypes,
-  UserRoleTypes,
   UserServices,
+  CandidateServices,
 } from 'services'
 
 import { AuthContextTypes } from './Auth.context.types'
@@ -27,54 +27,6 @@ import { AuthContextTypes } from './Auth.context.types'
 export const AuthContext = createContext({} as AuthContextTypes)
 
 export const useAuth = () => useContext(AuthContext)
-
-const BASE_INFO: Omit<
-  UserTypes,
-  'email' | 'password' | 'userType' | 'id' | 'fullName'
-> = {
-  companyId: 0,
-  cpf: '',
-  dateOfBirth: new Date(),
-  gender: 'MALE',
-  phoneNumber: '',
-  imageUrl: '',
-}
-
-const CANDIDATE_DUMMY_USER: UserTypes = {
-  ...BASE_INFO,
-  id: 0,
-  fullName: 'Candidate',
-  userType: ROLES.CANDIDATE,
-  email: 'candidate@ey.com',
-  password: '123',
-}
-
-const RECRUITER_DUMMY_USER: UserTypes = {
-  ...BASE_INFO,
-  id: 1,
-  fullName: 'Recruiter',
-  userType: ROLES.RECRUITER,
-  email: 'recruiter@ey.com',
-  password: '123',
-}
-
-const COMPANY_DUMMY_USER: UserTypes = {
-  ...BASE_INFO,
-  id: 2,
-  fullName: 'Company',
-  userType: ROLES.COMPANY,
-  email: 'company@ey.com',
-  password: '123',
-}
-
-const ADMIN_DUMMY_USER: UserTypes = {
-  ...BASE_INFO,
-  id: 3,
-  fullName: 'Admin',
-  userType: ROLES.ADMIN,
-  email: 'admin@ey.com',
-  password: '123',
-}
 
 export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
   children,
@@ -92,16 +44,16 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
 
   const isUserRole = useMemo(() => {
     const check: AuthContextTypes['isUserRole'] = {
-      ADMIN: user?.userType === ROLES.ADMIN,
-      RECRUITER: user?.userType === ROLES.RECRUITER,
-      CANDIDATE: user?.userType === ROLES.CANDIDATE,
-      COMPANY: user?.userType === ROLES.COMPANY,
+      ADMIN: user?.userType === ROLE_ENUM.ADMIN,
+      RECRUITER: user?.userType === ROLE_ENUM.RECRUITER,
+      CANDIDATE: user?.userType === ROLE_ENUM.CANDIDATE,
+      COMPANY: user?.userType === ROLE_ENUM.COMPANY,
     }
 
     return check
   }, [user?.userType])
 
-  const loginQuery = useMutation({
+  const signInQuery = useMutation({
     mutationKey: ['/users/login', { method: 'POST' }],
     mutationFn: UserServices.login.post,
     onSuccess: (user) => {
@@ -116,21 +68,28 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     },
   })
 
-  // const revalidateTokenQuery = useMutation(
-  //   ['/fusionauth/validateToken', { method: 'GET' }],
-  //   AuthenticationServices.validateToken
-  // )
-
-  // const isLoggingIn = useMemo(
-  //   () => fusionAuthLoginQuery.isLoading,
-  //   [fusionAuthLoginQuery.isLoading]
-  // )
-
-  const isLoggingIn = loginQuery.isError
+  const isSigningIn = signInQuery.isError
     ? false
-    : loginQuery.isSuccess
+    : signInQuery.isSuccess
     ? true
-    : loginQuery.isLoading
+    : signInQuery.isLoading
+
+  const signUpQuery = useMutation({
+    mutationKey: ['/candidates/register', { method: 'POST' }],
+    mutationFn: CandidateServices.register.post,
+    onSuccess: ({ email, password }) => {
+      signInQuery.mutate({ email, password })
+    },
+    onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
+      alert.showError(error.response?.data.message || error.message)
+    },
+  })
+
+  const isSigningUp = signUpQuery.isError
+    ? false
+    : signUpQuery.isSuccess
+    ? true
+    : signUpQuery.isLoading
 
   const isUserAuthenticated = useMemo(
     () => Boolean(sessionDateStorage && cookies.access_token),
@@ -139,9 +98,9 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
 
   const signIn: AuthContextTypes['signIn'] = useCallback(
     (payload) => {
-      loginQuery.mutate(payload)
+      signInQuery.mutate(payload)
     },
-    [loginQuery]
+    [signInQuery]
   )
 
   const signOut = useCallback(() => {
@@ -152,6 +111,13 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
     })
   }, [removeCookie, setSessionDateStorage, setUser])
 
+  const signUp: AuthContextTypes['signUp'] = useCallback(
+    (payload) => {
+      signUpQuery.mutate(payload)
+    },
+    [signUpQuery]
+  )
+
   const auth = useMemo(
     () => ({
       user,
@@ -161,8 +127,10 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       // userInfoQuery,
       isUserAuthenticated,
       isUserRole,
-      isLoggingIn,
       signIn,
+      isSigningIn,
+      signUp,
+      isSigningUp,
       signOut,
     }),
     [
@@ -171,8 +139,10 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       isUserRole,
       // userInfoQuery,
       isUserAuthenticated,
-      isLoggingIn,
       signIn,
+      isSigningIn,
+      signUp,
+      isSigningUp,
       signOut,
     ]
   )
