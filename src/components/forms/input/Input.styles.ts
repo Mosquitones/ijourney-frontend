@@ -1,7 +1,9 @@
 import { InputLabel, TextField } from '@mui/material'
 import styled, { css } from 'styled-components'
 
-export const Container = styled.div<{ fullWidth?: boolean }>`
+export const Container = styled.div<{
+  fullWidth?: boolean
+}>`
   --input-border-radius: 0.5rem;
 
   display: flex;
@@ -38,6 +40,13 @@ export const Input = styled(TextField)`
   .MuiFormHelperText-root {
     margin-left: 0;
   }
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.5;
+      cursor: not-allowed;
+    `}
 
   ${({ error }) =>
     error &&

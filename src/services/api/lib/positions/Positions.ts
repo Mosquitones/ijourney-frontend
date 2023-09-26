@@ -27,8 +27,18 @@ const create = async (payload: PositionRegisterPayloadTypes) => {
   return response.data
 }
 
+const update = async (payload: Partial<PositionRegisterPayloadTypes>) => {
+  const { data: response } = await api.put<ApiResponseTypes<PositionTypes>>(
+    `/positions/update`,
+    payload
+  )
+
+  return response.data
+}
+
 export default {
   findAll,
   findById,
   post: create,
+  put: update,
 }

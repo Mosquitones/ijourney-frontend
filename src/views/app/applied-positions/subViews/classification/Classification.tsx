@@ -33,12 +33,7 @@ export default function ClassificationPage() {
             Suas estatísticas
           </Typography>
 
-          <TableComponent
-            columns={columns}
-            data={[data[0]]}
-            focused
-            color='primary'
-          />
+          <TableComponent columns={columns} data={[]} focused color='primary' />
         </Box>
         <Box display='flex' flexDirection='column' gap={4}>
           <Typography
@@ -60,10 +55,7 @@ export default function ClassificationPage() {
             </Typography>
           </Typography>
 
-          <TableComponent
-            columns={columns}
-            data={[...data, ...data, data[2], data[3]]}
-          />
+          <TableComponent columns={columns} data={[]} />
         </Box>
       </Container>
     </>

@@ -160,21 +160,21 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
         />
         <Box display='flex' gap={3} py={2} px={3} flex={1}>
           <PositionInfo
-            title={String(40)}
+            title={String(position.totalApplication)}
             value='Aplicações'
             // titleAdditionalInfo='/40'
           />
           <Divider orientation='vertical' flexItem />
           <PositionInfo
-            title={String(5)}
+            title={String(position.totalSelected)}
             value='Selecionados'
             // titleAdditionalInfo='/40'
           />
           <Divider orientation='vertical' flexItem />
           <PositionInfo
-            title={String(0)}
+            title={String(position.totalHired)}
             value='Contratados'
-            titleAdditionalInfo='/3'
+            titleAdditionalInfo={`/${position.numOfHiredPeople}`}
           />
         </Box>
       </S.Footer>

@@ -39,6 +39,10 @@ export interface PositionTypes {
   requirements: RequirementTypes[]
   companyName: string
   archived: boolean
+  totalApplication: number
+  totalSelected: number
+  totalHired: number
+  numOfHiredPeople: number
 }
 
 export interface PositionRegisterPayloadTypes {

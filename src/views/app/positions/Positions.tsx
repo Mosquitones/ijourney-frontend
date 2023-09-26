@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Add } from '@mui/icons-material'
 import {
@@ -151,12 +151,14 @@ export default function PositionsPage() {
         </Grid>
       </Container>
       <PositionModalHandler
+        key={selectedPosition?.id}
+        position={selectedPosition || undefined}
         open={Boolean(selectedPosition) || openModal}
+        refetchPositions={positionsQuery.refetch}
         onClose={() => {
           setSelectedPosition(null)
           setOpenModal(false)
         }}
-        position={selectedPosition}
       />
     </>
   )
