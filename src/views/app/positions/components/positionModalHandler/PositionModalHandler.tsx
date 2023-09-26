@@ -46,6 +46,7 @@ import {
 } from '@mui/material'
 import { EMPLOYMENT_TYPE_LIST, LOCATION_TYPE_LIST } from '@types'
 import { AxiosError } from 'axios'
+import { format } from 'date-fns'
 import { useFormik } from 'formik'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
@@ -168,6 +169,7 @@ const HighlightedHeader: React.FC<BoxProps> = ({ children, ...rest }) => {
 
 export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
   position,
+  skills,
   refetchPositions,
   ...rest
 }) => {
@@ -175,11 +177,6 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
   const { alert } = useFeedback()
   const queryClient = useQueryClient()
   const action = `${position ? 'Editar' : 'Criar'} vaga`
-
-  const skillsQuery = useQuery({
-    queryKey: ['/skills', { method: 'GET' }],
-    queryFn: SkillServices.findAll,
-  })
 
   const positionRegisterQuery = useMutation({
     mutationKey: ['/positions/register', { method: 'POST' }],
@@ -227,7 +224,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
           state: '',
           employmentType: null,
           locationType: null,
-          numOfHiredPeople: 1,
+          numOfMaxHiredPeople: 1,
           phases: mergePendingPhasesWithRequiredPhases([DEFAULT_PHASE]),
           requirements: [DEFAULT_REQUIREMENT],
           creationDate: new Date().toLocaleDateString(),
@@ -236,11 +233,17 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
     validationSchema: PositionModalHandlerSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (payload, helpers) => {
+    onSubmit: (payload) => {
+      const creationDate = format(new Date(payload.creationDate), 'yyyy-MM-dd')
+      const newPayload: PositionRegisterPayloadTypes = {
+        ...payload,
+        creationDate,
+      }
+
       if (position) {
-        positionUpdateQuery.mutate(payload)
+        positionUpdateQuery.mutate(newPayload)
       } else {
-        positionRegisterQuery.mutate(payload)
+        positionRegisterQuery.mutate(newPayload)
       }
     },
   })
@@ -349,6 +352,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
                   <InputLabel sx={{ m: 0 }}>Prévia do Markdown</InputLabel>
                   <Tooltip title='Clique para aprender a escrever em Markdown'>
                     <IconButton
+                      tabIndex={-1}
                       color='info'
                       size='small'
                       target='_blank'
@@ -410,16 +414,16 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
               required
             />
             <Input
-              {...formik.getFieldProps('numOfHiredPeople')}
+              {...formik.getFieldProps('numOfMaxHiredPeople')}
               type='number'
               label='Quantas pessoas podem ser contratadas?'
               error={
-                formik.touched.numOfHiredPeople &&
-                !!formik.errors.numOfHiredPeople
+                formik.touched.numOfMaxHiredPeople &&
+                !!formik.errors.numOfMaxHiredPeople
               }
               helperText={
-                formik.touched.numOfHiredPeople
-                  ? formik.errors.numOfHiredPeople
+                formik.touched.numOfMaxHiredPeople
+                  ? formik.errors.numOfMaxHiredPeople
                   : undefined
               }
               inputProps={{ min: 1 }}
@@ -565,17 +569,17 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
                         autoHighlight
                         disablePortal
                         fullWidth
-                        value={skillsQuery.data?.find(
+                        value={skills.find(
                           (where) => where.id === requirement.requiredSkillId
                         )}
                         inputValue={
-                          skillsQuery.data?.find(
+                          skills.find(
                             (where) => where.id === requirement.requiredSkillId
                           )?.name
                         }
                         noOptionsText={noOptionsText}
                         // onKeyPress={handleOnKeyPress}
-                        options={skillsQuery.data || []}
+                        options={skills}
                         getOptionLabel={(option) => option.name}
                         onChange={(_, skill) => {
                           if (skill) {
@@ -706,121 +710,124 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
                   pb: 3,
                 }}
               >
-                {formik.values.phases.map((phase, index) => {
-                  const isPending = phase.phaseStatusType === 'PENDING'
-                  const isInitialPhases =
-                    phase.phaseStatusType === 'APPLIED' ||
-                    phase.phaseStatusType === 'SELECTED'
-                  const color = phaseStatusTypeMap[phase.phaseStatusType]
+                {formik.values.phases
+                  .sort((a, b) => a.sequenceIndex - b.sequenceIndex)
+                  .map((phase, index) => {
+                    const isPending = phase.phaseStatusType === 'PENDING'
+                    const isInitialPhases =
+                      phase.phaseStatusType === 'APPLIED' ||
+                      phase.phaseStatusType === 'SELECTED'
+                    const color = phaseStatusTypeMap[phase.phaseStatusType]
 
-                  const opacityShouldBeInvisible = (cond: boolean) =>
-                    cond ? 0 : 1
+                    const opacityShouldBeInvisible = (cond: boolean) =>
+                      cond ? 0 : 1
 
-                  return (
-                    <TimelineItem key={phase.sequenceIndex}>
-                      <TimelineSeparator>
-                        <TimelineConnector
-                          color='primary'
-                          sx={{
-                            bgcolor: color,
-                            opacity: opacityShouldBeInvisible(
-                              phase.phaseStatusType === 'APPLIED'
-                            ),
-                          }}
-                        />
-                        <ButtonBase
-                          disabled={!isPending}
-                          onClick={() => {
-                            const phasesWithoutCurrentPhase =
-                              formik.values.phases.filter(
-                                (curPhase) =>
-                                  curPhase.sequenceIndex !== phase.sequenceIndex
+                    return (
+                      <TimelineItem key={phase.sequenceIndex}>
+                        <TimelineSeparator>
+                          <TimelineConnector
+                            color='primary'
+                            sx={{
+                              bgcolor: color,
+                              opacity: opacityShouldBeInvisible(
+                                phase.phaseStatusType === 'APPLIED'
+                              ),
+                            }}
+                          />
+                          <ButtonBase
+                            disabled={!isPending}
+                            onClick={() => {
+                              const phasesWithoutCurrentPhase =
+                                formik.values.phases.filter(
+                                  (curPhase) =>
+                                    curPhase.sequenceIndex !==
+                                    phase.sequenceIndex
+                                )
+                              const newPhases = phasesWithoutCurrentPhase.map(
+                                (curPhase, index) => ({
+                                  ...curPhase,
+                                  sequenceIndex: index,
+                                })
                               )
-                            const newPhases = phasesWithoutCurrentPhase.map(
-                              (curPhase, index) => ({
-                                ...curPhase,
-                                sequenceIndex: index,
-                              })
-                            )
-                            formik.setFieldValue('phases', newPhases)
-                          }}
+                              formik.setFieldValue('phases', newPhases)
+                            }}
+                          >
+                            <TimelineDot sx={{ bgcolor: color }}>
+                              <SvgIcon
+                                component={
+                                  isInitialPhases
+                                    ? CheckSharp
+                                    : isPending
+                                    ? Close
+                                    : CircleSharp
+                                }
+                                color='inherit'
+                                sx={{
+                                  fontSize: 14,
+                                  color:
+                                    isPending || isInitialPhases
+                                      ? 'white'
+                                      : color,
+                                }}
+                              />
+                            </TimelineDot>
+                          </ButtonBase>
+                          <TimelineConnector
+                            sx={{
+                              bgcolor: color,
+                              opacity: opacityShouldBeInvisible(
+                                phase.phaseStatusType === 'HIRED'
+                              ),
+                            }}
+                          />
+                        </TimelineSeparator>
+                        <TimelineContent
+                          display='flex'
+                          alignItems='center'
+                          gap={2}
+                          mt={index === 0 ? -4.8 : 0}
                         >
-                          <TimelineDot sx={{ bgcolor: color }}>
-                            <SvgIcon
-                              component={
-                                isInitialPhases
-                                  ? CheckSharp
-                                  : isPending
-                                  ? Close
-                                  : CircleSharp
-                              }
-                              color='inherit'
-                              sx={{
-                                fontSize: 14,
-                                color:
-                                  isPending || isInitialPhases
-                                    ? 'white'
-                                    : color,
-                              }}
-                            />
-                          </TimelineDot>
-                        </ButtonBase>
-                        <TimelineConnector
-                          sx={{
-                            bgcolor: color,
-                            opacity: opacityShouldBeInvisible(
-                              phase.phaseStatusType === 'HIRED'
-                            ),
-                          }}
-                        />
-                      </TimelineSeparator>
-                      <TimelineContent
-                        display='flex'
-                        alignItems='center'
-                        gap={2}
-                        mt={index === 0 ? -4.8 : 0}
-                      >
-                        <Input
-                          {...formik.getFieldProps(`phases[${index}].name`)}
-                          error={
-                            formik.touched.phases?.[index]?.name &&
-                            !!formik.errors.phases?.[index]
-                          }
-                          helperText={
-                            formik.touched.phases?.[index]?.name
-                              ? (formik.errors.phases?.[index] as any)?.name
-                              : undefined
-                          }
-                          label={index === 0 ? 'Título' : undefined}
-                          fullWidth
-                          required
-                          placeholder='Título'
-                          disabled={!isPending}
-                        />
-                        <Input
-                          {...formik.getFieldProps(
-                            `phases[${index}].description`
-                          )}
-                          error={
-                            formik.touched.phases?.[index]?.description &&
-                            !!formik.errors.phases?.[index]
-                          }
-                          helperText={
-                            formik.touched.phases?.[index]?.description
-                              ? (formik.errors.phases?.[index] as any)
-                                  ?.description
-                              : undefined
-                          }
-                          label={index === 0 ? 'Descrição' : undefined}
-                          fullWidth
-                          required
-                          placeholder='Descrição'
-                          disabled={!isPending}
-                        />
-                      </TimelineContent>
-                    </TimelineItem>
-                  )
-                })}
+                          <Input
+                            {...formik.getFieldProps(`phases[${index}].name`)}
+                            error={
+                              formik.touched.phases?.[index]?.name &&
+                              !!formik.errors.phases?.[index]
+                            }
+                            helperText={
+                              formik.touched.phases?.[index]?.name
+                                ? (formik.errors.phases?.[index] as any)?.name
+                                : undefined
+                            }
+                            label={index === 0 ? 'Título' : undefined}
+                            fullWidth
+                            required
+                            placeholder='Título'
+                            disabled={!isPending}
+                          />
+                          <Input
+                            {...formik.getFieldProps(
+                              `phases[${index}].description`
+                            )}
+                            error={
+                              formik.touched.phases?.[index]?.description &&
+                              !!formik.errors.phases?.[index]
+                            }
+                            helperText={
+                              formik.touched.phases?.[index]?.description
+                                ? (formik.errors.phases?.[index] as any)
+                                    ?.description
+                                : undefined
+                            }
+                            label={index === 0 ? 'Descrição' : undefined}
+                            fullWidth
+                            required
+                            placeholder='Descrição'
+                            disabled={!isPending}
+                          />
+                        </TimelineContent>
+                      </TimelineItem>
+                    )
+                  })}
               </Timeline>
             </HighlightedContainer>
           </Box>

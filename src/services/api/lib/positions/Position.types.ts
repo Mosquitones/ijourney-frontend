@@ -34,15 +34,19 @@ export interface PositionTypes {
   creationDate: string
   locationType: EnumValueTypes<typeof LOCATION_TYPE_ENUM>
   employmentType: EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM>
+  numOfHiredPeople: number
+  numOfMaxHiredPeople: number
+  numOfAppliedPeople: number
+  numOfSelectedPeople: number
+  numOfPendingPeople: number
+  numOfRejectedPeople: number
+  numOfMasculineGender: number
+  numOfFeminineGender: number
+  numOfOtherGender: number
   recruiterId: number
   phases: PhaseTypes[]
   requirements: RequirementTypes[]
   companyName: string
-  archived: boolean
-  totalApplication: number
-  totalSelected: number
-  totalHired: number
-  numOfHiredPeople: number
 }
 
 export interface PositionRegisterPayloadTypes {
@@ -53,7 +57,7 @@ export interface PositionRegisterPayloadTypes {
   city: string
   state: string
   creationDate: string
-  numOfHiredPeople: number
+  numOfMaxHiredPeople: number
   locationType: EnumValueTypes<typeof LOCATION_TYPE_ENUM> | null
   employmentType: EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM> | null
   recruiterId: number

@@ -1,3 +1,5 @@
+import { EnumValueTypes, PHASE_STATUS_TYPE_ENUM } from '@types'
+
 import { CandidateTypes, PositionTypes } from 'services'
 
 export interface CandidatePositionRegisterPayloadTypes {
@@ -11,5 +13,6 @@ export interface CandidatePositionRegisterTypes {
   positionId: number
   candidateId: number
   currentPhaseId: number
+  positionStatus: EnumValueTypes<typeof PHASE_STATUS_TYPE_ENUM>
   archived: boolean
 }

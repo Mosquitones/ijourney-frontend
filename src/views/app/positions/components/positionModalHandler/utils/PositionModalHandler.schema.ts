@@ -36,7 +36,7 @@ export const PositionModalHandlerSchema: yup.ObjectSchema<PositionRegisterPayloa
     city: yup.string().required(),
     state: yup.string().required(),
     creationDate: yup.string().required(),
-    numOfHiredPeople: yup.number().required(),
+    numOfMaxHiredPeople: yup.number().required(),
     employmentType: yup
       .string<EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM>>()
       .required(),

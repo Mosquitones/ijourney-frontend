@@ -25,7 +25,12 @@ import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 import { Banner, Button, FloatingActionButton, Input } from 'components'
 import { useAuth, useLayout } from 'contexts'
 import { useDebounce, useIsDevice } from 'hooks'
-import { PositionServices, PositionTypes, RecruiterServices } from 'services'
+import {
+  PositionServices,
+  PositionTypes,
+  RecruiterServices,
+  SkillServices,
+} from 'services'
 
 import {
   AdditionalFilters,
@@ -45,6 +50,11 @@ export default function PositionsPage() {
     useState<PositionTypes | null>(null)
   const [openModal, setOpenModal] = useState(false)
   const { isUserRole, userId, userRole } = useAuth()
+
+  const skillsQuery = useQuery({
+    queryKey: ['/skills', { method: 'GET' }],
+    queryFn: SkillServices.findAll,
+  })
 
   const QUERIES: {
     [key in EnumValueTypes<typeof ROLE_ENUM>]: any
@@ -152,6 +162,7 @@ export default function PositionsPage() {
       </Container>
       <PositionModalHandler
         key={selectedPosition?.id}
+        skills={skillsQuery.data || []}
         position={selectedPosition || undefined}
         open={Boolean(selectedPosition) || openModal}
         refetchPositions={positionsQuery.refetch}
