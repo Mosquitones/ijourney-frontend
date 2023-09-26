@@ -8,6 +8,7 @@ import { PositionCardTypes } from './PositionCard.types'
 export const PositionCard: React.FC<PositionCardTypes> = ({
   position,
   href,
+  onEditClick,
 }) => {
   const { isUserRole } = useAuth()
 
@@ -16,6 +17,7 @@ export const PositionCard: React.FC<PositionCardTypes> = ({
       <PositionCardVariant.Complete
         seeButtonProps={{ href }}
         position={position}
+        onEditClick={onEditClick}
       />
     )
   }

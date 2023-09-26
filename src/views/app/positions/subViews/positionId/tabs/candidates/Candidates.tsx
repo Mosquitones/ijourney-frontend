@@ -29,6 +29,7 @@ import {
 import { createColumnHelper } from '@tanstack/react-table'
 import { useCandidateColumns } from 'common/hooks'
 import { useCandidateMockData } from 'common/hooks/candidate/useCandidateMockData'
+import { useQuery } from 'react-query'
 
 import {
   Banner,
@@ -39,13 +40,20 @@ import {
   MarkdownViewer,
   TableComponent,
 } from 'components'
+import { useTabContext } from 'contexts'
 import { useIsDevice } from 'hooks'
-import { CandidateTypes } from 'services'
+import { CandidateTypes, PositionServices, PositionTypes } from 'services'
 
 import { CandidateDetailsDialog } from './components'
 
 export default function CandidatesTab() {
   const [candidateId, setSelectedCandidateId] = useState<number | null>(null)
+
+  const position = useTabContext<PositionTypes>()
+  const candidateRankingQuery = useQuery({
+    queryKey: [`/positions/${position.id}/ranking`, { method: 'GET' }],
+    queryFn: () => PositionServices.id.ranking.findAll(position.id),
+  })
 
   const columns = useCandidateColumns()
   const data = useCandidateMockData()
@@ -58,22 +66,25 @@ export default function CandidatesTab() {
           fontWeight={({ typography }) => typography.fontWeightBold}
           color='text.secondary'
         >
-          70 Candidatos
+          {candidateRankingQuery.data?.length} Candidatos
         </Typography>
-        <Typography
-          variant='body2'
-          fontWeight={({ typography }) => typography.fontWeightBold}
-          color={({ palette }) => palette.success.dark}
-        >
-          (43 novos)
-        </Typography>
+        {false && (
+          <Typography
+            variant='body2'
+            fontWeight={({ typography }) => typography.fontWeightBold}
+            color={({ palette }) => palette.success.dark}
+          >
+            (43 novos)
+          </Typography>
+        )}
       </Box>
 
       <TableComponent
         columns={columns}
-        data={data}
+        data={candidateRankingQuery.data || []}
+        isLoading={candidateRankingQuery.isLoading}
         onRowClick={(row) => {
-          setSelectedCandidateId(row.original.id)
+          setSelectedCandidateId(row.original.position)
         }}
       />
 

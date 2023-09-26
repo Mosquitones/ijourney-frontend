@@ -4,10 +4,10 @@ import { Typography } from '@mui/material'
 import { createColumnHelper } from '@tanstack/react-table'
 
 import { DisplayHeaderComponent } from 'components'
-import { CandidateTypes } from 'services'
+import { PositionRankingTypes } from 'services'
 
 export const useCandidateColumns = () => {
-  const columnHelper = createColumnHelper<CandidateTypes>()
+  const columnHelper = createColumnHelper<PositionRankingTypes>()
 
   const columns = [
     columnHelper.accessor('position', {
@@ -17,15 +17,9 @@ export const useCandidateColumns = () => {
         <Typography color='text.secondary'>{info.row.index + 1}</Typography>
       ),
     }),
-    columnHelper.accessor('name', {
+    columnHelper.accessor('candidateName', {
       size: 500,
       header: () => <DisplayHeaderComponent title='Nome' />,
-      cell: (info) => (
-        <Typography color='text.secondary'>{info.getValue()}</Typography>
-      ),
-    }),
-    columnHelper.accessor('location', {
-      header: () => <DisplayHeaderComponent title='Localização' />,
       cell: (info) => (
         <Typography color='text.secondary'>{info.getValue()}</Typography>
       ),
@@ -34,12 +28,12 @@ export const useCandidateColumns = () => {
       header: () => <DisplayHeaderComponent title='Aplicado em' />,
       cell: (info) => (
         <Typography color='text.secondary'>
-          {info.getValue().toLocaleDateString()}
+          {new Date(info.getValue()).toLocaleDateString()}
         </Typography>
       ),
     }),
-    columnHelper.accessor('timeSpent', {
-      header: () => <DisplayHeaderComponent title='Tempo gasto' />,
+    columnHelper.accessor('phaseStatusType', {
+      header: () => <DisplayHeaderComponent title='Status' />,
       cell: (info) => (
         <Typography color='text.secondary'>{info.getValue()}</Typography>
       ),

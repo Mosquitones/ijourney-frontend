@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { Add } from '@mui/icons-material'
 import {
@@ -41,6 +41,9 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 
 export default function PositionsPage() {
   const isDevice = useIsDevice()
+  const [selectedPosition, setSelectedPosition] =
+    useState<PositionTypes | null>(null)
+  const [openModal, setOpenModal] = useState(false)
   const { isUserRole, userId, userRole } = useAuth()
 
   const QUERIES: {
@@ -69,6 +72,7 @@ export default function PositionsPage() {
         <FloatingActionButton
           icon={Add}
           tooltip='Clique para Adicionar uma vaga'
+          onClick={() => setOpenModal(true)}
         />
       )}
       <Banner.Container isLoading={positionsQuery.isLoading}>
@@ -138,6 +142,7 @@ export default function PositionsPage() {
                     <PositionCard
                       key={position.id}
                       href={String(position.id)}
+                      onEditClick={() => setSelectedPosition(position)}
                       position={position}
                     />
                   ))}
@@ -145,7 +150,14 @@ export default function PositionsPage() {
           </Grid>
         </Grid>
       </Container>
-      {/* <PositionModalHandler open onClose={() => null} /> */}
+      <PositionModalHandler
+        open={Boolean(selectedPosition) || openModal}
+        onClose={() => {
+          setSelectedPosition(null)
+          setOpenModal(false)
+        }}
+        position={selectedPosition}
+      />
     </>
   )
 }

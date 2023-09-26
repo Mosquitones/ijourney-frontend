@@ -1,21 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useMemo } from 'react'
 
+import { RestoreFromTrash } from '@mui/icons-material'
 import {
   Autocomplete,
   Box,
   Dialog,
   DialogContent,
   Divider,
+  IconButton,
+  SvgIcon,
+  Typography,
 } from '@mui/material'
 import { EMPLOYMENT_TYPE_LIST, LOCATION_TYPE_LIST } from '@types'
 import { useFormik } from 'formik'
+import { useQuery } from 'react-query'
 
 import { Button, DialogTitleComponent, Input } from 'components'
 import { useAuth } from 'contexts'
-import { PositionRegisterPayloadTypes } from 'services'
+import { PositionRegisterPayloadTypes, SkillServices } from 'services'
 
 import { PositionModalHandlerPropTypes } from './PositionModalHandler.types'
+
+const DEFAULT_REQUIREMENT: PositionRegisterPayloadTypes['requirements'][number] =
+  { requiredSkillId: -1, points: 0 }
 
 export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
   position,
@@ -23,6 +31,11 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
 }) => {
   const { userId } = useAuth()
   const action = `${position ? 'Editar' : 'Criar'} vaga`
+
+  const skillsQuery = useQuery({
+    queryKey: ['/skills', { method: 'GET' }],
+    queryFn: SkillServices.findAll,
+  })
 
   const formik = useFormik<PositionRegisterPayloadTypes>({
     initialValues: {
@@ -36,7 +49,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
       locationType: null,
       numOfHiredPeople: 0,
       phases: [],
-      requirements: [],
+      requirements: [DEFAULT_REQUIREMENT],
       creationDate: new Date().toLocaleDateString(),
       recruiterId: userId,
     },
@@ -207,9 +220,125 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
             )
           }}
         />
+
+        <Box
+          component='fieldset'
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3,
+            border: ({ palette }) => `0.1rem solid ${palette.grey[100]}`,
+            px: 2,
+            py: 3,
+            borderRadius: '0.5rem',
+          }}
+        >
+          <Typography
+            component='legend'
+            color='text.secondary'
+            px={1}
+            // fontWeight={({ typography }) => typography.fontWeightBold}
+          >
+            Requisitos
+          </Typography>
+          {formik.values.requirements.map((requirement, index) => (
+            <Box
+              display='flex'
+              alignItems='self-end'
+              gap={3}
+              key={requirement.requiredSkillId + index}
+            >
+              <Autocomplete
+                id={`skills-autocomplete-box-${index}`}
+                autoHighlight
+                disablePortal
+                fullWidth
+                value={skillsQuery.data?.find(
+                  (where) => where.id === requirement.requiredSkillId
+                )}
+                inputValue={
+                  skillsQuery.data?.find(
+                    (where) => where.id === requirement.requiredSkillId
+                  )?.name
+                }
+                onKeyPress={handleOnKeyPress}
+                options={skillsQuery.data || []}
+                getOptionLabel={(option) => option.name}
+                onChange={(_, skill) => {
+                  if (skill) {
+                    formik.setFieldValue(
+                      `requirements[${index}].requiredSkillId`,
+                      skill.id
+                    )
+                  }
+                }}
+                onBlur={(e) =>
+                  formik.handleBlur(`requirements[${index}].requiredSkillId`)(e)
+                }
+                renderInput={(params) => {
+                  params.id = `requirements[${index}].requiredSkillId`
+
+                  return (
+                    <Input
+                      {...params}
+                      name={params.id}
+                      error={
+                        formik.touched.requirements &&
+                        !!formik.errors.requirements
+                      }
+                      helperText={
+                        formik.touched.requirements
+                          ? Array.isArray(formik.errors.requirements)
+                            ? formik.errors.requirements.join(', ')
+                            : formik.errors.requirements
+                          : undefined
+                      }
+                      label='Qual o modelo de trabalho?'
+                      placeholder='Selecione'
+                      InputLabelProps={{
+                        ...params.InputLabelProps,
+                        required: true,
+                      }}
+                    />
+                  )
+                }}
+              />
+              <Input
+                {...formik.getFieldProps(`requirements[${index}].points`)}
+                label='Vale quantos pontos?'
+                required
+              />
+
+              <IconButton
+                color='error'
+                disabled={index === 0}
+                onClick={() => {
+                  formik.setFieldValue(
+                    'requirements',
+                    formik.values.requirements.filter((_, i) => i !== index)
+                  )
+                }}
+              >
+                <SvgIcon component={RestoreFromTrash} />
+              </IconButton>
+            </Box>
+          ))}
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => {
+              formik.setFieldValue('requirements', [
+                ...formik.values.requirements,
+                DEFAULT_REQUIREMENT,
+              ])
+            }}
+          >
+            Adicionar requisito
+          </Button>
+        </Box>
       </Box>
 
-      <Box position='sticky' bottom={0} bgcolor='white'>
+      <Box position='sticky' bottom={0} bgcolor='white' zIndex={1000}>
         <Divider />
         <DialogContent
           sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}

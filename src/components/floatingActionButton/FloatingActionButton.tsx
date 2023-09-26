@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
 import { Fab, SvgIcon, Tooltip, Zoom, useTheme } from '@mui/material'
@@ -19,40 +20,40 @@ export const FloatingActionButton: React.FC<FloatingActionButtonPropTypes> = ({
   })
 
   return (
-    <Zoom
-      in={isInTheScreen}
-      timeout={transitionDuration}
-      style={{
-        transitionDelay: `${isInTheScreen ? transitionDuration.exit : 0}ms`,
-      }}
-      unmountOnExit
-    >
-      <Tooltip title={tooltip} placement='left'>
-        <Fab
-          {...rest}
-          color={color}
-          aria-label={tooltip}
-          onClick={(e) => {
-            if (rest.onClick) {
-              setIsInTheScreen((cur) => !cur)
-              rest.onClick(e)
-            }
-          }}
-          sx={{
-            ...rest.sx,
-            position: 'fixed',
-            bottom: 40,
-            right: 16,
-            top: 'auto',
-            left: 'auto',
-          }}
-        >
-          <SvgIcon
-            component={icon}
-            sx={{ color: ({ palette }) => palette.primary.contrastText }}
-          />
-        </Fab>
-      </Tooltip>
-    </Zoom>
+    // <Zoom
+    //   in={isInTheScreen}
+    //   timeout={transitionDuration}
+    //   style={{
+    //     transitionDelay: `${isInTheScreen ? transitionDuration.exit : 0}ms`,
+    //   }}
+    //   unmountOnExit
+    // >
+    <Tooltip title={tooltip} placement='left'>
+      <Fab
+        {...rest}
+        color={color}
+        aria-label={tooltip}
+        onClick={(e) => {
+          if (rest.onClick) {
+            setIsInTheScreen((cur) => !cur)
+            rest.onClick(e)
+          }
+        }}
+        sx={{
+          ...rest.sx,
+          position: 'fixed',
+          bottom: 40,
+          right: 16,
+          top: 'auto',
+          left: 'auto',
+        }}
+      >
+        <SvgIcon
+          component={icon}
+          sx={{ color: ({ palette }) => palette.primary.contrastText }}
+        />
+      </Fab>
+    </Tooltip>
+    // {/* </Zoom> */}
   )
 }

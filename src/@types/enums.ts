@@ -77,6 +77,7 @@ export const PHASE_STATUS_TYPE_ENUM = {
   SELECTED: 'SELECTED',
   HIRED: 'HIRED',
   APPLIED: 'APPLIED',
+  PENDING: 'PENDING',
 } as const
 
 export const EMPLOYMENT_TYPE_ENUM = {

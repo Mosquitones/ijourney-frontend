@@ -103,6 +103,7 @@ const PositionInfo: React.FC<{
 export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
   seeButtonProps,
   position,
+  onEditClick,
 }) => {
   const isDevice = useIsDevice()
 
@@ -121,15 +122,13 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
             <Box display='flex' ml={-1}>
               {[
                 { icon: VisibilityOutlined, id: 'see' },
-                { icon: EditOutlined, id: 'edit' },
+                { icon: EditOutlined, id: 'edit', onClick: onEditClick },
                 { icon: DeleteOutlined, id: 'delete' },
                 { icon: MoreVertOutlined, id: 'more' },
               ].map((item) => (
                 <IconButton
                   key={item.id}
-                  onClick={(e) => {
-                    console.log('clicked ', item.id)
-                  }}
+                  onClick={item.onClick}
                   {...(item.id === 'see' && seeButtonProps)}
                 >
                   <Icon icon={item.icon} />
