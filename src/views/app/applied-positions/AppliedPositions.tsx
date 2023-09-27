@@ -1,39 +1,90 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { BusinessCenter } from '@mui/icons-material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Avatar, Typography, Divider, Container, Box } from '@mui/material'
+import { useQuery } from 'react-query'
 
 import { Banner } from 'components'
+import { useAuth } from 'contexts'
+import { useParamsSelector } from 'hooks'
+import { CandidateServices } from 'services'
 
 import ArchiveTab from './tabs/archived/Archived'
 import OnGoingTab from './tabs/on-going/OnGoing'
 import SavedTab from './tabs/saved/Saved'
 
-const TABS = [
-  {
-    value: '13b2f45e-8ee9-4d6e-8987-fbe6f2acdd22',
-    label: 'Em andamento',
-    content: <OnGoingTab />,
-  },
-  {
-    value: 'e6e95c5e-aa89-4883-9aa4-0e0ae2464aa4',
-    label: 'Arquivados',
-    content: <ArchiveTab />,
-  },
-  {
-    value: '3c084c1a-402c-43af-ba87-88ac541b8dd9',
-    label: 'Salvos',
-    content: <SavedTab />,
-  },
-]
+type TabTypes = {
+  id: 'on-going' | 'archiveds' | 'saveds'
+  label: string
+  content: React.ReactNode
+}
+
 export default function AppliedPositionsPage() {
-  const [selectedTab, setSelectedTab] = useState(TABS[0].value)
+  const { userId } = useAuth()
+
+  const params = useParamsSelector()
+
+  const positionsQuery = useQuery({
+    queryKey: [`/candidates/${userId}/positions`, { method: 'GET' }],
+    queryFn: () => CandidateServices.id.positions.get(userId),
+    enabled: params.get('tab') === 'on-going',
+  })
+
+  const archivedPositionsQuery = useQuery({
+    queryKey: [`/candidates/${userId}/positions/archived`, { method: 'GET' }],
+    queryFn: () => CandidateServices.id.positions.archived.get(userId),
+    enabled: params.get('tab') === 'archiveds',
+  })
+
+  const savedPositionsQuery = useQuery({
+    queryKey: [`/candidates/${userId}/positions/saved`, { method: 'GET' }],
+    queryFn: () => CandidateServices.id.positions.saved.get(userId),
+    enabled: params.get('tab') === 'saveds',
+  })
+
+  const TABS: TabTypes[] = [
+    {
+      id: 'on-going',
+      label: 'Em andamento',
+      content: <OnGoingTab positions={positionsQuery.data} />,
+    },
+    {
+      id: 'archiveds',
+      label: 'Arquivados',
+      content: <ArchiveTab archivedPositions={archivedPositionsQuery.data} />,
+    },
+    {
+      id: 'saveds',
+      label: 'Salvos',
+      content: <SavedTab savedPositions={savedPositionsQuery.data} />,
+    },
+  ]
+
+  const selectedTab = params.get('tab') || TABS[0].id
+
+  const isSelectedTabOnGoingLoading =
+    positionsQuery.isLoading && selectedTab === TABS[0].id
+
+  const isSelectedTabArchivedLoading =
+    archivedPositionsQuery.isLoading && selectedTab === TABS[1].id
+
+  const isSelectedTabSavedLoading =
+    savedPositionsQuery.isLoading && selectedTab === TABS[2].id
+
+  const isLoading =
+    isSelectedTabOnGoingLoading ||
+    isSelectedTabArchivedLoading ||
+    isSelectedTabSavedLoading
+
+  useEffect(() => {
+    params.add({ key: 'tab', value: 'on-going' })
+  }, [])
 
   return (
     <TabContext value={selectedTab}>
-      <Banner.Container>
+      <Banner.Container isLoading={isLoading}>
         <Banner.Wrapper maxWidth='sm'>
           <Banner.Title>Vagas aplicadas</Banner.Title>
           <Banner.Description>
@@ -44,16 +95,18 @@ export default function AppliedPositionsPage() {
         </Banner.Wrapper>
         <Banner.Tabs
           value={selectedTab}
-          onChange={(_, newValue) => setSelectedTab(newValue)}
+          onChange={(_, value) => {
+            params.add({ key: 'tab', value })
+          }}
         >
           {TABS.map((tab) => (
-            <Banner.Tab key={tab.value} {...tab} />
+            <Banner.Tab {...tab} key={tab.id} value={tab.id} />
           ))}
         </Banner.Tabs>
       </Banner.Container>
       <Container sx={{ py: 6 }}>
         {TABS.map((tab) => (
-          <TabPanel key={tab.value} value={tab.value}>
+          <TabPanel key={tab.id} value={tab.id}>
             {tab.content}
           </TabPanel>
         ))}

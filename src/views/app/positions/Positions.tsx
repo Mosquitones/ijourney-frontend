@@ -148,14 +148,16 @@ export default function PositionsPage() {
                       animation='wave'
                     />
                   ))
-                : positionsQuery.data?.map((position: PositionTypes) => (
-                    <PositionCard
-                      key={position.id}
-                      href={String(position.id)}
-                      onEditClick={() => setSelectedPosition(position)}
-                      position={position}
-                    />
-                  ))}
+                : positionsQuery.data
+                    .sort((a: PositionTypes, b: PositionTypes) => b.id - a.id)
+                    ?.map((position: PositionTypes) => (
+                      <PositionCard
+                        key={position.id}
+                        href={String(position.id)}
+                        onEditClick={() => setSelectedPosition(position)}
+                        position={position}
+                      />
+                    ))}
             </Box>
           </Grid>
         </Grid>

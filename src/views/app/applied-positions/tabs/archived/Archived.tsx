@@ -44,13 +44,10 @@ import { CandidateServices } from 'services'
 
 import { PositionTabTemplate } from '../../components'
 
-export default function ArchiveTab() {
-  const { userId } = useAuth()
+import { ArchivedTabPropTypes } from './Archived.types'
 
-  const positionsQuery = useQuery({
-    queryKey: [`/candidates/${userId}/positions/archived`, { method: 'GET' }],
-    queryFn: () => CandidateServices.id.positions.archived.get(userId),
-  })
-
-  return <PositionTabTemplate positions={positionsQuery.data} />
+export default function ArchiveTab({
+  archivedPositions,
+}: ArchivedTabPropTypes) {
+  return <PositionTabTemplate positions={archivedPositions} />
 }

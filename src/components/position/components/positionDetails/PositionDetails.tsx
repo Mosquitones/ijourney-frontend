@@ -12,7 +12,13 @@ const DetailTextComponent: React.FC<{
   value: string
 }> = ({ title, value }) => {
   return (
-    <Typography variant='body1' color='text.secondary' display='flex' gap={1}>
+    <Typography
+      variant='body1'
+      color='text.secondary'
+      display='flex'
+      gap={1}
+      flexWrap='wrap'
+    >
       <Typography fontWeight={({ typography }) => typography.fontWeightBold}>
         {title}
       </Typography>
@@ -57,7 +63,7 @@ export const PositionDetails: React.FC<PositionDetailsPropTypes> = ({
           <DetailTextComponent title='Vence em:' value={formatDate(expireAt)} />
         )}
         {recruiter && (
-          <Box display='flex' gap={1} alignItems='center'>
+          <Box display='flex' gap={1} alignItems='center' flexWrap='wrap'>
             <DetailTextComponent
               title='Criado por:'
               value={recruiter.fullName}

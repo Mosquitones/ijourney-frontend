@@ -71,7 +71,7 @@ type PhaseStatusTypeColorMap = {
   [key in PhaseStatusType]: 'success.main' | 'warning.main' | 'divider'
 }
 
-const phaseStatusTypeMap: PhaseStatusTypeColorMap = {
+export const phaseStatusTypeMap: PhaseStatusTypeColorMap = {
   APPLIED: 'success.main',
   SELECTED: 'success.main',
   PENDING: 'warning.main',
@@ -286,10 +286,17 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
       fullScreen={isDevice.to.md}
     >
       <Box component='form' onSubmit={formik.handleSubmit}>
-        <DialogTitleComponent title={action} onClose={handleClose} />
-        <Divider />
+        <Box
+          bgcolor={({ palette }) => palette.background.paper}
+          position='sticky'
+          top={0}
+          zIndex={({ zIndex }) => zIndex.appBar}
+          borderBottom={({ palette }) => `0.1rem solid ${palette.divider}`}
+        >
+          <DialogTitleComponent title={action} onClose={handleClose} />
+        </Box>
 
-        <Container>
+        <Container maxWidth='md'>
           <Box
             py={3}
             px={2}
@@ -843,31 +850,31 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
           </Box>
         </Container>
 
-        <Box position='sticky' bottom={0} bgcolor='white' zIndex={1000}>
-          <Divider />
-          <DialogContent
-            sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}
+        {/* <Box position='sticky' bottom={0} bgcolor='white' zIndex={1000}> */}
+        <Divider />
+        <DialogContent
+          sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}
+        >
+          <Button
+            variant='outlined'
+            color='black'
+            type='button'
+            onClick={handleClose}
           >
-            <Button
-              variant='outlined'
-              color='black'
-              type='button'
-              onClick={handleClose}
-            >
-              Fechar
-            </Button>
-            <Button
-              variant='contained'
-              color='black'
-              type='submit'
-              loading={
-                positionRegisterQuery.isLoading || positionUpdateQuery.isLoading
-              }
-            >
-              {action}
-            </Button>
-          </DialogContent>
-        </Box>
+            Fechar
+          </Button>
+          <Button
+            variant='contained'
+            color='black'
+            type='submit'
+            loading={
+              positionRegisterQuery.isLoading || positionUpdateQuery.isLoading
+            }
+          >
+            {action}
+          </Button>
+        </DialogContent>
+        {/* </Box> */}
       </Box>
     </Dialog>
   )

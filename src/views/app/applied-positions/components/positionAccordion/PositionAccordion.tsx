@@ -84,7 +84,11 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
       </S.AccordionSummary>
       <S.AccordionDetails>
         <S.ItemContainer>
-          <Position.Status title='Status' phases={position.phases} />
+          <Position.Status
+            title='Status'
+            phases={position.phases}
+            currentPhaseIndex={position.currentPhaseIndex}
+          />
         </S.ItemContainer>
         <Divider />
         <S.ItemContainer>
@@ -121,7 +125,14 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
 
         <Divider />
 
-        <Box display='flex' alignItems='center' gap={2} py={2} px={3}>
+        <Box
+          display='flex'
+          alignItems='center'
+          gap={2}
+          py={2}
+          px={3}
+          flexWrap='wrap'
+        >
           <Button variant='contained' color='black'>
             Enviar Sugestão
           </Button>

@@ -48,13 +48,8 @@ import {
 
 import { PositionTabTemplate } from '../../components'
 
-export default function SavedTab() {
-  const { userId } = useAuth()
+import { SavedTabPropTypes } from './Saved.types'
 
-  const positionsQuery = useQuery({
-    queryKey: [`/candidates/${userId}/positions/saved`, { method: 'GET' }],
-    queryFn: () => CandidateServices.id.positions.saved.get(userId),
-  })
-
-  return <PositionTabTemplate positions={positionsQuery.data} variant='saved' />
+export default function SavedTab({ savedPositions }: SavedTabPropTypes) {
+  return <PositionTabTemplate positions={savedPositions} variant='saved' />
 }

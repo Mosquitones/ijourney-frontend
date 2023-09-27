@@ -44,13 +44,8 @@ import { CandidateServices } from 'services'
 
 import { PositionTabTemplate } from '../../components'
 
-export default function OnGoingTab() {
-  const { userId } = useAuth()
+import { OnGoingTabPropTypes } from './OnGoing.types'
 
-  const positionsQuery = useQuery({
-    queryKey: [`/candidates/${userId}/positions`, { method: 'GET' }],
-    queryFn: () => CandidateServices.id.positions.get(userId),
-  })
-
-  return <PositionTabTemplate positions={positionsQuery.data} />
+export default function OnGoingTab({ positions }: OnGoingTabPropTypes) {
+  return <PositionTabTemplate positions={positions} />
 }

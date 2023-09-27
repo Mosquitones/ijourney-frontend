@@ -80,7 +80,7 @@ export default function SignUpPage() {
     queryFn: SkillServices.findAll,
   })
 
-  const [activeStep, setActiveStep] = useState(0)
+  const [activeStep, setActiveStep] = useState(3)
 
   const formik = useFormik<SignUpFormPropTypes>({
     initialValues: {
@@ -239,6 +239,12 @@ export default function SignUpPage() {
   const selectedGender = useMemo(
     () => GENDER_LIST.find((where) => where.value === formik.values.gender),
     [formik.values.gender]
+  )
+
+  const selectedSkills = useMemo(
+    () =>
+      skillsQuery.data?.filter((skill) => formik.values.skills.includes(skill)),
+    [formik.values.skills, skillsQuery?.data]
   )
 
   const handleOnKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -438,7 +444,7 @@ export default function SignUpPage() {
           <Autocomplete
             id='skills-autocomplete-box'
             multiple
-            value={formik.values.skills}
+            value={selectedSkills}
             options={skillsQuery.data || []}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
