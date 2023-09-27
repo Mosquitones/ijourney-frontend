@@ -52,6 +52,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { Button, DialogTitleComponent, Input, MarkdownViewer } from 'components'
 import { useAuth, useFeedback } from 'contexts'
+import { useIsDevice } from 'hooks'
 import {
   ApiResponseTypes,
   PositionRegisterPayloadTypes,
@@ -175,6 +176,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
 }) => {
   const { userId } = useAuth()
   const { alert } = useFeedback()
+  const isDevice = useIsDevice()
   const queryClient = useQueryClient()
   const action = `${position ? 'Editar' : 'Criar'} vaga`
 
@@ -210,6 +212,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
     initialValues: position
       ? {
           ...position,
+          creationDate: new Date(position.creationDate).toLocaleDateString(),
           requirements: position?.requirements.flatMap((requirement) => ({
             points: requirement.points,
             requiredSkillId: requirement.skill.id,
@@ -275,7 +278,13 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
   }
 
   return (
-    <Dialog {...rest} fullWidth maxWidth='md' scroll='paper'>
+    <Dialog
+      {...rest}
+      fullWidth
+      maxWidth='md'
+      scroll='paper'
+      fullScreen={isDevice.to.md}
+    >
       <Box component='form' onSubmit={formik.handleSubmit}>
         <DialogTitleComponent title={action} onClose={handleClose} />
         <Divider />
@@ -785,6 +794,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
                           display='flex'
                           alignItems='center'
                           gap={2}
+                          flexWrap={{ xs: 'wrap', sm: 'nowrap' }}
                           mt={index === 0 ? -4.8 : 0}
                         >
                           <Input
