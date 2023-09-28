@@ -5,7 +5,7 @@ import {
   EnumValueTypes,
 } from '@types'
 
-import { CandidateTypes } from '../candidates'
+import { CandidatePositionTypes, CandidateTypes } from '../candidates'
 import { SkillTypes } from '../skills'
 
 export interface PhaseTypes {
@@ -70,6 +70,9 @@ export interface PositionRegisterPayloadTypes {
 
 export interface PositionRankingTypes {
   position: number
+  candidatePositionId: CandidatePositionTypes['candidatePositionId']
+  currentPhaseIndex: number
+  picture: string | null
   candidateName: CandidateTypes['name']
   appliedAt: string
   phaseStatusType: EnumValueTypes<typeof PHASE_STATUS_TYPE_ENUM>

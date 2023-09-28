@@ -1,5 +1,7 @@
+import { CandidatePositionTypes } from 'services'
+
 export interface CandidateDetailPropTypes {
-  candidateId?: number
+  candidatePositionId?: CandidatePositionTypes['candidatePositionId']
   isOpen: boolean
   onClose: () => void
 }

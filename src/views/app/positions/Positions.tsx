@@ -20,12 +20,14 @@ import {
   useTheme,
 } from '@mui/material'
 import { EnumValueTypes, ROLE_ENUM } from '@types'
-import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
+import { AxiosError } from 'axios'
+import { QueryKey, UseQueryOptions, useMutation, useQuery } from 'react-query'
 
 import { Banner, Button, FloatingActionButton, Input } from 'components'
-import { useAuth, useLayout } from 'contexts'
+import { useAuth, useFeedback, useLayout } from 'contexts'
 import { useDebounce, useIsDevice } from 'hooks'
 import {
+  ApiResponseTypes,
   PositionServices,
   PositionTypes,
   RecruiterServices,
@@ -46,6 +48,7 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 
 export default function PositionsPage() {
   const isDevice = useIsDevice()
+  const { alert } = useFeedback()
   const [selectedPosition, setSelectedPosition] =
     useState<PositionTypes | null>(null)
   const [openModal, setOpenModal] = useState(false)

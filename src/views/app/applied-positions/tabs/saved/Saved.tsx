@@ -51,5 +51,10 @@ import { PositionTabTemplate } from '../../components'
 import { SavedTabPropTypes } from './Saved.types'
 
 export default function SavedTab({ savedPositions }: SavedTabPropTypes) {
-  return <PositionTabTemplate positions={savedPositions} variant='saved' />
+  return (
+    <PositionTabTemplate
+      positions={savedPositions?.sort((a, b) => a.id - b.id)}
+      variant='saved'
+    />
+  )
 }

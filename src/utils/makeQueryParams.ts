@@ -1,12 +1,17 @@
 import { createSearchParams } from 'react-router-dom'
 
-import { PaginatedApiParamsTypes } from 'services'
+export const makeQueryParams = <T extends object = { [k: string]: string }>(
+  params?: T
+) => {
+  if (!params) return ''
 
-export const makeQueryParams = (params: PaginatedApiParamsTypes) => {
   const listOfParams = Object.entries(params)
 
+  if (listOfParams.length === 0) return ''
+
   const filteredList = listOfParams.filter(
-    ([_key, value]) => value !== undefined && value !== null
+    ([_key, value]) =>
+      value !== undefined && value !== null && value !== '' && value !== -1
   )
 
   const objectParams = Object.fromEntries(filteredList)

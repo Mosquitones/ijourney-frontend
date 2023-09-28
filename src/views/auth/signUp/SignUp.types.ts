@@ -18,7 +18,7 @@ export interface SignUpFormPropTypes {
   phoneNumber: string
   dateOfBirth: string | null
 
-  picture: File | null
+  picture?: File | null
   resume: File | null
   skills: SkillTypes[]
 

@@ -25,7 +25,7 @@ import { LoginFormSchema } from './utils/LoginForm.schema'
 export default function LoginPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { signIn, isSigningUp, cookies } = useAuth()
+  const { signIn, isSigningIn, cookies } = useAuth()
 
   const formik = useFormik<LoginFormPropTypes>({
     initialValues: {
@@ -91,9 +91,10 @@ export default function LoginPage() {
         fullWidth
         type='submit'
         color='black'
-        loading={isSigningUp}
+        loading={isSigningIn}
+        disabled={isSigningIn}
       >
-        Entrar
+        {isSigningIn ? 'Carregando...' : 'Entrar'}
       </Button>
       <Box
         maxWidth={500}

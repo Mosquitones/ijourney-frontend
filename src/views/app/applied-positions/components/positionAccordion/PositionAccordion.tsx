@@ -29,7 +29,7 @@ import {
   CandidateServices,
   RecruiterServices,
 } from 'services'
-import { getChips } from 'utils'
+import { getChips, getPositionScores } from 'utils'
 
 import * as S from './PositionAccordion.styles'
 import { PositionAccordionPropTypes } from './PositionAccordion.types'
@@ -38,6 +38,7 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
   position,
 }) => {
   const { alert } = useFeedback()
+
   const recruiterIdQuery = useQuery({
     queryKey: [`/recruiters/${position.recruiterId}`, { method: 'GET' }],
     queryFn: () => RecruiterServices.id.get(position.recruiterId),
@@ -56,6 +57,9 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
       alert.showError(error.response?.data.message || error.message)
     },
   })
+
+  // const progress =  position.phases.reduce((acc, cur) => acc + (cur. + 1 )) / position.phases.length
+  // const progress = position.phases.reduce((acc, b) => acc + b.sequenceIndex, 0)
 
   return (
     <S.Accordion disableGutters TransitionProps={{ unmountOnExit: true }}>
@@ -79,13 +83,12 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
               salary: position.salaryRange,
             })}
           />
-          {false && <CircularProgress value={60} />}
+          <CircularProgress value={60} />
         </Box>
       </S.AccordionSummary>
       <S.AccordionDetails>
         <S.ItemContainer>
           <Position.Status
-            title='Status'
             phases={position.phases}
             currentPhaseIndex={position.currentPhaseIndex}
           />
@@ -93,23 +96,13 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
         <Divider />
         <S.ItemContainer>
           <Position.Requirement
-            title='Requisitos'
             topicListProps={{ requirements: position.requirements }}
           />
         </S.ItemContainer>
         <Divider />
         <S.ItemContainer>
           <Position.Score
-            header={{ title: 'Pontuações' }}
-            minScore={
-              position.requirements
-                .sort((a, b) => a.points - b.points)
-                .flatMap((requirement) => requirement.points)[0]
-            }
-            currentScore={position.requirements
-              .filter((requirement) => requirement.done)
-              .reduce((a, b) => a + b.points, 0)}
-            maxScore={position.requirements.reduce((a, b) => a + b.points, 0)}
+            {...getPositionScores({ requirements: position.requirements })}
           />
         </S.ItemContainer>
 

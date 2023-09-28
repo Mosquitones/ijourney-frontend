@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react'
@@ -35,7 +37,7 @@ import { useParams } from 'react-router-dom'
 
 import { Banner, EmptyContent } from 'components'
 import { TabContextWrapper, useAuth, useFeedback } from 'contexts'
-import { useIsDevice } from 'hooks'
+import { useIsDevice, useParamsSelector } from 'hooks'
 import { ApiResponseTypes, CandidateServices, PositionServices } from 'services'
 
 import { getTabsBasedOnRole } from './utils/getTabBasedOnRole'
@@ -52,12 +54,15 @@ export default function PositionIdPage() {
   const { positionId } = useParams()
   const tabs = getTabsBasedOnRole(user?.userType)
 
+  const params = useParamsSelector()
+
   const positionIdQuery = useQuery({
     queryKey: [`/positions/${positionId}`, { method: 'GET' }],
     queryFn: () => PositionServices.findById(String(positionId)),
   })
 
-  const [selectedTab, setSelectedTab] = useState(tabs[0].value)
+  // const [selectedTab, setSelectedTab] = useState(tabs[0].key)
+  const selectedTabId = params.get('tab') || tabs[0].id
 
   const isDevice = useIsDevice()
 
@@ -69,9 +74,15 @@ export default function PositionIdPage() {
     return <NotFoundPosition />
   }
 
+  useEffect(() => {
+    if (!params.get('tab')) {
+      params.add({ key: 'tab', value: tabs[0].id })
+    }
+  }, [])
+
   return (
     <>
-      <TabContext value={selectedTab}>
+      <TabContext value={selectedTabId}>
         <Banner.Container isLoading={positionIdQuery.isLoading}>
           <Banner.Wrapper maxWidth='sm' renderBackButton>
             <Box
@@ -131,11 +142,11 @@ export default function PositionIdPage() {
             </Box>
           </Banner.Wrapper>
           <Banner.Tabs
-            value={selectedTab}
-            onChange={(_, newValue) => setSelectedTab(newValue)}
+            value={selectedTabId}
+            onChange={(_, value) => params.add({ key: 'tab', value })}
           >
             {tabs.map((tab) => (
-              <Banner.Tab key={tab.value} {...tab} />
+              <Banner.Tab {...tab} value={tab.id} key={tab.id} />
             ))}
           </Banner.Tabs>
         </Banner.Container>
@@ -143,7 +154,7 @@ export default function PositionIdPage() {
           {positionIdQuery.data && (
             <TabContextWrapper value={positionIdQuery.data}>
               {tabs.map((tab) => (
-                <TabPanel key={tab.value} value={tab.value}>
+                <TabPanel key={tab.id} value={tab.id}>
                   {tab.content}
                 </TabPanel>
               ))}

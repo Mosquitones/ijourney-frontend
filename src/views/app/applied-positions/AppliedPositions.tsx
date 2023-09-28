@@ -62,7 +62,8 @@ export default function AppliedPositionsPage() {
     },
   ]
 
-  const selectedTab = params.get('tab') || TABS[0].id
+  const tabParam = params.get('tab')
+  const selectedTab = tabParam || TABS[0].id
 
   const isSelectedTabOnGoingLoading =
     positionsQuery.isLoading && selectedTab === TABS[0].id
@@ -79,8 +80,10 @@ export default function AppliedPositionsPage() {
     isSelectedTabSavedLoading
 
   useEffect(() => {
-    params.add({ key: 'tab', value: 'on-going' })
-  }, [])
+    if (!tabParam) {
+      params.add({ key: 'tab', value: 'on-going' })
+    }
+  }, [params, tabParam])
 
   return (
     <TabContext value={selectedTab}>

@@ -49,5 +49,9 @@ import { ArchivedTabPropTypes } from './Archived.types'
 export default function ArchiveTab({
   archivedPositions,
 }: ArchivedTabPropTypes) {
-  return <PositionTabTemplate positions={archivedPositions} />
+  return (
+    <PositionTabTemplate
+      positions={archivedPositions?.sort((a, b) => a.id - b.id)}
+    />
+  )
 }

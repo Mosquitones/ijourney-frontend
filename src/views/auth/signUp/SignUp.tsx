@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material'
 import {
@@ -32,7 +32,6 @@ import {
   FAMILY_INCOME_ENUM,
   AGE_OF_THE_ELDERLY,
 } from '@types'
-import { Input as StyledInput } from 'components/forms/input/Input.styles'
 import { differenceInYears, format } from 'date-fns'
 import { Formik, useFormik } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -42,13 +41,27 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button, Input, Logo } from 'components'
 import { useAuth } from 'contexts'
+import { useSessionStorage } from 'hooks'
 import { ROUTES } from 'router'
 import { RegisterCandidatePayloadTypes, SkillServices } from 'services'
-import { convertToBase64 } from 'utils'
+import { convertToBase64, deepEquals } from 'utils'
 
 import * as S from './SignUp.styles'
 import { SignUpFormPropTypes } from './SignUp.types'
+import { SIGN_UP_INITIAL_VALUES } from './utils/SignUpForm.initial'
 import { SignUpFormSchema } from './utils/SignUpForm.schema'
+
+type StoredSignUpFormPropTypes = {
+  form: SignUpFormPropTypes
+  stepIndex: number
+}
+
+const PROFILE_SESSION_KEY = 'profile-sign-up'
+
+const STORED_SIGN_UP_FORM_INITIAL_VALUES: StoredSignUpFormPropTypes = {
+  form: SIGN_UP_INITIAL_VALUES,
+  stepIndex: 0,
+}
 
 const TextMaskCustom = React.forwardRef<HTMLInputElement, any>(
   function TextMaskCustom(props, ref) {
@@ -80,39 +93,26 @@ export default function SignUpPage() {
     queryFn: SkillServices.findAll,
   })
 
-  const [activeStep, setActiveStep] = useState(3)
+  const ctaButtonRef = React.useRef<HTMLButtonElement>(null)
+
+  const [storedSignUpForm, setStoredSignUpForm] =
+    useSessionStorage<StoredSignUpFormPropTypes>(
+      PROFILE_SESSION_KEY,
+      STORED_SIGN_UP_FORM_INITIAL_VALUES
+    )
+
+  const [activeStep, setActiveStep] = useState(storedSignUpForm.stepIndex)
 
   const formik = useFormik<SignUpFormPropTypes>({
-    initialValues: {
-      fullName: '',
-      email: '',
-
-      password: '',
-      passwordConfirmation: '',
-
-      phoneNumber: '',
-      dateOfBirth: null,
-
-      picture: null,
-      resume: null,
-      skills: [],
-
-      gender: null,
-      sexualOrientation: null,
-      raceEthnicity: null,
-
-      familyIncome: null,
-      hasDisability: null,
-      whichDisability: '',
-    },
+    initialValues: storedSignUpForm.form,
     validationSchema: SignUpFormSchema,
     validateOnChange: true,
     validateOnBlur: true,
+    isInitialValid: false,
     onSubmit: async (values) => {
       if (
         !values.dateOfBirth ||
         !values.gender ||
-        !values.picture ||
         !values.resume ||
         !values.sexualOrientation ||
         !values.raceEthnicity ||
@@ -170,7 +170,9 @@ export default function SignUpPage() {
         vulnerabilityList.push(VULNERABILITY_ENUM.AGE_GROUP)
       }
 
-      const pictureAsBase64 = await convertToBase64(values.picture)
+      const picture = values.picture
+        ? await convertToBase64(values.picture)
+        : undefined
       const resumeAsBase64 = await convertToBase64(values.resume)
 
       const skillsId = values.skills.flatMap((skill) => skill.id)
@@ -182,7 +184,7 @@ export default function SignUpPage() {
         gender: values.gender,
         password: values.password,
         phoneNumber: values.phoneNumber,
-        picture: pictureAsBase64,
+        picture,
         resume: resumeAsBase64,
         skillsId,
         companyId: COMPANY_ENUM.ID,
@@ -237,18 +239,15 @@ export default function SignUpPage() {
   )
 
   const selectedGender = useMemo(
-    () => GENDER_LIST.find((where) => where.value === formik.values.gender),
+    () =>
+      GENDER_LIST.find((where) => where.value === formik.values.gender) || null,
     [formik.values.gender]
   )
 
-  const selectedSkills = useMemo(
-    () =>
-      skillsQuery.data?.filter((skill) => formik.values.skills.includes(skill)),
-    [formik.values.skills, skillsQuery?.data]
-  )
-
-  const handleOnKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    e.preventDefault()
+  const clickAtCtaButton = (e: React.KeyboardEvent<unknown>) => {
+    if (e.key === 'Enter' && !ctaButtonRef.current?.disabled) {
+      ctaButtonRef.current?.click()
+    }
   }
 
   const steps = [
@@ -274,6 +273,7 @@ export default function SignUpPage() {
             label='E-mail'
             fullWidth
             InputLabelProps={{ required: true }}
+            onKeyDown={clickAtCtaButton}
           />
         </>
       ),
@@ -311,6 +311,7 @@ export default function SignUpPage() {
             type='password'
             fullWidth
             InputLabelProps={{ required: true }}
+            onKeyDown={clickAtCtaButton}
           />
         </>
       ),
@@ -368,6 +369,7 @@ export default function SignUpPage() {
             placeholder='dd/mm/yyyy'
             fullWidth
             InputLabelProps={{ required: true }}
+            onKeyDown={clickAtCtaButton}
           />
         </>
       ),
@@ -396,7 +398,7 @@ export default function SignUpPage() {
                 formik.touched.picture ? formik.errors.picture : undefined
               }
               inputProps={{ accept: 'image/*' }}
-              label='Imagem de perfil'
+              label='Imagem de perfil (opcional)'
               placeholder='Escolha um arquivo de IMAGEM'
               onChange={async (e) => {
                 const { files } = e.target as HTMLInputElement
@@ -407,9 +409,8 @@ export default function SignUpPage() {
                 }
               }}
               fullWidth
-              InputLabelProps={{ required: true }}
             />
-            {formik.values.picture && (
+            {formik.values.picture && formik.values.picture instanceof File && (
               <Avatar
                 alt={formik.values.fullName}
                 variant='rounded'
@@ -444,7 +445,7 @@ export default function SignUpPage() {
           <Autocomplete
             id='skills-autocomplete-box'
             multiple
-            value={selectedSkills}
+            value={formik.values.skills}
             options={skillsQuery.data || []}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
@@ -458,6 +459,7 @@ export default function SignUpPage() {
             onChange={(_, skills) => {
               formik.setFieldValue('skills', skills)
             }}
+            onKeyDown={clickAtCtaButton}
             renderInput={(params) => (
               <Input
                 {...params}
@@ -491,12 +493,15 @@ export default function SignUpPage() {
             fullWidth
             value={selectedGender}
             inputValue={selectedGender?.label}
-            onKeyPress={handleOnKeyPress}
             options={GENDER_LIST}
             getOptionLabel={(option) => option.label}
-            onChange={(_, gender) => {
+            onChange={(_, gender, reason) => {
               if (gender) formik.setFieldValue('gender', gender.value)
+              if (reason === 'clear') {
+                formik.setFieldValue('gender', null)
+              }
             }}
+            noOptionsText={noOptionsText}
             onBlur={(e) => formik.handleBlur('gender')(e)}
             renderInput={(params) => {
               params.id = 'gender'
@@ -526,15 +531,19 @@ export default function SignUpPage() {
             fullWidth
             value={selectedSexualOrientation}
             inputValue={selectedSexualOrientation?.label}
-            onKeyPress={handleOnKeyPress}
+            noOptionsText={noOptionsText}
             options={SEXUAL_ORIENTATION_LIST}
             getOptionLabel={(option) => option.label}
-            onChange={(_, sexualOrientation) => {
+            onChange={(_, sexualOrientation, reason) => {
               if (sexualOrientation) {
                 formik.setFieldValue(
                   'sexualOrientation',
                   sexualOrientation.value
                 )
+              }
+
+              if (reason === 'clear') {
+                formik.setFieldValue('sexualOrientation', null)
               }
             }}
             onBlur={(e) => formik.handleBlur('sexualOrientation')(e)}
@@ -579,12 +588,16 @@ export default function SignUpPage() {
             fullWidth
             value={selectedRaceEthnicity}
             inputValue={selectedRaceEthnicity?.label}
-            onKeyPress={handleOnKeyPress}
             options={RACE_ETHNICITY_LIST}
+            noOptionsText={noOptionsText}
             getOptionLabel={(option) => option.label}
-            onChange={(_, raceEthnicity) => {
+            onChange={(_, raceEthnicity, reason) => {
               if (raceEthnicity) {
                 formik.setFieldValue('raceEthnicity', raceEthnicity.value)
+              }
+
+              if (reason === 'clear') {
+                formik.setFieldValue('raceEthnicity', null)
               }
             }}
             onBlur={(e) => formik.handleBlur('raceEthnicity')(e)}
@@ -621,14 +634,19 @@ export default function SignUpPage() {
             fullWidth
             value={selectedFamilyIncome}
             inputValue={selectedFamilyIncome?.label}
-            onKeyPress={handleOnKeyPress}
             options={FAMILY_INCOME_LIST}
+            noOptionsText={noOptionsText}
             getOptionLabel={(option) => option.label}
-            onChange={(_, familyIncome) => {
+            onChange={(_, familyIncome, reason) => {
               if (familyIncome) {
                 formik.setFieldValue('familyIncome', familyIncome.value)
               }
+
+              if (reason === 'clear') {
+                formik.setFieldValue('familyIncome', null)
+              }
             }}
+            onKeyDown={clickAtCtaButton}
             onBlur={(e) => formik.handleBlur('familyIncome')(e)}
             renderInput={(params) => {
               params.id = 'familyIncome'
@@ -671,12 +689,16 @@ export default function SignUpPage() {
             fullWidth
             value={selectedHasDisability}
             inputValue={selectedHasDisability?.label}
-            onKeyPress={handleOnKeyPress}
+            noOptionsText={noOptionsText}
             options={DISABILITY_ANSWERS_LIST}
             getOptionLabel={(option) => option.label}
-            onChange={(_, hasDisability) => {
+            onChange={(_, hasDisability, reason) => {
               if (hasDisability !== null) {
                 formik.setFieldValue('hasDisability', hasDisability.value)
+              }
+
+              if (reason === 'clear') {
+                formik.setFieldValue('hasDisability', null)
               }
             }}
             onBlur={(e) => formik.handleBlur('hasDisability')(e)}
@@ -698,6 +720,7 @@ export default function SignUpPage() {
                   }
                   label='Possui alguma deficiência?'
                   placeholder='Deficiência'
+                  onKeyDown={clickAtCtaButton}
                   InputLabelProps={{
                     ...params.InputLabelProps,
                     required: true,
@@ -720,6 +743,7 @@ export default function SignUpPage() {
               }
               label='Informe o número do CID (laudo médico).'
               fullWidth
+              onKeyDown={clickAtCtaButton}
             />
           )}
         </>
@@ -733,6 +757,27 @@ export default function SignUpPage() {
   const maxSteps = steps.length
   const isLastStep = activeStep === maxSteps - 1
   const isFirstStep = activeStep === 0
+
+  useEffect(() => {
+    if (activeStep !== storedSignUpForm.stepIndex) {
+      setStoredSignUpForm({
+        ...storedSignUpForm,
+        stepIndex: activeStep,
+      })
+    }
+
+    const isStoredSignUpFormDifferentFromFormik = !deepEquals(
+      storedSignUpForm.form,
+      formik.values
+    )
+
+    if (isStoredSignUpFormDifferentFromFormik) {
+      setStoredSignUpForm({
+        form: formik.values,
+        stepIndex: activeStep,
+      })
+    }
+  }, [activeStep, formik.values, setStoredSignUpForm, storedSignUpForm])
 
   return (
     <S.Form onSubmit={formik.handleSubmit}>
@@ -784,6 +829,7 @@ export default function SignUpPage() {
                 </Button>
               )}
               <Button
+                ref={ctaButtonRef}
                 variant='contained'
                 fullWidth
                 type={isLastStep ? 'submit' : 'button'}
@@ -792,16 +838,17 @@ export default function SignUpPage() {
                 loading={isSigningIn}
                 disabled={
                   isLastStep
-                    ? !(
-                        steps[activeStep].content &&
-                        formik.isValid &&
-                        formik.dirty
-                      )
-                    : !steps[activeStep].isValid
+                    ? !(formik.isValid && formik.dirty)
+                    : formik.values === SIGN_UP_INITIAL_VALUES ||
+                      !steps[activeStep].isValid
                 }
                 sx={{ flex: 6 }}
               >
-                {isLastStep ? 'Cadastrar' : 'Avançar'}
+                {isLastStep
+                  ? 'Cadastrar'
+                  : isSigningIn
+                  ? 'Aguarde...'
+                  : 'Avançar'}
               </Button>
             </Box>
           </Box>

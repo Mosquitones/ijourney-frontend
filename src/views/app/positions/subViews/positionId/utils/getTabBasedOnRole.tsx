@@ -6,26 +6,26 @@ import CandidatesTab from '../tabs/candidates/Candidates'
 import DescriptionTab from '../tabs/description/Description'
 
 type TabTypes = {
-  value: string
+  id: 'description' | 'candidates' | 'culture-and-benefits'
   label: string
   content: React.ReactNode
   disabled?: boolean
 }
 
 const DESCRIPTION_TAB: TabTypes = {
-  value: 'd7cb546d-71ab-4b00-8540-7ad9bdb3f476',
+  id: 'description',
   label: 'Descrição',
   content: <DescriptionTab />,
 }
 
 const CANDIDATES_TAB: TabTypes = {
-  value: 'adbfbf36-239a-4c57-b963-6c459819ba45',
+  id: 'candidates',
   label: 'Candidatos',
   content: <CandidatesTab />,
 }
 
 const CULTURE_BENEFITS_TAB: TabTypes = {
-  value: 'db674ef1-013f-49d3-92ac-b6d5db7aa09d',
+  id: 'culture-and-benefits',
   label: 'Cultura e Benefícios',
   content: <div>Cultura e Benefícios</div>,
   disabled: true,

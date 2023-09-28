@@ -57,17 +57,8 @@ export const SignUpFormSchema: yup.ObjectSchema<SignUpFormPropTypes> =
       .matches(dateOfBirthRegExp, 'dateOfBirth must be a valid date')
       .required(),
 
-    picture: yup
-      .mixed<File>()
-      .test({
-        name: 'is-a-file',
-        message: 'picture must be a file',
-        test: (value) => {
-          if (!value) return false
-          return value instanceof File
-        },
-      })
-      .required(),
+    picture: yup.mixed<File>().nullable(),
+
     resume: yup
       .mixed<File>()
       .test({

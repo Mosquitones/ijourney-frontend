@@ -202,6 +202,10 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
         position
       )
       refetchPositions()
+
+      setTimeout(() => {
+        handleClose()
+      }, 1000)
     },
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
       alert.showError(error.response?.data.message || error.message)

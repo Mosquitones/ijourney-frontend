@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import {
   BusinessCenter,
@@ -9,6 +9,7 @@ import {
 } from '@mui/icons-material'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
+  Autocomplete,
   Avatar,
   Box,
   BoxProps,
@@ -41,58 +42,126 @@ import {
   TableComponent,
 } from 'components'
 import { useTabContext } from 'contexts'
-import { useIsDevice } from 'hooks'
-import { CandidateTypes, PositionServices, PositionTypes } from 'services'
+import { useIsDevice, useParamsSelector } from 'hooks'
+import {
+  CandidatePositionTypes,
+  CandidateTypes,
+  PositionServices,
+  PositionTypes,
+} from 'services'
 
 import { CandidateDetailsDialog } from './components'
 
 export default function CandidatesTab() {
-  const [candidateId, setSelectedCandidateId] = useState<number | null>(null)
+  const params = useParamsSelector()
+
+  const currentPhaseIndexParam = params.get('currentPhaseIndex')
+  const currentPhaseIndex = currentPhaseIndexParam
+    ? Number(currentPhaseIndexParam)
+    : -1
 
   const position = useTabContext<PositionTypes>()
+
   const candidateRankingQuery = useQuery({
-    queryKey: [`/positions/${position.id}/ranking`, { method: 'GET' }],
-    queryFn: () => PositionServices.id.ranking.findAll(position.id),
+    queryKey: [
+      `/positions/${position.id}/ranking`,
+      { method: 'GET', query: { currentPhaseIndex } },
+    ],
+    queryFn: () =>
+      PositionServices.id.ranking.findAll(position.id, { currentPhaseIndex }),
   })
 
+  const [candidatePositionId, setSelectedCandidatePositionId] = useState<
+    CandidatePositionTypes['candidatePositionId'] | null
+  >(null)
+
   const columns = useCandidateColumns()
-  const data = useCandidateMockData()
+
+  const selectedCurrentPhaseIndex = useMemo(
+    () =>
+      position.phases.find(
+        (phase) => phase.sequenceIndex === currentPhaseIndex
+      ),
+    [currentPhaseIndex, position.phases]
+  )
+
+  useEffect(() => {
+    if (currentPhaseIndex === -1) {
+      params.delete('currentPhaseIndex')
+    }
+  }, [currentPhaseIndex, currentPhaseIndexParam, params])
 
   return (
     <Box display='flex' flexDirection='column' gap={4}>
-      <Box display='flex' gap={2} alignItems='center'>
+      <Box
+        display='flex'
+        gap={2}
+        alignItems='center'
+        justifyContent='space-between'
+        flexWrap='wrap'
+      >
         <Typography
           variant='body1'
           fontWeight={({ typography }) => typography.fontWeightBold}
           color='text.secondary'
+          flex={1}
         >
           {candidateRankingQuery.data?.length} Candidatos
         </Typography>
-        {false && (
-          <Typography
-            variant='body2'
-            fontWeight={({ typography }) => typography.fontWeightBold}
-            color={({ palette }) => palette.success.dark}
-          >
-            (43 novos)
-          </Typography>
-        )}
+        <Autocomplete
+          id='current-phase-autocomplete-box'
+          autoHighlight
+          disablePortal
+          fullWidth
+          sx={{ maxWidth: 350 }}
+          value={selectedCurrentPhaseIndex}
+          inputValue={selectedCurrentPhaseIndex?.name}
+          options={position.phases.sort(
+            (a, b) => a.sequenceIndex - b.sequenceIndex
+          )}
+          getOptionLabel={(option) => option.name}
+          defaultValue={null}
+          onChange={(_, phase, reason) => {
+            if (reason === 'clear') params.delete('currentPhaseIndex')
+            if (phase && phase.sequenceIndex !== currentPhaseIndex) {
+              params.add({
+                key: 'currentPhaseIndex',
+                value: String(phase.sequenceIndex),
+              })
+            }
+          }}
+          noOptionsText='Status de fase não encontrado'
+          renderInput={(params) => {
+            params.id = 'currentPhaseIndex'
+
+            return (
+              <Input
+                {...params}
+                name={params.id}
+                placeholder='Filtre pelo status da vaga'
+              />
+            )
+          }}
+        />
       </Box>
 
       <TableComponent
         columns={columns}
-        data={candidateRankingQuery.data || []}
+        data={
+          candidateRankingQuery.data?.sort((a, b) => a.position - b.position) ||
+          []
+        }
         isLoading={candidateRankingQuery.isLoading}
         onRowClick={(row) => {
-          setSelectedCandidateId(row.original.position)
+          setSelectedCandidatePositionId(row.original.candidatePositionId)
         }}
       />
 
       <CandidateDetailsDialog
-        candidateId={candidateId || undefined}
-        isOpen={typeof candidateId === 'number'}
+        candidatePositionId={candidatePositionId || undefined}
+        isOpen={typeof candidatePositionId === 'number'}
         onClose={() => {
-          setSelectedCandidateId(null)
+          setSelectedCandidatePositionId(null)
         }}
       />
     </Box>

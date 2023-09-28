@@ -19,6 +19,6 @@ export interface RegisterCandidatePayloadTypes {
   companyId: EnumValueTypes<typeof COMPANY_ENUM, 'ID'>
   vulnerabilityList: EnumValueTypes<typeof VULNERABILITY_ENUM>[]
   skillsId: SkillTypes['id'][]
-  picture: string // missing on server
-  resume: string // missing on server
+  picture?: string
+  resume: string
 }

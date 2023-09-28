@@ -1,4 +1,4 @@
-export type ParamKeyTypes = 'tab'
+export type ParamKeyTypes = 'tab' | 'currentPhaseIndex'
 
 export type ParamTypes = {
   key: ParamKeyTypes

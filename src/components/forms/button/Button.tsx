@@ -1,20 +1,19 @@
-import React from 'react'
+/* eslint-disable react/display-name */
+import React, { PropsWithChildren, forwardRef } from 'react'
 
 import { LoadingButton } from '@mui/lab'
-import { FCWithChildren } from '@types'
 
 import { ButtonPropTypes } from './Button.types'
 
-export const Button: FCWithChildren<ButtonPropTypes> = ({
-  value,
-  children = value,
-  rounded = false,
-  ...props
-}) => {
+export const Button = forwardRef<
+  HTMLButtonElement,
+  PropsWithChildren<ButtonPropTypes>
+>(({ value, children = value, rounded = false, ...props }, ref) => {
   const { fontWeight, ...rest } = props
 
   return (
     <LoadingButton
+      ref={ref}
       sx={{
         fontWeight,
         borderRadius: rounded ? 100 : '0.5rem',
@@ -26,6 +25,6 @@ export const Button: FCWithChildren<ButtonPropTypes> = ({
       {children}
     </LoadingButton>
   )
-}
+})
 
 export * from './Button.types'

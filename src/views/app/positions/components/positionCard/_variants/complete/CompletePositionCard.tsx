@@ -21,19 +21,25 @@ import {
   ButtonProps,
   Chip,
   ChipProps,
+  CircularProgress,
   Divider,
   IconButton,
   IconButtonProps,
   SvgIcon,
   SvgIconProps,
+  Tooltip,
   Typography,
 } from '@mui/material'
+import { AxiosError } from 'axios'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { useMutation, useQueryClient } from 'react-query'
 import { getChips } from 'utils/getChips'
 
 import { ChipList, ChipListPropTypes, Position } from 'components'
+import { useAuth, useFeedback } from 'contexts'
 import { useIsDevice } from 'hooks'
+import { ApiResponseTypes, PositionServices } from 'services'
 import { currencyFormatter } from 'utils'
 
 import { PositionBody } from '../../components'
@@ -105,7 +111,30 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
   position,
   onEditClick,
 }) => {
+  const { userId } = useAuth()
+  const queryClient = useQueryClient()
+  const { alert } = useFeedback()
   const isDevice = useIsDevice()
+
+  const deletePositionQuery = useMutation({
+    mutationKey: [`/positions/${position.id}`, { method: 'DELETE' }],
+    mutationFn: () => PositionServices.id.delete(position.id),
+    onSuccess: () => {
+      queryClient.fetchQuery([`/positions`, { method: 'GET' }])
+      queryClient.fetchQuery([
+        `/recruiters/${userId}/positions`,
+        { method: 'GET' },
+      ])
+      alert.showSuccess('Vaga deletada com sucesso')
+      // queryClient.refetchQueries([
+      //   ['/positions', { method: 'GET' }],
+      //   [`/recruiters/${userId}/positions`, { method: 'GET' }],
+      // ])
+    },
+    onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
+      alert.showError(error.response?.data.message || error.message)
+    },
+  })
 
   return (
     <S.Paper>
@@ -116,24 +145,79 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
             chips={getChips({
               employmentType: position.employmentType,
               locationType: position.locationType,
+              salary: position.salaryRange,
             })}
           />
           <S.HeaderInfoContent>
             <Box display='flex' ml={-1}>
-              {[
-                { icon: VisibilityOutlined, id: 'see' },
-                { icon: EditOutlined, id: 'edit', onClick: onEditClick },
-                { icon: DeleteOutlined, id: 'delete' },
-                { icon: MoreVertOutlined, id: 'more' },
-              ].map((item) => (
-                <IconButton
-                  key={item.id}
-                  onClick={item.onClick}
-                  {...(item.id === 'see' && seeButtonProps)}
-                >
-                  <Icon icon={item.icon} />
-                </IconButton>
-              ))}
+              {(
+                [
+                  {
+                    icon: VisibilityOutlined,
+                    id: 'see',
+                    color: 'info',
+                    tooltip: 'Clique para visualizar a vaga',
+                  },
+                  {
+                    icon: EditOutlined,
+                    id: 'edit',
+                    onClick: onEditClick,
+                    tooltip: 'Clique para editar vaga',
+                  },
+                  {
+                    icon: DeleteOutlined,
+                    id: 'delete',
+                    disabled: deletePositionQuery.isLoading,
+                    isLoading: deletePositionQuery.isLoading,
+                    color: 'error',
+                    tooltip: 'Clique para deletar a vaga',
+                    onClick: () => deletePositionQuery.mutate(),
+                  },
+                  { icon: MoreVertOutlined, id: 'more' },
+                ] as (IconButtonProps & {
+                  tooltip?: string
+                  icon: React.ElementType
+                  isLoading?: boolean
+                })[]
+              ).map(({ tooltip, ...buttonRest }) => {
+                const button = (
+                  <IconButton
+                    key={buttonRest.id}
+                    {...buttonRest}
+                    {...(buttonRest.id === 'see' && seeButtonProps)}
+                  >
+                    {buttonRest.isLoading ? (
+                      <Box
+                        display='flex'
+                        alignItems='center'
+                        bgcolor='white'
+                        p={1}
+                        borderRadius={30}
+                        border={({ palette }) =>
+                          `0.1rem solid ${palette.divider}`
+                        }
+                      >
+                        <CircularProgress
+                          size={20}
+                          sx={({ palette }) => ({ color: palette.grey[600] })}
+                        />
+                      </Box>
+                    ) : (
+                      <Icon icon={buttonRest.icon} color='inherit' />
+                    )}
+                  </IconButton>
+                )
+
+                if (tooltip) {
+                  return (
+                    <Tooltip title={tooltip} key={buttonRest.id}>
+                      {button}
+                    </Tooltip>
+                  )
+                }
+
+                return button
+              })}
             </Box>
           </S.HeaderInfoContent>
         </S.Header>
