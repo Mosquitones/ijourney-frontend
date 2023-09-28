@@ -152,7 +152,7 @@ export default function PositionsPage() {
                     />
                   ))
                 : positionsQuery.data
-                    .sort((a: PositionTypes, b: PositionTypes) => b.id - a.id)
+                    ?.sort((a: PositionTypes, b: PositionTypes) => b.id - a.id)
                     ?.map((position: PositionTypes) => (
                       <PositionCard
                         key={position.id}
