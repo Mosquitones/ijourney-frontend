@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import {
+  Autocomplete,
   Box,
   Checkbox,
   Divider,
@@ -10,7 +12,6 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
-  Input,
   InputLabel,
   OutlinedInput,
   Radio,
@@ -19,35 +20,263 @@ import {
   Slider,
   TextField,
 } from '@mui/material'
+import {
+  EMPLOYMENT_TYPE_LIST,
+  LOCATION_TYPE_LIST,
+  VULNERABILITIES_LIST,
+} from '@types'
+import { useQuery } from 'react-query'
+import { renderSelectedCheckbox } from 'views/auth'
+
+import { Input } from 'components'
+import { useAuth } from 'contexts'
+import { useParamsSelector } from 'hooks'
+import { PositionPayloadQueryTypes, SkillServices } from 'services'
+import { currencyFormatter } from 'utils'
+
+type Filters = keyof PositionPayloadQueryTypes
+
+// 'position-name': string
+// 'city-or-state-name': string
+
+const MAX_SALARY_VALUE = 10000
+const SALARIES_LIST = [
+  {
+    id: 0,
+    label: 'Todos os salários',
+    value: [0, MAX_SALARY_VALUE],
+  },
+  {
+    id: 1,
+    label: 'Até 1K',
+    value: [0, 1000],
+  },
+  {
+    id: 2,
+    label: '1K até 5K',
+    value: [1000, 5000],
+  },
+  {
+    id: 3,
+    label: '2.5K até 5K',
+    value: [2500, 5000],
+  },
+  {
+    id: -1,
+    label: 'Customizado',
+    value: [2500, 7000],
+  },
+] as const
 
 export const AdditionalFilters: React.FC = () => {
+  const { isUserRole } = useAuth()
+  const params = useParamsSelector<Filters | 'salary-id'>()
+
+  const skillsQuery = useQuery({
+    queryKey: ['/skills', { method: 'GET' }],
+    queryFn: SkillServices.findAll,
+  })
+
+  const cityOrStateNameParam = params.get('city-or-state-name')
+  const positionNameParam = params.get('position-name')
+
+  const minCreationDateParam = params.get('min-creation-date')
+  const maxCreationDateParam = params.get('max-creation-date')
+
+  const salaryIdParam = Number(
+    params.get('salary-id') || 0
+  ) as (typeof SALARIES_LIST)[number]['id']
+  const minSalaryParam = Number(params.get('min-salary') || 0)
+  const maxSalaryParam = Number(params.get('max-salary') || 0)
+
+  const employmentTypeParam = params.getAsArray('employment-type')
+  const locationTypeParam = params.getAsArray('location-type')
+  const skillIdsParam = params.getAsArray('skill-ids')
+
+  const vulnerabilitiesParam = params.getAsArray('vulnerabilities')
+
+  const selectedVulnerabilityList = useMemo(
+    () =>
+      VULNERABILITIES_LIST.filter((vulnerability) =>
+        vulnerabilitiesParam.includes(vulnerability.value)
+      ),
+    [vulnerabilitiesParam]
+  )
+
+  const selectedSkillsList = useMemo(
+    () =>
+      skillsQuery.data?.filter((skill) =>
+        skillIdsParam.includes(String(skill.id))
+      ) || [],
+    [skillIdsParam]
+  )
+
+  const selectedSalary = useMemo(
+    () =>
+      SALARIES_LIST.find((salary) => salary.id === salaryIdParam) ||
+      SALARIES_LIST[0],
+    [salaryIdParam]
+  )
+
   return (
     <Box display='flex' flexDirection='column' gap={3}>
       <FormControl fullWidth component='fieldset'>
-        <FormLabel component='legend'>Data de postagem</FormLabel>
+        <FormLabel component='legend'>Data de postagem (inicial)</FormLabel>
         <OutlinedInput
+          value={minCreationDateParam}
+          name='min-creation-date'
           type='date'
-          name='date-posting'
           placeholder='Qualquer período'
+          onChange={(e) => {
+            if (e.target.value) {
+              params.add({ key: 'min-creation-date', value: e.target.value })
+            } else {
+              params.delete('min-creation-date')
+              params.delete('max-creation-date')
+            }
+          }}
         />
         {false && <FormHelperText>Helper Text</FormHelperText>}
       </FormControl>
 
+      {minCreationDateParam && (
+        <FormControl
+          fullWidth
+          component='fieldset'
+          error={!maxCreationDateParam}
+        >
+          <FormLabel component='legend'>Data de postagem (final)</FormLabel>
+          <OutlinedInput
+            value={maxCreationDateParam}
+            type='date'
+            name='max-creation-date'
+            placeholder='Qualquer período'
+            onChange={(e) => {
+              if (e.target.value) {
+                params.add({ key: 'max-creation-date', value: e.target.value })
+              } else {
+                params.delete('max-creation-date')
+              }
+            }}
+            inputProps={{ min: minCreationDateParam }}
+          />
+          {!maxCreationDateParam && (
+            <FormHelperText>Obrigatório ter uma data máxima</FormHelperText>
+          )}
+        </FormControl>
+      )}
+
+      <Divider />
+
+      {!isUserRole.CANDIDATE && (
+        <>
+          <Autocomplete
+            id='vulnerabilities-autocomplete-box'
+            multiple
+            value={selectedVulnerabilityList}
+            options={VULNERABILITIES_LIST}
+            disableCloseOnSelect
+            getOptionLabel={(option) => option.label}
+            renderOption={(props, option, { selected }) => (
+              <li {...props} key={option.value}>
+                {renderSelectedCheckbox(selected)}
+                {option.label}
+              </li>
+            )}
+            noOptionsText='Vulnerabilidade não encontrada'
+            onChange={(_, vulnerabilities) => {
+              const vulnerabilitiesList = vulnerabilities.flatMap(
+                (vulnerability) => vulnerability.value
+              )
+              params.add({
+                key: 'vulnerabilities',
+                value: vulnerabilitiesList,
+              })
+            }}
+            renderInput={(params) => (
+              <Input
+                {...params}
+                label={
+                  <FormLabel {...params?.InputLabelProps} component='legend'>
+                    Tipo de vulnerabilidade social
+                  </FormLabel>
+                }
+                placeholder='Clique para selecionar'
+              />
+            )}
+          />
+          <Divider />
+        </>
+      )}
+
+      <Autocomplete
+        id='skills-autocomplete-box'
+        multiple
+        value={selectedSkillsList}
+        options={skillsQuery.data || []}
+        disableCloseOnSelect
+        getOptionLabel={(option) => option.name}
+        renderOption={(props, option, { selected }) => (
+          <li {...props} key={option.id}>
+            {renderSelectedCheckbox(selected)}
+            {option.name}
+          </li>
+        )}
+        noOptionsText='Habilidade e/ou tecnologia não encontrada'
+        onChange={(_, skills) => {
+          const skillIds = skills.flatMap((skill) => String(skill.id))
+          params.add({
+            key: 'skill-ids',
+            value: skillIds,
+          })
+        }}
+        renderInput={(params) => (
+          <Input
+            {...params}
+            label={
+              <FormLabel {...params?.InputLabelProps} component='legend'>
+                Habilidades e/ou tecnologias
+              </FormLabel>
+            }
+            placeholder='Selecione'
+          />
+        )}
+      />
       <Divider />
 
       <FormControl fullWidth component='fieldset' variant='standard'>
-        <FormLabel component='legend'>Tipo do trabalho</FormLabel>
+        <FormLabel component='legend'>Tipo de contratação</FormLabel>
         <FormGroup>
-          {['Integral', 'Estágio', 'Freelance', 'Voluntário'].map(
-            (option, i) => (
-              <FormControlLabel
-                key={option}
-                control={<Checkbox checked={i === 0} name={option} />}
-                label={option}
-                sx={{ ml: 0, gap: 1 }}
-              />
-            )
-          )}
+          {EMPLOYMENT_TYPE_LIST.map((employmentType, i) => (
+            <FormControlLabel
+              key={employmentType.key}
+              value={employmentType.key}
+              control={
+                <Checkbox
+                  checked={employmentTypeParam.includes(employmentType.key)}
+                  name={employmentType.label}
+                  onChange={(_, isChecked) => {
+                    if (isChecked) {
+                      params.add({
+                        key: 'employment-type',
+                        value: [...employmentTypeParam, employmentType.key],
+                      })
+                    } else {
+                      params.add({
+                        key: 'employment-type',
+                        value: employmentTypeParam.filter(
+                          (employmentKey) =>
+                            employmentKey !== employmentType.key
+                        ),
+                      })
+                    }
+                  }}
+                />
+              }
+              label={employmentType.label}
+              sx={{ ml: 0, gap: 1 }}
+            />
+          ))}
           {false && <FormHelperText>Helper Text</FormHelperText>}
         </FormGroup>
       </FormControl>
@@ -57,66 +286,132 @@ export const AdditionalFilters: React.FC = () => {
       <FormControl fullWidth component='fieldset' variant='standard'>
         <FormLabel component='legend'>Salário</FormLabel>
         <RadioGroup
-          // aria-labelledby='demo-radio-buttons-group-label'
-          // defaultValue='female'
+          value={selectedSalary.id}
+          onChange={(_, optionSalaryId) => {
+            params.add({
+              key: 'salary-id',
+              value: optionSalaryId,
+            })
+
+            const optionSalaryIdAsNumber = Number(
+              optionSalaryId
+            ) as (typeof SALARIES_LIST)[number]['id']
+
+            const salary = SALARIES_LIST.find(
+              (option) => option.id === optionSalaryIdAsNumber
+            )
+
+            if (!salary) return
+
+            const [minSalary, maxSalary] = salary.value
+
+            params.add({
+              key: 'min-salary',
+              value: String(minSalary),
+            })
+            params.add({
+              key: 'max-salary',
+              value: String(maxSalary),
+            })
+          }}
           name='radio-buttons-group'
         >
-          {['Menos de 1K', '1K até 5K', '2.5K até 5K', 'Customizado'].map(
-            (option, i) => (
-              <FormControlLabel
-                key={option}
-                checked={i === 3}
-                value={option}
-                control={<Radio />}
-                label={option}
-                sx={{ mt: -1 }}
-              />
-            )
-          )}
+          {SALARIES_LIST.map((optionSalary) => (
+            <FormControlLabel
+              key={optionSalary.id}
+              checked={optionSalary.id === selectedSalary?.id}
+              value={optionSalary.id}
+              control={<Radio />}
+              label={optionSalary.label}
+              sx={{ mt: -1 }}
+            />
+          ))}
         </RadioGroup>
-        <Slider
-          getAriaLabel={() => 'Salary range'}
-          // value={value}
-          defaultValue={30}
-          // onChange={handleChange}
-          valueLabelDisplay='auto'
-          // getAriaValueText={valuetext}
-        />
+        {selectedSalary?.id === -1 && (
+          <Slider
+            min={100}
+            max={MAX_SALARY_VALUE}
+            getAriaLabel={() => 'Distância entre salários para filtrar'}
+            valueLabelFormat={(value) => currencyFormatter.format(value)}
+            value={[minSalaryParam, maxSalaryParam]}
+            onChange={(_, value, activeThumb) => {
+              if (!Array.isArray(value)) return
+
+              const [minSalary, maxSalary] = value
+
+              const addMinSalaryParam = (salary: number) => {
+                params.add({
+                  key: 'min-salary',
+                  value: String(salary),
+                })
+              }
+
+              const addMaxSalaryParam = (salary: number) => {
+                params.add({
+                  key: 'max-salary',
+                  value: String(salary),
+                })
+              }
+
+              if (maxSalary - minSalary < minSalaryParam) {
+                if (activeThumb === 0) {
+                  const clamped = Math.min(minSalary, 100 - minSalaryParam)
+                  addMinSalaryParam(clamped)
+                  addMaxSalaryParam(clamped + minSalaryParam)
+                } else {
+                  const clamped = Math.max(maxSalary, minSalaryParam)
+                  addMinSalaryParam(clamped - minSalaryParam)
+                  addMaxSalaryParam(clamped)
+                }
+              } else {
+                addMinSalaryParam(minSalary)
+                addMaxSalaryParam(maxSalary)
+              }
+            }}
+            valueLabelDisplay='auto'
+            disableSwap
+          />
+        )}
         {false && <FormHelperText>Helper Text</FormHelperText>}
       </FormControl>
 
       <Divider />
 
       <FormControl fullWidth component='fieldset' variant='standard'>
-        <FormLabel component='legend'>Modelo de Contratação</FormLabel>
+        <FormLabel component='legend'>Modelo de trabalho</FormLabel>
         <FormGroup>
-          {['Presencial', 'Híbrido', 'Remoto'].map((option, i) => (
+          {LOCATION_TYPE_LIST.map((locationType, i) => (
             <FormControlLabel
-              key={option}
-              control={<Checkbox checked={i === 0} name={option} />}
-              label={option}
+              key={locationType.key}
+              value={locationType.key}
+              control={
+                <Checkbox
+                  checked={locationTypeParam.includes(locationType.key)}
+                  name={locationType.label}
+                  onChange={(_, isChecked) => {
+                    if (isChecked) {
+                      params.add({
+                        key: 'location-type',
+                        value: [...locationTypeParam, locationType.key],
+                      })
+                    } else {
+                      params.add({
+                        key: 'location-type',
+                        value: locationTypeParam.filter(
+                          (locationTypekey) =>
+                            locationTypekey !== locationType.key
+                        ),
+                      })
+                    }
+                  }}
+                />
+              }
+              label={locationType.label}
               sx={{ ml: 0, gap: 1 }}
             />
           ))}
+          {false && <FormHelperText>Helper Text</FormHelperText>}
         </FormGroup>
-        {false && <FormHelperText>Helper Text</FormHelperText>}
-      </FormControl>
-
-      <Divider />
-
-      <FormControl fullWidth component='fieldset' variant='standard'>
-        <FormLabel component='legend'>Função de Trabalho</FormLabel>
-        <FormGroup>
-          {['Análise', 'Gestão', 'Relações públicas'].map((option, i) => (
-            <FormControlLabel
-              key={option}
-              control={<Checkbox checked={i === 0} name={option} />}
-              label={option}
-              sx={{ ml: 0, gap: 1 }}
-            />
-          ))}
-        </FormGroup>
-        {false && <FormHelperText>Helper Text</FormHelperText>}
       </FormControl>
     </Box>
   )

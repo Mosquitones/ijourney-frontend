@@ -22,7 +22,10 @@ import * as S from './Input.styles'
 
 export const Input = forwardRef<
   HTMLInputElement,
-  TextFieldProps & { fileName?: string | null }
+  TextFieldProps & {
+    fileName?: string | null
+    label?: string | React.ReactNode
+  }
 >(({ label, variant = 'outlined', fileName = null, ...rest }, ref) => {
   const [inputFileName, setInputFileName] = React.useState<string | null>(
     fileName
@@ -33,7 +36,7 @@ export const Input = forwardRef<
 
   return (
     <S.Container fullWidth={!!rest.fullWidth}>
-      {label && (
+      {typeof label === 'string' ? (
         <S.Label
           {...rest.InputLabelProps}
           htmlFor={rest.name}
@@ -42,6 +45,8 @@ export const Input = forwardRef<
         >
           {label}
         </S.Label>
+      ) : (
+        label
       )}
 
       {rest.type === 'file' ? (

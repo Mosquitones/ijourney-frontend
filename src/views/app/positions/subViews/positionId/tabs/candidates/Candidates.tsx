@@ -53,7 +53,7 @@ import {
 import { CandidateDetailsDialog } from './components'
 
 export default function CandidatesTab() {
-  const params = useParamsSelector()
+  const params = useParamsSelector<'currentPhaseIndex'>()
 
   const currentPhaseIndexParam = params.get('currentPhaseIndex')
   const currentPhaseIndex = currentPhaseIndexParam

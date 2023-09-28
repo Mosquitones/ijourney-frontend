@@ -286,21 +286,7 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
           alignItems='center'
           gap={2}
         >
-          <SvgIcon
-            component={ErrorOutlineRounded}
-            fontSize='large'
-            color='error'
-          />
-          <Typography
-            variant='h4'
-            color='error'
-            fontWeight={({ typography }) => typography.fontWeightBold}
-          >
-            Ops. Algo aconteceu
-          </Typography>
-          <Typography textAlign='center'>
-            Não foi possível encontrar o candidato
-          </Typography>
+          <CircularProgress />
         </Box>
       )}
     </S.Drawer>

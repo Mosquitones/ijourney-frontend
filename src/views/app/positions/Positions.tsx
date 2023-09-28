@@ -22,10 +22,11 @@ import {
 import { EnumValueTypes, ROLE_ENUM } from '@types'
 import { AxiosError } from 'axios'
 import { QueryKey, UseQueryOptions, useMutation, useQuery } from 'react-query'
+import { useSearchParams } from 'react-router-dom'
 
 import { Banner, Button, FloatingActionButton, Input } from 'components'
 import { useAuth, useFeedback, useLayout } from 'contexts'
-import { useDebounce, useIsDevice } from 'hooks'
+import { useDebounce, useIsDevice, useParamsSelector } from 'hooks'
 import {
   ApiResponseTypes,
   PositionServices,
@@ -49,6 +50,7 @@ const DEFAULT_PADDINGS: Partial<BoxProps> = {
 export default function PositionsPage() {
   const isDevice = useIsDevice()
   const { alert } = useFeedback()
+  const params = useParamsSelector()
   const [selectedPosition, setSelectedPosition] =
     useState<PositionTypes | null>(null)
   const [openModal, setOpenModal] = useState(false)
@@ -63,21 +65,35 @@ export default function PositionsPage() {
     [key in EnumValueTypes<typeof ROLE_ENUM>]: any
   } = {
     CANDIDATE: {
-      queryKey: [`/positions/candidates/${userId}`, { method: 'GET' }],
-      queryFn: () => PositionServices.candidates.get(userId),
+      queryKey: [
+        `/positions/candidates/${userId}`,
+        { method: 'GET', query: params.objParams },
+      ],
+      queryFn: () => PositionServices.candidates.get(userId, params.objParams),
     },
     RECRUITER: {
-      queryKey: [`/recruiters/${userId}/positions`, { method: 'GET' }],
-      queryFn: () => RecruiterServices.id.positions.get(userId),
+      queryKey: [
+        `/recruiters/${userId}/positions`,
+        { method: 'GET', query: params.objParams },
+      ],
+      queryFn: () =>
+        RecruiterServices.id.positions.get(userId, params.objParams),
     },
     ADMIN: {
-      queryKey: [`/positions`, { method: 'GET' }],
-      queryFn: () => PositionServices.findAll(),
+      queryKey: [`/positions`, { method: 'GET', query: params.objParams }],
+      queryFn: () => PositionServices.findAll(params.objParams),
     },
-    COMPANY: {},
+    COMPANY: {
+      queryKey: [`/positions`, { method: 'GET', query: params.objParams }],
+      queryFn: () => PositionServices.findAll(params.objParams),
+    },
   } as const
 
   const positionsQuery = useQuery(QUERIES[userRole]) as any
+
+  React.useEffect(() => {
+    console.log(params.objParams)
+  }, [params.objParams])
 
   return (
     <>
@@ -113,11 +129,17 @@ export default function PositionsPage() {
                 >
                   Filtrar
                 </Typography>
-                <Button color='error' sx={{ p: 0, mr: -1, my: -2 }}>
-                  <Typography color='red' variant='body2'>
-                    Limpar Filtros
-                  </Typography>
-                </Button>
+                {Object.keys(params.objParams).length > 0 && (
+                  <Button
+                    color='error'
+                    sx={{ p: 0, mr: -1, my: -2 }}
+                    onClick={params.deleteAll}
+                  >
+                    <Typography color='red' variant='body2'>
+                      Limpar Filtros
+                    </Typography>
+                  </Button>
+                )}
               </Box>
               <Divider />
               <Box {...DEFAULT_PADDINGS}>

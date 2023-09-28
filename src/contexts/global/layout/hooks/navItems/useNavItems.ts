@@ -18,10 +18,11 @@ type RouteBasedOnRoleTypes = {
   [key in EnumValueTypes<typeof ROLE_ENUM>]: NavItemTypes[]
 }
 
-type NavItemWithoutLabel = Omit<NavItemTypes, 'label'>
+type _NavItemWithoutLabel = Omit<NavItemTypes, 'label'>
 
 export const useNavItems = () => {
-  const POSITION_ITEM_PROPERTIES: NavItemWithoutLabel = {
+  const POSITION_ITEM_PROPERTIES: NavItemTypes = {
+    label: 'Vagas',
     path: `/${ROUTES.APP}/${ROUTES.POSITIONS}`,
     icon: DashboardOutlined,
     filledIcon: DashboardTwoTone,
@@ -59,8 +60,8 @@ export const useNavItems = () => {
   const navItems: RouteBasedOnRoleTypes = {
     CANDIDATE: [
       {
-        label: 'Vagas',
         ...POSITION_ITEM_PROPERTIES,
+        label: 'Vagas',
         isDefaultPath: true,
       },
       {
@@ -74,8 +75,8 @@ export const useNavItems = () => {
     ],
     RECRUITER: [
       {
-        label: 'Minhas Vagas',
         ...POSITION_ITEM_PROPERTIES,
+        label: 'Minhas Vagas',
         isDefaultPath: true,
       },
       REPORT_ITEM,
@@ -83,12 +84,21 @@ export const useNavItems = () => {
       ABOUT_US_ITEM,
     ],
     COMPANY: [
-      { ...REPORT_ITEM, isDefaultPath: true },
+      {
+        ...POSITION_ITEM_PROPERTIES,
+        isDefaultPath: true,
+      },
+      REPORT_ITEM,
       COURSE_ITEM,
       ABOUT_US_ITEM,
     ],
     ADMIN: [
-      { ...REPORT_ITEM, isDefaultPath: true },
+      {
+        ...POSITION_ITEM_PROPERTIES,
+        isDefaultPath: true,
+      },
+      // { ..., isDefaultPath: true },
+      REPORT_ITEM,
       COURSE_ITEM,
       ABOUT_US_ITEM,
     ],

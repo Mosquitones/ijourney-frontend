@@ -1,26 +1,40 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react'
 
 import { useSearchParams } from 'react-router-dom'
 
-import { ParamKeyTypes, ParamTypes } from './useParamsSelector.types'
+import { ParamTypes } from './useParamsSelector.types'
 
-export const useParamsSelector = () => {
+export const useParamsSelector = <TKey extends string>() => {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const getQueryParam = (key: ParamKeyTypes) => {
-    return searchParams.get(key)
+  const getQueryParam = <TValue extends string>(key: TKey) => {
+    const value = searchParams.get(key)
+
+    return value as TValue | null
+  }
+
+  const getQueryParamAsArray = <TValue extends string[]>(key: TKey) => {
+    const value = searchParams.get(key)
+
+    if (!value) return []
+
+    const isValueWithComma = value.includes(',')
+    if (isValueWithComma) return value.split(',')
+
+    return [value] as TValue
   }
 
   const getAllParams = () => {
-    const params: ParamTypes[] = []
+    const params: ParamTypes<TKey>[] = []
     searchParams.forEach((value, key) =>
-      params.push({ key: key as ParamKeyTypes, value })
+      params.push({ key: key as TKey, value })
     )
     return params
   }
 
-  const removeQueryParam = (key: ParamKeyTypes) => {
+  const removeQueryParam = (key: TKey) => {
     const param = getQueryParam(key)
 
     if (param) {
@@ -31,16 +45,27 @@ export const useParamsSelector = () => {
 
   const removeAllParams = () => setSearchParams([])
 
-  const addQueryParam = (queries: ParamTypes[] | ParamTypes) => {
-    const params = Array.isArray(queries) ? queries : [queries]
+  const addQueryParam = (
+    paramsToAdd: ParamTypes<TKey>[] | ParamTypes<TKey>
+  ) => {
+    const paramsToAddAsArray = Array.isArray(paramsToAdd)
+      ? paramsToAdd
+      : [paramsToAdd]
 
-    params.forEach(({ key, value }) => {
-      const param = getQueryParam(key)
+    paramsToAddAsArray.forEach((paramToAdd) => {
+      const valueAsArray = Array.isArray(paramToAdd.value)
+        ? paramToAdd.value
+        : [paramToAdd.value]
 
-      if (param) {
-        searchParams.set(key, value)
+      const browserAlreadyHasThisParam = getQueryParam(paramToAdd.key)
+
+      if (browserAlreadyHasThisParam) {
+        if (valueAsArray.length === 0) removeQueryParam(paramToAdd.key)
+        else {
+          searchParams.set(paramToAdd.key, valueAsArray.join(','))
+        }
       } else {
-        searchParams.append(key, value)
+        searchParams.append(paramToAdd.key, valueAsArray[0])
       }
     })
 
@@ -59,6 +84,7 @@ export const useParamsSelector = () => {
       getAll: getAllParams,
       deleteAll: removeAllParams,
       get: getQueryParam,
+      getAsArray: getQueryParamAsArray,
       add: addQueryParam,
       delete: removeQueryParam,
       objParams,
@@ -67,6 +93,7 @@ export const useParamsSelector = () => {
       getAllParams,
       removeAllParams,
       getQueryParam,
+      getQueryParamAsArray,
       addQueryParam,
       removeQueryParam,
       objParams,

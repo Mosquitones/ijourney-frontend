@@ -1,6 +1,4 @@
-export type ParamKeyTypes = 'tab' | 'currentPhaseIndex'
-
-export type ParamTypes = {
-  key: ParamKeyTypes
-  value: string
+export type ParamTypes<T extends string> = {
+  key: T
+  value: string | string[]
 }

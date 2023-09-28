@@ -20,7 +20,7 @@ import {
 import { is } from 'date-fns/locale'
 
 import { DialogTitleComponent } from 'components'
-import { useDisclosure, useIsDevice } from 'hooks'
+import { useDisclosure, useIsDevice, useParamsSelector } from 'hooks'
 
 import { AdditionalFilters } from '../additionalFilters/AdditionalFilters'
 
@@ -31,6 +31,7 @@ export const MainFilters: React.FC<MainFiltersPropTypes> = ({
   hideLocationFilters = false,
   fullWidth = false,
 }) => {
+  const params = useParamsSelector()
   const isDevice = useIsDevice()
   const filterHandlers = useDisclosure()
 
@@ -89,9 +90,17 @@ export const MainFilters: React.FC<MainFiltersPropTypes> = ({
               <AdditionalFilters />
             </DialogContent>
             <DialogActions>
-              <Button onClick={filterHandlers.onClose} variant='text'>
-                Apagar
-              </Button>
+              {Boolean(params.objParams) && (
+                <Button
+                  onClick={() => {
+                    params.deleteAll()
+                    filterHandlers.onClose()
+                  }}
+                  variant='text'
+                >
+                  Apagar
+                </Button>
+              )}
               <Button onClick={filterHandlers.onClose} variant='contained'>
                 Aplicar filtros
               </Button>

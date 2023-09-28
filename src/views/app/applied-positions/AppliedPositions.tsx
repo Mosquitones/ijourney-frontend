@@ -24,7 +24,7 @@ type TabTypes = {
 export default function AppliedPositionsPage() {
   const { userId } = useAuth()
 
-  const params = useParamsSelector()
+  const params = useParamsSelector<'tab'>()
 
   const positionsQuery = useQuery({
     queryKey: [`/candidates/${userId}/positions`, { method: 'GET' }],

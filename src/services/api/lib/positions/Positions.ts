@@ -1,10 +1,18 @@
 import { ApiResponseTypes, api } from 'services'
+import { makeQueryParams } from 'utils'
 
-import { PositionRegisterPayloadTypes, PositionTypes } from './Position.types'
+import {
+  PositionPayloadQueryTypes,
+  PositionRegisterPayloadTypes,
+  PositionTypes,
+} from './Positions.types'
+import { positionQueryParams } from './utils/positionQueryParams'
 
-const findAll = async () => {
+const findAll = async (params?: PositionPayloadQueryTypes) => {
+  const serverParams = positionQueryParams(params)
+
   const { data: response } = await api.get<ApiResponseTypes<PositionTypes[]>>(
-    `/positions`
+    `/positions${makeQueryParams(serverParams)}`
   )
 
   return response.data

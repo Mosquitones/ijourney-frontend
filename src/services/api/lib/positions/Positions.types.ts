@@ -24,6 +24,33 @@ export interface RequirementTypes {
   done: boolean
 }
 
+export interface PositionPayloadQueryTypes {
+  'position-name': string
+  'city-or-state-name': string
+
+  'min-salary': number
+  'max-salary': number
+
+  'min-creation-date': string
+  'max-creation-date': string
+
+  'employment-type': EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM>[]
+  'location-type': EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM>[]
+  'skill-ids': SkillTypes['id'][]
+  vulnerabilities: EnumValueTypes<typeof VULNERABILITY_ENUM>[]
+}
+
+export interface PositionServerQueryTypes {
+  positionName: string
+  stateName: string
+  salaryRange: string // min~max
+  creationDate: string // YYYY-MM-DD
+  employmentType: EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM>[]
+  locationType: EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM>[]
+  skills: SkillTypes['id'][]
+  vulnerabilities: EnumValueTypes<typeof VULNERABILITY_ENUM>[]
+}
+
 export interface PositionTypes {
   id: number
   salaryRange: number

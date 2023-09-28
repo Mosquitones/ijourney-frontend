@@ -62,8 +62,8 @@ export const Router: React.FC = () => {
     ),
     COMPANY: (
       <>
-        {redirectToDefaultRoute(ROUTES.REPORTS)}
-        {/* {renderPositionRoutes()} */}
+        {redirectToDefaultRoute(ROUTES.POSITIONS)}
+        {renderPositionRoutes()}
         {renderReportRoutes()}
         {renderCourseRoutes()}
         {renderAboutUsRoutes()}
@@ -71,8 +71,8 @@ export const Router: React.FC = () => {
     ),
     ADMIN: (
       <>
-        {redirectToDefaultRoute(ROUTES.REPORTS)}
-        {/* {renderPositionRoutes()} */}
+        {redirectToDefaultRoute(ROUTES.POSITIONS)}
+        {renderPositionRoutes()}
         {renderReportRoutes()}
         {renderCourseRoutes()}
         {renderAboutUsRoutes()}

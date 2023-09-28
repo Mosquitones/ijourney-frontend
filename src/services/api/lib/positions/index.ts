@@ -1,7 +1,7 @@
-import positionIdMethods from './Position.id'
-import positionIdRankingMethods from './Position.id.ranking'
 import positionMethods from './Positions'
 import positionCandidateMethods from './Positions.candidate.id'
+import positionIdMethods from './Positions.id'
+import positionIdRankingMethods from './Positions.id.ranking'
 
 export const PositionServices = {
   ...positionMethods,
@@ -12,4 +12,4 @@ export const PositionServices = {
   candidates: positionCandidateMethods,
 }
 
-export * from './Position.types'
+export * from './Positions.types'
