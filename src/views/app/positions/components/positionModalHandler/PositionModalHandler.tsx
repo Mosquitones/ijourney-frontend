@@ -216,7 +216,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
     initialValues: position
       ? {
           ...position,
-          creationDate: new Date(position.creationDate).toLocaleDateString(),
+          creationDate: String(new Date(position.creationDate).getTime()),
           requirements: position?.requirements.flatMap((requirement) => ({
             points: requirement.points,
             requiredSkillId: requirement.skill.id,
@@ -234,14 +234,14 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
           numOfMaxHiredPeople: 1,
           phases: mergePendingPhasesWithRequiredPhases([DEFAULT_PHASE]),
           requirements: [DEFAULT_REQUIREMENT],
-          creationDate: new Date().toLocaleDateString(),
+          creationDate: String(new Date().getTime()),
           recruiterId: userId,
         },
     validationSchema: PositionModalHandlerSchema,
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (payload) => {
-      const creationDate = format(new Date(payload.creationDate), 'yyyy-MM-dd')
+      const creationDate = format(Number(payload.creationDate), 'yyyy-MM-dd')
       const newPayload: PositionRegisterPayloadTypes = {
         ...payload,
         creationDate,
