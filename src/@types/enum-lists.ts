@@ -5,6 +5,7 @@ import {
   RACE_ETHNICITY_ENUM,
   SEXUAL_ORIENTATION_ENUM,
   FAMILY_INCOME_ENUM,
+  VULNERABILITY_ENUM,
 } from './enums'
 
 export const EMPLOYMENT_TYPE_LIST = [
@@ -189,5 +190,44 @@ export const FAMILY_INCOME_LIST = [
   {
     label: 'Abaixo de R$ 1 mil',
     value: FAMILY_INCOME_ENUM.E,
+  },
+] as const
+
+export const VULNERABILITIES_LIST = [
+  {
+    label: 'Pessoas indígenas',
+    value: VULNERABILITY_ENUM.INDIGENOUS_PEOPLE,
+  },
+  {
+    label: 'Pessoas do grupo LGBTQIA+',
+    value: VULNERABILITY_ENUM.LGBTQIA,
+  },
+  {
+    label: 'Pessoas com deficiência',
+    value: VULNERABILITY_ENUM.DISABILITIES_PEOPLE,
+  },
+  {
+    label: 'Pessoas com mais de 40 anos',
+    value: VULNERABILITY_ENUM.AGE_GROUP,
+  },
+  {
+    label: 'Pessoas consideradas de cor (Preto, Pardo ou Mulato)',
+    value: VULNERABILITY_ENUM.ETHNIC_RACIAL,
+  },
+  {
+    label: 'Pessoas de classe social do tipo B (Abaixo de R$ 5 mil)',
+    value: VULNERABILITY_ENUM.FAMILY_INCOME_B,
+  },
+  {
+    label: 'Pessoa de classe social do tipo C (Abaixo de R$ 3 mil)',
+    value: VULNERABILITY_ENUM.FAMILY_INCOME_C,
+  },
+  {
+    label: 'Pessoa de classe social do tipo D (Acima de R$ 2 mil)',
+    value: VULNERABILITY_ENUM.FAMILY_INCOME_D,
+  },
+  {
+    label: 'Pessoa de classe social do tipo E (Abaixo de R$ 1 mil)',
+    value: VULNERABILITY_ENUM.FAMILY_INCOME_E,
   },
 ] as const

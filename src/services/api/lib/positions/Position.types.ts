@@ -3,6 +3,7 @@ import {
   LOCATION_TYPE_ENUM,
   PHASE_STATUS_TYPE_ENUM,
   EnumValueTypes,
+  VULNERABILITY_ENUM,
 } from '@types'
 
 import { CandidatePositionTypes, CandidateTypes } from '../candidates'
@@ -34,6 +35,7 @@ export interface PositionTypes {
   creationDate: string
   locationType: EnumValueTypes<typeof LOCATION_TYPE_ENUM>
   employmentType: EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM>
+  vulnerabilityList: EnumValueTypes<typeof VULNERABILITY_ENUM>[]
   numOfHiredPeople: number
   numOfMaxHiredPeople: number
   numOfAppliedPeople: number
@@ -60,6 +62,7 @@ export interface PositionRegisterPayloadTypes {
   numOfMaxHiredPeople: number
   locationType: EnumValueTypes<typeof LOCATION_TYPE_ENUM> | null
   employmentType: EnumValueTypes<typeof EMPLOYMENT_TYPE_ENUM> | null
+  vulnerabilityList: EnumValueTypes<typeof VULNERABILITY_ENUM>[]
   recruiterId: number
   phases: Omit<PhaseTypes, 'id'>[]
   requirements: {

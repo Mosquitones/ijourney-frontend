@@ -83,6 +83,15 @@ const TextMaskCustom = React.forwardRef<HTMLInputElement, any>(
   }
 )
 
+export const renderSelectedCheckbox = (isSelected: boolean) => (
+  <Checkbox
+    icon={<CheckBoxOutlineBlank fontSize='small' />}
+    checkedIcon={<CheckBox fontSize='small' />}
+    sx={{ mr: 1 }}
+    checked={isSelected}
+  />
+)
+
 export default function SignUpPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -197,14 +206,6 @@ export default function SignUpPage() {
   })
 
   const noOptionsText = 'Nenhuma opção encontrada'
-  const renderSelectedCheckbox = (isSelected: boolean) => (
-    <Checkbox
-      icon={<CheckBoxOutlineBlank fontSize='small' />}
-      checkedIcon={<CheckBox fontSize='small' />}
-      sx={{ mr: 1 }}
-      checked={isSelected}
-    />
-  )
 
   const selectedSexualOrientation = useMemo(
     () =>

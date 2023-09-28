@@ -44,11 +44,16 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { EMPLOYMENT_TYPE_LIST, LOCATION_TYPE_LIST } from '@types'
+import {
+  EMPLOYMENT_TYPE_LIST,
+  LOCATION_TYPE_LIST,
+  VULNERABILITIES_LIST,
+} from '@types'
 import { AxiosError } from 'axios'
 import { format } from 'date-fns'
 import { useFormik } from 'formik'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { renderSelectedCheckbox } from 'views/auth'
 
 import { Button, DialogTitleComponent, Input, MarkdownViewer } from 'components'
 import { useAuth, useFeedback } from 'contexts'
@@ -236,6 +241,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
           requirements: [DEFAULT_REQUIREMENT],
           creationDate: String(new Date().getTime()),
           recruiterId: userId,
+          vulnerabilityList: [],
         },
     validationSchema: PositionModalHandlerSchema,
     validateOnChange: true,
@@ -273,6 +279,14 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
         (where) => where.key === formik.values.locationType
       ),
     [formik.values.locationType]
+  )
+
+  const selectedVulnerabilityList = useMemo(
+    () =>
+      VULNERABILITIES_LIST.filter((vulnerability) =>
+        formik.values.vulnerabilityList.includes(vulnerability.value)
+      ),
+    [formik.values.vulnerabilityList]
   )
 
   const noOptionsText = 'Nenhuma opção encontrada'
@@ -539,6 +553,47 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
                 }}
               />
             </Box>
+
+            <Autocomplete
+              id='vulnerabilities-autocomplete-box'
+              multiple
+              value={selectedVulnerabilityList}
+              options={VULNERABILITIES_LIST}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.label}
+              renderOption={(props, option, { selected }) => (
+                <li {...props} key={option.value}>
+                  {renderSelectedCheckbox(selected)}
+                  {option.label}
+                </li>
+              )}
+              noOptionsText={noOptionsText}
+              onChange={(_, vulnerabilities) => {
+                const vulnerabilitiesList = vulnerabilities.flatMap(
+                  (vulnerability) => vulnerability.value
+                )
+                formik.setFieldValue('vulnerabilityList', vulnerabilitiesList)
+              }}
+              renderInput={(params) => (
+                <Input
+                  {...params}
+                  {...formik.getFieldProps('vulnerabilityList')}
+                  error={
+                    formik.touched.vulnerabilityList &&
+                    !!formik.errors.vulnerabilityList
+                  }
+                  helperText={
+                    formik.touched.vulnerabilityList
+                      ? Array.isArray(formik.errors.vulnerabilityList)
+                        ? formik.errors.vulnerabilityList.join(', ')
+                        : formik.errors.vulnerabilityList
+                      : undefined
+                  }
+                  label='Vaga exclusiva para (opcional)'
+                  placeholder='Caso seja para uma vaga exclusiva, selecione'
+                />
+              )}
+            />
 
             <HighlightedContainer>
               <HighlightedHeader>

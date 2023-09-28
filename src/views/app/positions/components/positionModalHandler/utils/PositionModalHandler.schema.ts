@@ -4,6 +4,7 @@ import {
   EnumValueTypes,
   LOCATION_TYPE_ENUM,
   PHASE_STATUS_TYPE_ENUM,
+  VULNERABILITY_ENUM,
 } from '@types'
 import * as yup from 'yup'
 
@@ -42,6 +43,9 @@ export const PositionModalHandlerSchema: yup.ObjectSchema<PositionRegisterPayloa
       .required(),
     locationType: yup
       .string<EnumValueTypes<typeof LOCATION_TYPE_ENUM>>()
+      .required(),
+    vulnerabilityList: yup
+      .array<EnumValueTypes<typeof VULNERABILITY_ENUM>[]>()
       .required(),
     recruiterId: yup.number().required(),
     phases: yup.array(PhaseSchema).min(1).required(),
