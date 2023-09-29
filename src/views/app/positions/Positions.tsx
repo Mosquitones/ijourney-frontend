@@ -61,31 +61,32 @@ export default function PositionsPage() {
     queryFn: SkillServices.findAll,
   })
 
+  const { 'salary-id': _, ...restOfParams } = params.objParams
+
   const QUERIES: {
     [key in EnumValueTypes<typeof ROLE_ENUM>]: any
   } = {
     CANDIDATE: {
       queryKey: [
         `/positions/candidates/${userId}`,
-        { method: 'GET', query: params.objParams },
+        { method: 'GET', query: restOfParams },
       ],
-      queryFn: () => PositionServices.candidates.get(userId, params.objParams),
+      queryFn: () => PositionServices.candidates.get(userId, restOfParams),
     },
     RECRUITER: {
       queryKey: [
         `/recruiters/${userId}/positions`,
-        { method: 'GET', query: params.objParams },
+        { method: 'GET', query: restOfParams },
       ],
-      queryFn: () =>
-        RecruiterServices.id.positions.get(userId, params.objParams),
+      queryFn: () => RecruiterServices.id.positions.get(userId, restOfParams),
     },
     ADMIN: {
-      queryKey: [`/positions`, { method: 'GET', query: params.objParams }],
-      queryFn: () => PositionServices.findAll(params.objParams),
+      queryKey: [`/positions`, { method: 'GET', query: restOfParams }],
+      queryFn: () => PositionServices.findAll(restOfParams),
     },
     COMPANY: {
-      queryKey: [`/positions`, { method: 'GET', query: params.objParams }],
-      queryFn: () => PositionServices.findAll(params.objParams),
+      queryKey: [`/positions`, { method: 'GET', query: restOfParams }],
+      queryFn: () => PositionServices.findAll(restOfParams),
     },
   } as const
 

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import {
   Autocomplete,
@@ -30,7 +30,7 @@ import { renderSelectedCheckbox } from 'views/auth'
 
 import { Input } from 'components'
 import { useAuth } from 'contexts'
-import { useParamsSelector } from 'hooks'
+import { useDebounce, useParamsSelector } from 'hooks'
 import { PositionPayloadQueryTypes, SkillServices } from 'services'
 import { currencyFormatter } from 'utils'
 
@@ -40,11 +40,12 @@ type Filters = keyof PositionPayloadQueryTypes
 // 'city-or-state-name': string
 
 const MAX_SALARY_VALUE = 10000
+const INITIAL_SALARY_VALUE: [number, number] = [0, MAX_SALARY_VALUE]
 const SALARIES_LIST = [
   {
     id: 0,
     label: 'Todos os salários',
-    value: [0, MAX_SALARY_VALUE],
+    value: INITIAL_SALARY_VALUE,
   },
   {
     id: 1,
@@ -77,9 +78,7 @@ export const AdditionalFilters: React.FC = () => {
     queryFn: SkillServices.findAll,
   })
 
-  const cityOrStateNameParam = params.get('city-or-state-name')
-  const positionNameParam = params.get('position-name')
-
+  const [salary, setSalary] = React.useState<number[]>(INITIAL_SALARY_VALUE)
   const minCreationDateParam = params.get('min-creation-date')
   const maxCreationDateParam = params.get('max-creation-date')
 
@@ -88,6 +87,8 @@ export const AdditionalFilters: React.FC = () => {
   ) as (typeof SALARIES_LIST)[number]['id']
   const minSalaryParam = Number(params.get('min-salary') || 0)
   const maxSalaryParam = Number(params.get('max-salary') || 0)
+
+  const debouncedSalary = useDebounce(salary, 500)
 
   const employmentTypeParam = params.getAsArray('employment-type')
   const locationTypeParam = params.getAsArray('location-type')
@@ -117,6 +118,25 @@ export const AdditionalFilters: React.FC = () => {
       SALARIES_LIST[0],
     [salaryIdParam]
   )
+
+  useEffect(() => {
+    const [minSalary, maxSalary] = salary
+
+    if (salary !== INITIAL_SALARY_VALUE) {
+      params.add({
+        key: 'min-salary',
+        value: String(minSalary),
+      })
+
+      params.add({
+        key: 'max-salary',
+        value: String(maxSalary),
+      })
+    } else {
+      params.delete('min-salary')
+      params.delete('max-salary')
+    }
+  }, [debouncedSalary])
 
   return (
     <Box display='flex' flexDirection='column' gap={3}>
@@ -303,16 +323,7 @@ export const AdditionalFilters: React.FC = () => {
 
             if (!salary) return
 
-            const [minSalary, maxSalary] = salary.value
-
-            params.add({
-              key: 'min-salary',
-              value: String(minSalary),
-            })
-            params.add({
-              key: 'max-salary',
-              value: String(maxSalary),
-            })
+            setSalary(salary.value as [number, number])
           }}
           name='radio-buttons-group'
         >
@@ -329,44 +340,12 @@ export const AdditionalFilters: React.FC = () => {
         </RadioGroup>
         {selectedSalary?.id === -1 && (
           <Slider
-            min={100}
             max={MAX_SALARY_VALUE}
             getAriaLabel={() => 'Distância entre salários para filtrar'}
             valueLabelFormat={(value) => currencyFormatter.format(value)}
-            value={[minSalaryParam, maxSalaryParam]}
-            onChange={(_, value, activeThumb) => {
-              if (!Array.isArray(value)) return
-
-              const [minSalary, maxSalary] = value
-
-              const addMinSalaryParam = (salary: number) => {
-                params.add({
-                  key: 'min-salary',
-                  value: String(salary),
-                })
-              }
-
-              const addMaxSalaryParam = (salary: number) => {
-                params.add({
-                  key: 'max-salary',
-                  value: String(salary),
-                })
-              }
-
-              if (maxSalary - minSalary < minSalaryParam) {
-                if (activeThumb === 0) {
-                  const clamped = Math.min(minSalary, 100 - minSalaryParam)
-                  addMinSalaryParam(clamped)
-                  addMaxSalaryParam(clamped + minSalaryParam)
-                } else {
-                  const clamped = Math.max(maxSalary, minSalaryParam)
-                  addMinSalaryParam(clamped - minSalaryParam)
-                  addMaxSalaryParam(clamped)
-                }
-              } else {
-                addMinSalaryParam(minSalary)
-                addMaxSalaryParam(maxSalary)
-              }
+            value={salary}
+            onChange={(_, value) => {
+              setSalary(value as [number, number])
             }}
             valueLabelDisplay='auto'
             disableSwap

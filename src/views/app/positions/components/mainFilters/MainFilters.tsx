@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { SVGProps } from 'react'
+import React, { SVGProps, useEffect } from 'react'
 
 import { SearchOutlined, PlaceOutlined, Tune, Close } from '@mui/icons-material'
 import {
@@ -20,20 +21,42 @@ import {
 import { is } from 'date-fns/locale'
 
 import { DialogTitleComponent } from 'components'
-import { useDisclosure, useIsDevice, useParamsSelector } from 'hooks'
+import {
+  useDebounce,
+  useDisclosure,
+  useIsDevice,
+  useParamsSelector,
+} from 'hooks'
+import { PositionPayloadQueryTypes } from 'services'
 
 import { AdditionalFilters } from '../additionalFilters/AdditionalFilters'
 
 import * as S from './MainFilters.styles'
 import { MainFiltersPropTypes } from './MainFilters.types'
 
+type Filters = keyof PositionPayloadQueryTypes
+
+const renderFindButton = () => <Button variant='contained'>Encontrar</Button>
+
+const renderInternalButton = () => (
+  <Box my={-2} mr={-0.5}>
+    {renderFindButton()}
+  </Box>
+)
+
 export const MainFilters: React.FC<MainFiltersPropTypes> = ({
   hideLocationFilters = false,
   fullWidth = false,
 }) => {
-  const params = useParamsSelector()
+  const params = useParamsSelector<Filters>()
   const isDevice = useIsDevice()
   const filterHandlers = useDisclosure()
+
+  const [positionName, setPositionName] = React.useState('')
+  const [cityOrStateName, setCityOrStateName] = React.useState('')
+
+  const debouncedPositionName = useDebounce<string>(positionName, 500)
+  const debouncedCityOrStateName = useDebounce<string>(cityOrStateName, 500)
 
   const CONTAINER_AND_INPUT_PADDING_PROPS = {
     flex: 1,
@@ -48,13 +71,27 @@ export const MainFilters: React.FC<MainFiltersPropTypes> = ({
     },
   }
 
-  const renderFindButton = () => <Button variant='contained'>Encontrar</Button>
+  useEffect(() => {
+    if (debouncedPositionName) {
+      params.add({
+        key: 'position-name',
+        value: positionName,
+      })
+    } else {
+      params.delete('position-name')
+    }
+  }, [debouncedPositionName])
 
-  const renderInternalButton = () => (
-    <Box my={-2} mr={-0.5}>
-      {renderFindButton()}
-    </Box>
-  )
+  useEffect(() => {
+    if (debouncedCityOrStateName) {
+      params.add({
+        key: 'city-or-state-name',
+        value: cityOrStateName,
+      })
+    } else {
+      params.delete('city-or-state-name')
+    }
+  }, [debouncedCityOrStateName])
 
   return (
     <Box width={fullWidth || isDevice.to.sm ? '100%' : 'initial'}>
@@ -90,14 +127,8 @@ export const MainFilters: React.FC<MainFiltersPropTypes> = ({
               <AdditionalFilters />
             </DialogContent>
             <DialogActions>
-              {Boolean(params.objParams) && (
-                <Button
-                  onClick={() => {
-                    params.deleteAll()
-                    filterHandlers.onClose()
-                  }}
-                  variant='text'
-                >
+              {Object.keys(params.objParams).length > 0 && (
+                <Button onClick={params.deleteAll} variant='text'>
                   Apagar
                 </Button>
               )}
@@ -121,12 +152,17 @@ export const MainFilters: React.FC<MainFiltersPropTypes> = ({
           justifyContent='space-between'
         >
           <S.InputBase
+            type='autocomplete'
             fullWidth={fullWidth}
+            value={positionName}
             placeholder={
               isDevice.from.sm
-                ? 'Pesquise pelo nome ou palavra-chave'
+                ? 'Pesquise pelo termo da vaga'
                 : 'Nome ou palavra-chave'
             }
+            onChange={(e) => {
+              setPositionName(e.target.value)
+            }}
             startAdornment={
               <SvgIcon {...SVG_ICON_PROPS} component={SearchOutlined} />
             }
@@ -149,6 +185,10 @@ export const MainFilters: React.FC<MainFiltersPropTypes> = ({
               <S.InputBase
                 fullWidth={fullWidth}
                 placeholder='Cidade ou estado'
+                value={cityOrStateName}
+                onChange={(e) => {
+                  setCityOrStateName(e.target.value)
+                }}
                 startAdornment={
                   <SvgIcon {...SVG_ICON_PROPS} component={PlaceOutlined} />
                 }
