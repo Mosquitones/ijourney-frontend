@@ -27,7 +27,7 @@ export const CircularProgress: React.FC<ProgressPropTypes> = ({
 
   return (
     <S.Container>
-      <MUICircularProgress {...COMMON_PROPS} value={100} />
+      <MUICircularProgress {...COMMON_PROPS} value={100} size={rest.size} />
       <MUICircularProgress
         {...COMMON_PROPS}
         {...rest}
