@@ -2,12 +2,17 @@
 import React from 'react'
 
 import {
+  ArchiveOutlined,
   AttachMoneyOutlined,
+  BookmarkBorderOutlined,
   BusinessCenter,
   CalendarMonthOutlined,
   Circle,
   DeleteOutlined,
+  DifferenceOutlined,
+  DriveFileMoveOutlined,
   EditOutlined,
+  FavoriteBorderOutlined,
   MoreVertOutlined,
   PaidOutlined,
   Place,
@@ -25,6 +30,9 @@ import {
   Divider,
   IconButton,
   IconButtonProps,
+  ListItemIcon,
+  Menu,
+  MenuItem,
   SvgIcon,
   SvgIconProps,
   Tooltip,
@@ -110,31 +118,62 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
   seeButtonProps,
   position,
   onEditClick,
+  isArchived,
 }) => {
   const { userId } = useAuth()
   const queryClient = useQueryClient()
   const { alert } = useFeedback()
   const isDevice = useIsDevice()
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const isMoreItemsMenuOpen = Boolean(anchorEl)
+
+  const refetchPositions = () => {
+    queryClient.fetchQuery([`/positions`, { method: 'GET' }])
+    queryClient.fetchQuery([
+      `/recruiters/${userId}/positions`,
+      { method: 'GET' },
+    ])
+    queryClient.fetchQuery([
+      `/recruiters/${userId}/positions/archived`,
+      { method: 'GET' },
+    ])
+  }
+
   const deletePositionQuery = useMutation({
     mutationKey: [`/positions/${position.id}`, { method: 'DELETE' }],
     mutationFn: () => PositionServices.id.delete(position.id),
     onSuccess: () => {
-      queryClient.fetchQuery([`/positions`, { method: 'GET' }])
-      queryClient.fetchQuery([
-        `/recruiters/${userId}/positions`,
-        { method: 'GET' },
-      ])
+      refetchPositions()
       alert.showSuccess('Vaga deletada com sucesso')
-      // queryClient.refetchQueries([
-      //   ['/positions', { method: 'GET' }],
-      //   [`/recruiters/${userId}/positions`, { method: 'GET' }],
-      // ])
     },
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
       alert.showError(error.response?.data.message || error.message)
     },
   })
+
+  const archivePositionQuery = useMutation({
+    mutationKey: [
+      `/positions/${position.id}/archived/register`,
+      { method: 'POST' },
+    ],
+    mutationFn: () => PositionServices.id.archived.register.post(position.id),
+    onSuccess: () => {
+      refetchPositions()
+      alert.showSuccess('Vaga arquivada com sucesso')
+    },
+    onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
+      alert.showError(error.response?.data.message || error.message)
+    },
+  })
+
+  const chips = getChips({
+    employmentType: position.employmentType,
+    locationType: position.locationType,
+    salary: position.salaryRange,
+  })
+
+  const isCardDisabled = archivePositionQuery.isSuccess
 
   return (
     <S.Paper>
@@ -142,11 +181,17 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
         <S.Header>
           <Position.Header
             title={position.title}
-            chips={getChips({
-              employmentType: position.employmentType,
-              locationType: position.locationType,
-              salary: position.salaryRange,
-            })}
+            chips={
+              isCardDisabled
+                ? [
+                    {
+                      color: 'default',
+                      label: 'Arquivada',
+                      variant: 'outlined',
+                    },
+                  ]
+                : chips
+            }
           />
           <S.HeaderInfoContent>
             <Box display='flex' ml={-1}>
@@ -155,25 +200,34 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
                   {
                     icon: VisibilityOutlined,
                     id: 'see',
+                    disabled: isCardDisabled,
                     color: 'info',
                     tooltip: 'Clique para visualizar a vaga',
                   },
                   {
                     icon: EditOutlined,
                     id: 'edit',
+                    disabled: isCardDisabled,
                     onClick: onEditClick,
                     tooltip: 'Clique para editar vaga',
                   },
                   {
                     icon: DeleteOutlined,
                     id: 'delete',
-                    disabled: deletePositionQuery.isLoading,
+                    disabled: deletePositionQuery.isLoading || isCardDisabled,
                     isLoading: deletePositionQuery.isLoading,
                     color: 'error',
                     tooltip: 'Clique para deletar a vaga',
                     onClick: () => deletePositionQuery.mutate(),
                   },
-                  { icon: MoreVertOutlined, id: 'more' },
+                  {
+                    icon: MoreVertOutlined,
+                    id: 'more',
+                    disabled: archivePositionQuery.isLoading || isCardDisabled,
+                    isLoading: archivePositionQuery.isLoading,
+                    tooltip: 'Clique para ver mais opções',
+                    onClick: (e) => setAnchorEl(e.currentTarget),
+                  },
                 ] as (IconButtonProps & {
                   tooltip?: string
                   icon: React.ElementType
@@ -219,47 +273,104 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
                 return button
               })}
             </Box>
+            <Menu
+              id='more-items-menu'
+              anchorEl={anchorEl}
+              open={isMoreItemsMenuOpen}
+              onClose={() => {
+                setAnchorEl(null)
+              }}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  archivePositionQuery.mutate()
+                }}
+                disabled={isArchived}
+              >
+                <ListItemIcon>
+                  <ArchiveOutlined fontSize='small' />
+                </ListItemIcon>
+                {isArchived ? 'Desarquivar' : 'Arquivar'}
+              </MenuItem>
+              <MenuItem disabled>
+                <ListItemIcon>
+                  <DifferenceOutlined fontSize='small' />
+                </ListItemIcon>
+                Duplicar
+              </MenuItem>
+              <MenuItem disabled>
+                <ListItemIcon>
+                  <BookmarkBorderOutlined fontSize='small' />
+                </ListItemIcon>
+                Salvar
+              </MenuItem>
+              <MenuItem disabled>
+                <ListItemIcon>
+                  <DriveFileMoveOutlined fontSize='small' />
+                </ListItemIcon>
+                Mover
+              </MenuItem>
+            </Menu>
           </S.HeaderInfoContent>
         </S.Header>
-        <PositionBody description={position.shortDescription} />
+        {!archivePositionQuery.isSuccess && (
+          <PositionBody description={position.shortDescription} />
+        )}
       </S.Wrapper>
-      <Divider />
 
-      <S.Footer>
-        <Box display='flex' gap={4} py={2} px={3} flex={1}>
-          <PositionInfo
-            icon={CalendarMonthOutlined}
-            title='Data'
-            value={format(new Date(position.creationDate), 'dd/MM/yyyy')}
-          />
-          <PositionInfo
-            icon={PaidOutlined}
-            title='Orçamento'
-            value={currencyFormatter.format(position.salaryRange)}
-          />
-        </Box>
-        <Divider
-          orientation={isDevice.from.md ? 'vertical' : 'horizontal'}
-          flexItem
-        />
-        <Box display='flex' gap={3} py={2} px={3} flex={1}>
-          <PositionInfo
-            title={String(position.numOfAppliedPeople)}
-            value='Aplicações'
-          />
-          <Divider orientation='vertical' flexItem />
-          <PositionInfo
-            title={String(position.numOfSelectedPeople)}
-            value='Selecionados'
-          />
-          <Divider orientation='vertical' flexItem />
-          <PositionInfo
-            title={String(position.numOfHiredPeople)}
-            value='Contratados'
-            titleAdditionalInfo={`/${position.numOfMaxHiredPeople}`}
-          />
-        </Box>
-      </S.Footer>
+      {!archivePositionQuery.isSuccess && (
+        <>
+          <Divider />
+          <S.Footer sx={{ justifyContent: 'space-between' }}>
+            <Box display='flex' gap={4} py={2} px={3} flex={1}>
+              <PositionInfo
+                icon={CalendarMonthOutlined}
+                title='Data'
+                value={format(new Date(position.creationDate), 'dd/MM/yyyy')}
+              />
+              <PositionInfo
+                icon={PaidOutlined}
+                title='Orçamento'
+                value={currencyFormatter.format(position.salaryRange)}
+              />
+            </Box>
+            {!isArchived && (
+              <Divider
+                orientation={isDevice.from.md ? 'vertical' : 'horizontal'}
+                flexItem
+              />
+            )}
+            <Box
+              display='flex'
+              gap={3}
+              py={2}
+              px={3}
+              flex={1}
+              justifyContent={isArchived ? 'flex-end' : 'flex-start'}
+            >
+              {isArchived && <Divider orientation='vertical' flexItem />}
+              <PositionInfo
+                title={String(position.numOfAppliedPeople)}
+                value='Aplicações'
+              />
+              <Divider orientation='vertical' flexItem />
+              <PositionInfo
+                title={String(position.numOfSelectedPeople)}
+                value='Selecionados'
+              />
+              <Divider orientation='vertical' flexItem />
+              <PositionInfo
+                title={String(position.numOfHiredPeople)}
+                value='Contratados'
+                titleAdditionalInfo={`/${position.numOfMaxHiredPeople}`}
+              />
+            </Box>
+          </S.Footer>
+        </>
+      )}
     </S.Paper>
   )
 }

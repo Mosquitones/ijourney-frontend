@@ -5,6 +5,7 @@ import { Container } from '@mui/material'
 import dashboardImage from 'assets/images/app/reports/dashboard.png'
 
 import { Banner } from 'components'
+import { useAuth } from 'contexts'
 
 const TABS = [
   {
@@ -33,16 +34,23 @@ const TABS = [
 ]
 
 export default function ReportsPage() {
+  const { isUserRole } = useAuth()
   const [selectedTab, setSelectedTab] = useState(TABS[0].value)
 
   return (
     <TabContext value={selectedTab}>
       <Banner.Container>
         <Banner.Wrapper maxWidth='sm'>
-          <Banner.Title>Relatórios</Banner.Title>
+          <Banner.Title>
+            {isUserRole.RECRUITER && 'Análise e Orientações Estratégicas'}
+            {(isUserRole.COMPANY || isUserRole.ADMIN) &&
+              'Análise e Gestão Estratégica'}
+          </Banner.Title>
           <Banner.Description>
-            Procurando emprego? Pesquise nossas ultimas vagas abertas e aplique
-            para as melhores oportunidades ainda hoje e bla bla boa!
+            {isUserRole.RECRUITER &&
+              'Acesse informações detalhadas e orientações estratégicas para aprimorar sua estratégia de recrutamento. Tome decisões fundamentadas e otimize sua busca pelos candidatos ideais.'}
+            {(isUserRole.COMPANY || isUserRole.ADMIN) &&
+              'Tenha acesso a informações detalhadas e ferramentas de gestão estratégica para aprimorar a eficiência da sua plataforma de recrutamento. Tome decisões embasadas e otimize o processo de recrutamento.'}
           </Banner.Description>
         </Banner.Wrapper>
         <Banner.Tabs

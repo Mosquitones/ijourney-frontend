@@ -852,12 +852,13 @@ export default function SignUpPage() {
                 type={isLastStep ? 'submit' : 'button'}
                 color='black'
                 onClick={isLastStep ? undefined : handleNext}
-                // loading={isSigningIn}
                 disabled={
-                  isLastStep
+                  (isLastStep
                     ? !(formik.isValid && formik.dirty)
                     : formik.values === SIGN_UP_INITIAL_VALUES ||
-                      !steps[activeStep].isValid
+                      !steps[activeStep].isValid) ||
+                  isSigningIn ||
+                  isSigningUp
                 }
                 sx={{ flex: 6 }}
               >

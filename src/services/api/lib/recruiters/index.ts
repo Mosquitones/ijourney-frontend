@@ -1,11 +1,15 @@
-import recruiterIdMethods from './Recruiter.id'
-import RecruiterIdPositionMethods from './Recruiter.id.positions'
+import recruiterIdMethods from './Recruiters.id'
+import recruiterIdPositionMethods from './Recruiters.id.positions'
+import recruiterIdPositionsArchivedMethods from './Recruiters.Id.positions.archived'
 
 export const RecruiterServices = {
   id: {
     ...recruiterIdMethods,
-    positions: RecruiterIdPositionMethods,
+    positions: {
+      ...recruiterIdPositionMethods,
+      archived: recruiterIdPositionsArchivedMethods,
+    },
   },
 }
 
-export * from './Recruiter.types'
+export * from './Recruiters.types'

@@ -52,7 +52,7 @@ export const HeaderInfoContent = styled(Box)`
 
 export const Body = styled.div``
 
-export const Footer = styled.div`
+export const Footer = styled(Box)`
   display: flex;
   /* flex-wrap: wrap; */
   flex-direction: column;

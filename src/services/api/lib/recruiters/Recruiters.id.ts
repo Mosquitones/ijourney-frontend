@@ -3,7 +3,7 @@ import { ApiResponseTypes, api } from 'services'
 import {
   RecruiterRegisterPayloadTypes,
   RecruiterTypes,
-} from './Recruiter.types'
+} from './Recruiters.types'
 
 const create = async (payload: RecruiterRegisterPayloadTypes) => {
   const { data: response } = await api.post<ApiResponseTypes<RecruiterTypes>>(

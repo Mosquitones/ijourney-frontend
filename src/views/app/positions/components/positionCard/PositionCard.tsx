@@ -9,6 +9,7 @@ export const PositionCard: React.FC<PositionCardTypes> = ({
   position,
   href,
   onEditClick,
+  isArchived,
 }) => {
   const { isUserRole } = useAuth()
 
@@ -18,6 +19,7 @@ export const PositionCard: React.FC<PositionCardTypes> = ({
         seeButtonProps={{ href }}
         position={position}
         onEditClick={onEditClick}
+        isArchived={isArchived}
       />
     )
   }

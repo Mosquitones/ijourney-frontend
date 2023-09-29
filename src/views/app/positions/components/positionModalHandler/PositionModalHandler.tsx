@@ -190,7 +190,11 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
     mutationFn: PositionServices.post,
     onSuccess: (position) => {
       alert.showSuccess(`Vaga: ${position.title} - criada com sucesso`)
-      refetchPositions()
+      refetchPositions?.()
+
+      setTimeout(() => {
+        handleClose()
+      }, 1000)
     },
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
       alert.showError(error.response?.data.message || error.message)
@@ -206,7 +210,7 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
         [`/positions/${position.id}`, { method: 'GET' }],
         position
       )
-      refetchPositions()
+      refetchPositions?.()
 
       setTimeout(() => {
         handleClose()

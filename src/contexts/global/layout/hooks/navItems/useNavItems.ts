@@ -79,6 +79,12 @@ export const useNavItems = () => {
         label: 'Minhas Vagas',
         isDefaultPath: true,
       },
+      {
+        label: 'Vagas Arquivadas',
+        path: `/${ROUTES.APP}/${ROUTES.ARCHIVED_POSITIONS}`,
+        icon: InboxOutlined,
+        filledIcon: MoveToInboxTwoTone,
+      },
       REPORT_ITEM,
       // COURSE_ITEM,
       // ABOUT_US_ITEM,

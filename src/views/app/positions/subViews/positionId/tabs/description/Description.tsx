@@ -41,7 +41,7 @@ import { MARKDOWN_TEXT } from './markdown.util'
 export default function DescriptionTab() {
   const isDevice = useIsDevice()
   const { alert } = useFeedback()
-  const { userId } = useAuth()
+  const { userId, isUserRole } = useAuth()
   const { id: positionId } = useTabContext<PositionTypes>()
 
   const applyToPositionIdQuery = useMutation({
@@ -88,41 +88,44 @@ export default function DescriptionTab() {
       <Box display='flex' flexDirection='column' gap={3}>
         <MarkdownViewer markdown={tabContext.longDescription} />
       </Box>
-      <Box display='flex' gap={2}>
-        <Button
-          variant='contained'
-          color='black'
-          disabled={
-            applyToPositionIdQuery.isLoading || applyToPositionIdQuery.isSuccess
-          }
-          loading={applyToPositionIdQuery.isLoading}
-          onClick={() => {
-            applyToPositionIdQuery.mutate({ candidateId: userId, positionId })
-          }}
-        >
-          {applyToPositionIdQuery.isIdle && 'Aplicar para vaga'}
-          {applyToPositionIdQuery.isLoading && 'Aplicando...'}
-          {applyToPositionIdQuery.isSuccess && 'Aplicado'}
-        </Button>
-        <Button
-          variant='outlined'
-          color='black'
-          disabled={
-            savePositionIdQuery.isLoading || savePositionIdQuery.isSuccess
-          }
-          loading={savePositionIdQuery.isLoading}
-          onClick={() => {
-            savePositionIdQuery.mutate({ candidateId: userId, positionId })
-          }}
-        >
-          {applyToPositionIdQuery.isIdle && 'Salvar'}
-          {applyToPositionIdQuery.isLoading && 'Salvando...'}
-          {applyToPositionIdQuery.isSuccess && 'Salvo'}
-        </Button>
-        <Button variant='text' color='black'>
-          Reportar
-        </Button>
-      </Box>
+      {isUserRole.CANDIDATE && (
+        <Box display='flex' gap={2}>
+          <Button
+            variant='contained'
+            color='black'
+            disabled={
+              applyToPositionIdQuery.isLoading ||
+              applyToPositionIdQuery.isSuccess
+            }
+            loading={applyToPositionIdQuery.isLoading}
+            onClick={() => {
+              applyToPositionIdQuery.mutate({ candidateId: userId, positionId })
+            }}
+          >
+            {applyToPositionIdQuery.isIdle && 'Aplicar para vaga'}
+            {applyToPositionIdQuery.isLoading && 'Aplicando...'}
+            {applyToPositionIdQuery.isSuccess && 'Aplicado'}
+          </Button>
+          <Button
+            variant='outlined'
+            color='black'
+            disabled={
+              savePositionIdQuery.isLoading || savePositionIdQuery.isSuccess
+            }
+            loading={savePositionIdQuery.isLoading}
+            onClick={() => {
+              savePositionIdQuery.mutate({ candidateId: userId, positionId })
+            }}
+          >
+            {applyToPositionIdQuery.isIdle && 'Salvar'}
+            {applyToPositionIdQuery.isLoading && 'Salvando...'}
+            {applyToPositionIdQuery.isSuccess && 'Salvo'}
+          </Button>
+          <Button variant='text' color='black'>
+            Reportar
+          </Button>
+        </Box>
+      )}
     </Box>
   )
 }
