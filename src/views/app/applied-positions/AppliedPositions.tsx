@@ -62,7 +62,7 @@ export default function AppliedPositionsPage() {
     },
   ]
 
-  const tabParam = params.get('tab')
+  const tabParam = params.get<TabTypes['id']>('tab')
   const selectedTab = tabParam || TABS[0].id
 
   const isSelectedTabOnGoingLoading =
@@ -89,11 +89,15 @@ export default function AppliedPositionsPage() {
     <TabContext value={selectedTab}>
       <Banner.Container isLoading={isLoading}>
         <Banner.Wrapper maxWidth='sm'>
-          <Banner.Title>Vagas aplicadas</Banner.Title>
+          <Banner.Title>
+            {selectedTab === 'on-going' && 'Aplicações em andamento'}
+            {selectedTab === 'archiveds' && 'Vagas arquivadas'}
+            {selectedTab === 'saveds' && 'Vagas salvas'}
+          </Banner.Title>
           <Banner.Description>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam
+            Mantenha o controle das suas aplicações e visualize o status das
+            vagas que você se candidatou. Sua jornada profissional está a um
+            passo de se tornar realidade.
           </Banner.Description>
         </Banner.Wrapper>
         <Banner.Tabs

@@ -119,8 +119,8 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
   }, [removeCookie, setSessionDateStorage, setUser])
 
   const signUp: AuthContextTypes['signUp'] = useCallback(
-    (payload) => {
-      signUpQuery.mutate(payload)
+    (payload, options) => {
+      signUpQuery.mutate(payload, options)
     },
     [signUpQuery]
   )

@@ -48,7 +48,7 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderAppliedPositionRoutes()}
         {renderCourseRoutes()}
-        {renderAboutUsRoutes()}
+        {/* {renderAboutUsRoutes()} */}
       </>
     ),
     RECRUITER: (
@@ -57,7 +57,7 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderReportRoutes()}
         {/* {renderCourseRoutes()} */}
-        {renderAboutUsRoutes()}
+        {/* {renderAboutUsRoutes()} */}
       </>
     ),
     COMPANY: (
@@ -66,7 +66,7 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderReportRoutes()}
         {renderCourseRoutes()}
-        {renderAboutUsRoutes()}
+        {/* {renderAboutUsRoutes()} */}
       </>
     ),
     ADMIN: (
@@ -75,7 +75,7 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderReportRoutes()}
         {renderCourseRoutes()}
-        {renderAboutUsRoutes()}
+        {/* {renderAboutUsRoutes()} */}
       </>
     ),
   }

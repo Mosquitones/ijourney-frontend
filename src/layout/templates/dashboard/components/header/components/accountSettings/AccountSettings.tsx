@@ -24,6 +24,7 @@ import { AppColorMenuItem } from './components'
 
 export const AccountSettings: React.FC = () => {
   const { user } = useAuth()
+  // const { } = useAccessibility()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -86,7 +87,11 @@ export const AccountSettings: React.FC = () => {
           </ListItemIcon>
           Perfil
         </MenuItem>
-        <MenuItem onClick={handleClose} tabIndex={0}>
+        <MenuItem
+          onClick={handleClose}
+          tabIndex={0}
+          // disabled
+        >
           <ListItemIcon>
             <SettingsOutlined fontSize='small' />
           </ListItemIcon>
@@ -97,9 +102,17 @@ export const AccountSettings: React.FC = () => {
             <TextFieldsOutlined fontSize='small' />
           </ListItemIcon>
           Alterar Fonte
+          {/* <button type='button' onClick={() => null}>
+            aumentar
+          </button> */}
         </MenuItem>
         <AppColorMenuItem handleClose={handleClose} />
-        <MenuItem onClick={handleClose} tabIndex={0}>
+        <MenuItem
+          component='a'
+          href='https://support.google.com/?hl=pt-BR'
+          target='_blank'
+          tabIndex={0}
+        >
           <ListItemIcon>
             <HelpOutlineOutlined fontSize='small' />
           </ListItemIcon>

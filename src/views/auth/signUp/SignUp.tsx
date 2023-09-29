@@ -95,7 +95,7 @@ export const renderSelectedCheckbox = (isSelected: boolean) => (
 export default function SignUpPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { isSigningIn, signUp } = useAuth()
+  const { isSigningUp, isSigningIn, signUp } = useAuth()
 
   const skillsQuery = useQuery({
     queryKey: ['/skills', { method: 'GET' }],
@@ -179,9 +179,10 @@ export default function SignUpPage() {
         vulnerabilityList.push(VULNERABILITY_ENUM.AGE_GROUP)
       }
 
-      const picture = values.picture
-        ? await convertToBase64(values.picture)
-        : undefined
+      const picture =
+        values.picture && Object.keys(values.picture).length > 0
+          ? await convertToBase64(values.picture)
+          : undefined
       const resumeAsBase64 = await convertToBase64(values.resume)
 
       const skillsId = values.skills.flatMap((skill) => skill.id)
@@ -201,7 +202,11 @@ export default function SignUpPage() {
         vulnerabilityList,
       }
 
-      signUp(payload)
+      signUp(payload, {
+        onSuccess: () => {
+          sessionStorage.removeItem(PROFILE_SESSION_KEY)
+        },
+      })
     },
   })
 
@@ -244,6 +249,8 @@ export default function SignUpPage() {
       GENDER_LIST.find((where) => where.value === formik.values.gender) || null,
     [formik.values.gender]
   )
+
+  // const selected
 
   const clickAtCtaButton = (e: React.KeyboardEvent<unknown>) => {
     if (e.key === 'Enter' && !ctaButtonRef.current?.disabled) {
@@ -458,26 +465,35 @@ export default function SignUpPage() {
             )}
             noOptionsText={noOptionsText}
             onChange={(_, skills) => {
-              formik.setFieldValue('skills', skills)
+              if (skills) {
+                formik.setFieldValue('skills', skills)
+              }
             }}
-            onKeyDown={clickAtCtaButton}
-            renderInput={(params) => (
-              <Input
-                {...params}
-                {...formik.getFieldProps('skills')}
-                error={formik.touched.skills && !!formik.errors.skills}
-                helperText={
-                  formik.touched.skills
-                    ? Array.isArray(formik.errors.skills)
-                      ? formik.errors.skills.join(', ')
-                      : formik.errors.skills
-                    : undefined
-                }
-                label='Quais são as suas habilidades?'
-                placeholder='Selecione'
-                InputLabelProps={{ ...params.InputLabelProps, required: true }}
-              />
-            )}
+            // onKeyDown={clickAtCtaButton}
+            renderInput={(params) => {
+              params.id = `skills`
+
+              return (
+                <Input
+                  {...params}
+                  name={params.id}
+                  error={formik.touched.skills && !!formik.errors.skills}
+                  helperText={
+                    formik.touched.skills
+                      ? Array.isArray(formik.errors.skills)
+                        ? formik.errors.skills.join(', ')
+                        : formik.errors.skills
+                      : undefined
+                  }
+                  label='Quais são as suas habilidades?'
+                  placeholder='Selecione'
+                  InputLabelProps={{
+                    ...params.InputLabelProps,
+                    required: true,
+                  }}
+                />
+              )
+            }}
           />
         </>
       ),
@@ -836,7 +852,7 @@ export default function SignUpPage() {
                 type={isLastStep ? 'submit' : 'button'}
                 color='black'
                 onClick={isLastStep ? undefined : handleNext}
-                loading={isSigningIn}
+                // loading={isSigningIn}
                 disabled={
                   isLastStep
                     ? !(formik.isValid && formik.dirty)
@@ -845,10 +861,12 @@ export default function SignUpPage() {
                 }
                 sx={{ flex: 6 }}
               >
-                {isLastStep
+                {isSigningIn
+                  ? 'Entrando...'
+                  : isSigningUp
+                  ? 'Cadastrando...'
+                  : isLastStep
                   ? 'Cadastrar'
-                  : isSigningIn
-                  ? 'Aguarde...'
                   : 'Avançar'}
               </Button>
             </Box>

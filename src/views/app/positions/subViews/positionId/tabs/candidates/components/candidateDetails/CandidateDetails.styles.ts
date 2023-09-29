@@ -17,7 +17,7 @@ export const Drawer = styled(MUIDrawer)`
 
   ${from.sm} {
     .MuiDrawer-paper {
-      max-width: 45rem;
+      max-width: 50rem;
     }
   }
 `

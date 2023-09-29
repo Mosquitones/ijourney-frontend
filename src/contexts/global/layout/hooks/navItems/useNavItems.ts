@@ -35,7 +35,7 @@ export const useNavItems = () => {
     filledIcon: DashboardTwoTone,
   }
 
-  const ABOUT_US_ITEM: NavItemTypes = {
+  const _ABOUT_US_ITEM: NavItemTypes = {
     label: 'Sobre nós',
     path: `/${ROUTES.APP}/${ROUTES.ABOUT_US}`,
     icon: BusinessOutlined,
@@ -71,7 +71,7 @@ export const useNavItems = () => {
         filledIcon: MoveToInboxTwoTone,
       },
       COURSE_ITEM,
-      ABOUT_US_ITEM,
+      // ABOUT_US_ITEM,
     ],
     RECRUITER: [
       {
@@ -81,7 +81,7 @@ export const useNavItems = () => {
       },
       REPORT_ITEM,
       // COURSE_ITEM,
-      ABOUT_US_ITEM,
+      // ABOUT_US_ITEM,
     ],
     COMPANY: [
       {
@@ -90,17 +90,16 @@ export const useNavItems = () => {
       },
       REPORT_ITEM,
       COURSE_ITEM,
-      ABOUT_US_ITEM,
+      // ABOUT_US_ITEM,
     ],
     ADMIN: [
       {
         ...POSITION_ITEM_PROPERTIES,
         isDefaultPath: true,
       },
-      // { ..., isDefaultPath: true },
       REPORT_ITEM,
       COURSE_ITEM,
-      ABOUT_US_ITEM,
+      // ABOUT_US_ITEM,
     ],
   }
 

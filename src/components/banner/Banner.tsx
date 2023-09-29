@@ -15,6 +15,8 @@ import {
 } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { ROUTES } from 'router'
+
 import * as S from './Banner.styles'
 
 const _getPreviousRoute = (pathname: string) => {
@@ -45,7 +47,7 @@ const Wrapper: React.FC<
             color='default'
             aria-label={ariaLabel}
             component='a'
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`/${ROUTES.APP}/${ROUTES.POSITIONS}`)}
           />
         </Tooltip>
       )}

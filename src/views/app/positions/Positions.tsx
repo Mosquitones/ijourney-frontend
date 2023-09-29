@@ -92,10 +92,6 @@ export default function PositionsPage() {
 
   const positionsQuery = useQuery(QUERIES[userRole]) as any
 
-  React.useEffect(() => {
-    console.log(params.objParams)
-  }, [params.objParams])
-
   return (
     <>
       {!isUserRole.CANDIDATE && (
@@ -107,10 +103,19 @@ export default function PositionsPage() {
       )}
       <Banner.Container isLoading={positionsQuery.isLoading}>
         <Banner.Wrapper maxWidth='sm'>
-          <Banner.Title>Encontre o emprego dos sonhos</Banner.Title>
+          <Banner.Title>
+            {isUserRole.CANDIDATE && 'Encontre o emprego dos sonhos'}
+            {isUserRole.RECRUITER && 'Gerencie suas Oportunidades'}
+            {(isUserRole.ADMIN || isUserRole.COMPANY) &&
+              'Controle Centralizado das Oportunidades'}
+          </Banner.Title>
           <Banner.Description>
-            Procurando emprego? Pesquise nossas ultimas vagas abertas e aplique
-            para as melhores oportunidades ainda hoje!
+            {isUserRole.CANDIDATE &&
+              'Em busca da oportunidade perfeita? Explore as vagas mais recentes e aplique hoje mesmo para transformar seus sonhos em realidade. Sua carreira de sucesso começa aqui.'}
+            {isUserRole.RECRUITER &&
+              'Controle e gerencie facilmente as vagas que você criou. Otimize seu processo de recrutamento e encontre os melhores talentos para sua empresa.'}
+            {(isUserRole.ADMIN || isUserRole.COMPANY) &&
+              'Tenha o controle completo sobre todas as vagas criadas na plataforma. Gerencie, edite e monitore cada oportunidade para garantir um processo de recrutamento eficiente e transparente.'}
           </Banner.Description>
         </Banner.Wrapper>
       </Banner.Container>

@@ -1,6 +1,6 @@
 import { EnumValueTypes, ROLE_ENUM } from '@types'
 import { AxiosError } from 'axios'
-import { UseMutationResult } from 'react-query'
+import { MutateOptions, UseMutationResult } from 'react-query'
 
 import {
   ApiResponseTypes,
@@ -26,7 +26,17 @@ export interface AuthContextTypes {
   isUserAuthenticated: boolean
   signIn: (payload: LoginPayloadTypes) => void
   isSigningIn: boolean
-  signUp: (payload: RegisterCandidatePayloadTypes) => void
+  signUp: (
+    payload: RegisterCandidatePayloadTypes,
+    options?:
+      | MutateOptions<
+          UserTypes,
+          AxiosError<ApiResponseTypes<unknown>, unknown>,
+          RegisterCandidatePayloadTypes,
+          unknown
+        >
+      | undefined
+  ) => void
   isSigningUp: boolean
   signOut: () => void
   userId: UserTypes['id']

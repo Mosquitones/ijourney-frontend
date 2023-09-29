@@ -165,7 +165,7 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
             gap={3}
             flexWrap='wrap'
           >
-            <Avatar sx={{ width: 55, height: 55 }} />
+            <Avatar sx={{ width: 55, height: 55 }} src={candidate.picture} />
             <Box display='flex' flexDirection='column' gap={1}>
               <Typography
                 variant='subtitle1'
@@ -184,6 +184,25 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
                     />
                   ))}
               </Box>
+              <Typography
+                color='secondary'
+                sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+                onClick={() => {
+                  if (!candidate.resume) return
+                  const pdfWindow = window.open('')
+                  if (!pdfWindow) return
+                  pdfWindow.document.write(
+                    `<iframe 
+                    width='100%' 
+                    height='100%' 
+                    title='${candidate.name}' 
+                    src='${encodeURI(candidate.resume)}'
+                    ></iframe>`
+                  )
+                }}
+              >
+                Ver currículo
+              </Typography>
             </Box>
           </Box>
           <Divider />
@@ -219,16 +238,18 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
             py={4}
             display='flex'
             flexDirection='column'
-            gap={5}
+            gap={4}
             flex={1}
           >
             <Position.Status
               phases={candidate.phases}
               currentPhaseIndex={candidate.currentPhaseIndex}
             />
+            <Divider />
             <Position.Score
               {...getPositionScores({ requirements: candidate.requirements })}
             />
+            <Divider />
             <Position.Details appliedAt={new Date(candidate.appliedAt)} />
           </Box>
           <Box position='sticky' bottom={0} bgcolor='white' top='auto'>

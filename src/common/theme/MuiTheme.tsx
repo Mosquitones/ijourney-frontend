@@ -27,18 +27,41 @@ export const MuiThemeWrapper: FCWithChildren<{ theme?: ThemeOptions }> = ({
   children,
   theme = MuiTheme,
 }) => {
+  // const [fontSize, setFontSize] = React.useState(16)
   const { color } = useAccessibility()
 
-  let currentTheme = createTheme(theme)
+  let currentTheme = createTheme(theme, {
+    // typography: {
+    //   // htmlFontSize: (62.5 / 100) * fontSize,
+    //   fontSize: fontSize,
+    // },
+  })
 
   currentTheme = responsiveFontSizes(currentTheme)
 
   currentTheme.palette.primary = getPaletteColors(color.rgba)
+  // currentTheme.typography.htmlFontSize = fontSize
+
+  // React.useEffect(() => {
+  //   console.log({ stateFontSize: fontSize })
+  // }, [fontSize])
+
+  // React.useEffect(() => {
+  //   console.log(currentTheme.typography.htmlFontSize)
+  // }, [currentTheme.typography.htmlFontSize, fontSize])
 
   return (
-    <ThemeProvider theme={currentTheme}>
-      <CssBaseline />
-      <StyledThemeWrapper>{children}</StyledThemeWrapper>
-    </ThemeProvider>
+    <>
+      {/* <button type='button' onClick={() => setFontSize(fontSize + 1)}>
+        aumentar
+      </button>
+      <button type='button' onClick={() => setFontSize(fontSize - 1)}>
+        reduzir
+      </button> */}
+      <ThemeProvider theme={currentTheme}>
+        <CssBaseline />
+        <StyledThemeWrapper>{children}</StyledThemeWrapper>
+      </ThemeProvider>
+    </>
   )
 }

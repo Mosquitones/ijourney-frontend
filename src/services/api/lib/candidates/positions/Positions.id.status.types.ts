@@ -10,4 +10,6 @@ export interface CandidatePositionStatusTypes {
   requirements: RequirementTypes[]
   appliedAt: string
   skills: SkillTypes[]
+  picture: string
+  resume: string
 }
