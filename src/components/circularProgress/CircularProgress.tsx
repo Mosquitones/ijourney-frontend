@@ -40,7 +40,9 @@ export const CircularProgress: React.FC<ProgressPropTypes> = ({
           component='div'
           color='text.secondary'
           fontWeight={({ typography }) => typography.fontWeightBold}
-        >{`${Math.round(newValue)}%`}</Typography>
+        >{`${Math.round(
+          Number.isNaN(Number(newValue)) ? 0 : newValue
+        )}%`}</Typography>
       </S.LabelContainer>
     </S.Container>
   )

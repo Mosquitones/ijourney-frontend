@@ -122,7 +122,6 @@ export default function CoursesPage() {
                   )
                 })}
               </Grid>
-              {/* {tab.content} */}
             </TabPanel>
           ))}
         </Container>

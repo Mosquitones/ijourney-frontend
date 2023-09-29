@@ -66,7 +66,9 @@ export const AcquisitionGeneralDataProgressChart: React.FC<
             </Box>
             <Typography
               fontWeight={({ typography }) => typography.fontWeightBold}
-            >{`${Math.round(item.progress || 0)}%`}</Typography>
+            >{`${Math.round(
+              Number.isNaN(Number(item.progress)) ? 0 : item.progress || 0
+            )}%`}</Typography>
           </Box>
           <S.LinearProgress
             value={60}
