@@ -5,7 +5,6 @@ import {
   SettingsOutlined,
   PersonOutlined,
   HelpOutlineOutlined,
-  TextFieldsOutlined,
 } from '@mui/icons-material'
 import {
   IconButton,
@@ -20,7 +19,7 @@ import {
 import { useAuth } from 'contexts'
 import { GET_LOGOUT_ROUTE } from 'views'
 
-import { AppColorMenuItem } from './components'
+import { AppColorMenuItem, AppFontSizeMenuItem } from './components'
 
 export const AccountSettings: React.FC = () => {
   const { user } = useAuth()
@@ -49,7 +48,6 @@ export const AccountSettings: React.FC = () => {
         id='account-menu'
         open={open}
         onClose={handleClose}
-        // onClick={handleClose}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -97,15 +95,7 @@ export const AccountSettings: React.FC = () => {
           </ListItemIcon>
           Configurações
         </MenuItem>
-        <MenuItem onClick={handleClose} tabIndex={0}>
-          <ListItemIcon>
-            <TextFieldsOutlined fontSize='small' />
-          </ListItemIcon>
-          Alterar Fonte
-          {/* <button type='button' onClick={() => null}>
-            aumentar
-          </button> */}
-        </MenuItem>
+        <AppFontSizeMenuItem handleClose={handleClose} />
         <AppColorMenuItem handleClose={handleClose} />
         <MenuItem
           component='a'

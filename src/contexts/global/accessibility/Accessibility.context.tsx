@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { createContext, useContext, useEffect, useMemo } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react'
 
 import { FCWithChildren } from '@types'
 
@@ -13,6 +19,7 @@ export const AccessibilityContext = createContext(
 )
 
 const hexColor = `#${import.meta.env.VITE_APP_PRIMARY_COLOR}`
+const INITIAL_FONT_SIZE = 8
 
 export const useAccessibility = () => useContext(AccessibilityContext)
 
@@ -25,6 +32,30 @@ export const AccessibilityContextWrapper: FCWithChildren = ({ children }) => {
       hex: hexColor,
     }
   )
+  const [fontSize, setFontSize] = useLocalStorage<number>(
+    'app_main_font',
+    INITIAL_FONT_SIZE
+  )
+
+  const increaseFontSize = useCallback(
+    // it's strange but it's working xD
+    () => setFontSize(fontSize - 1),
+    [fontSize, setFontSize]
+  )
+  const decreaseFontSize = useCallback(
+    // it's strange but it's working xD
+    () => setFontSize(fontSize + 1),
+    [fontSize, setFontSize]
+  )
+
+  const resetFontSize = useCallback(
+    () => setFontSize(INITIAL_FONT_SIZE),
+    [setFontSize]
+  )
+
+  const isFontSizeSameAsInitial = fontSize === INITIAL_FONT_SIZE
+
+  const htmlFontSize = (62.5 / 100) * fontSize * 2
 
   const availableColors = useMemo(
     () => [
@@ -47,8 +78,26 @@ export const AccessibilityContextWrapper: FCWithChildren = ({ children }) => {
       color,
       setColor,
       availableColors,
+      htmlFontSize,
+      fontSize,
+      fontSizeHandlers: {
+        increase: increaseFontSize,
+        decrease: decreaseFontSize,
+        reset: resetFontSize,
+      },
+      isFontSizeSameAsInitial,
     }),
-    [availableColors, color, setColor]
+    [
+      availableColors,
+      color,
+      decreaseFontSize,
+      fontSize,
+      htmlFontSize,
+      increaseFontSize,
+      resetFontSize,
+      setColor,
+      isFontSizeSameAsInitial,
+    ]
   )
 
   return (

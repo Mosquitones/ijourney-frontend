@@ -80,6 +80,10 @@ export const genericReset = () => css`
     padding: 0;
   }
 
+  html {
+    font-size: 62.5%;
+  }
+
   html,
   body,
   #root {
@@ -90,7 +94,6 @@ export const genericReset = () => css`
       'cv03', 'cv04', 'cv05', 'cv06', 'cv09', 'cv10';
 
     font-family: ${({ theme }) => theme.typography.fontFamily};
-    font-size: 62.5%;
   }
 
   body {
