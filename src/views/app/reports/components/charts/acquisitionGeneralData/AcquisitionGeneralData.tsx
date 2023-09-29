@@ -71,7 +71,7 @@ export const AcquisitionGeneralDataProgressChart: React.FC<
           <S.LinearProgress
             value={60}
             variant='determinate'
-            bgColor={item.color}
+            bgcolor={item.color}
             sx={{ height: 8, borderRadius: 4 }}
           />
         </Box>

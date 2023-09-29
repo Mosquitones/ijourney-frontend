@@ -18,13 +18,14 @@ import {
   SvgIcon,
   Typography,
 } from '@mui/material'
+import { COMPANY_ENUM } from '@types'
 import dashboardImage from 'assets/images/app/reports/dashboard.png'
 import { useQuery } from 'react-query'
 
 import { Banner, CircularProgress as Progress } from 'components'
 import { useAuth } from 'contexts'
 import { useIsDevice } from 'hooks'
-import { RecruiterServices } from 'services'
+import { CompanyServices, RecruiterServices } from 'services'
 
 import {
   AcquisitionGeneralDataProgressChart,
@@ -126,43 +127,56 @@ export default function ReportsPage() {
     enabled: isUserRole.RECRUITER,
   })
 
+  const companyIdReportsQuery = useQuery({
+    queryKey: [
+      `/companies/${COMPANY_ENUM.ID}/recruiters/positions/report`,
+      { method: 'GET' },
+    ],
+    queryFn: () => CompanyServices.id.recruiters.report.get(),
+    enabled: isUserRole.SUPER_ADMIN,
+  })
+
+  const data = companyIdReportsQuery.data || recruiterIdReportsQuery.data
+
+  const isLoading =
+    companyIdReportsQuery.isLoading || recruiterIdReportsQuery.isLoading
+
   const SIMPLE_INFO_ITEMS_LIST = [
     {
       id: 'applications',
       title: 'Aplicações',
       icon: SupervisedUserCircle,
-      value: recruiterIdReportsQuery.data?.totalApplications || 0,
-      progress: recruiterIdReportsQuery.data?.totalApplicationsPercentage || 0,
+      value: data?.totalApplications || 0,
+      progress: data?.totalApplicationsPercentage || 0,
     },
     {
       id: 'selected-candidates',
       title: 'Candidatos selecionados',
       icon: PlaylistAddCheckCircle,
-      value: recruiterIdReportsQuery.data?.totalSelected || 0,
-      progress: recruiterIdReportsQuery.data?.totalSelectedPercentage || 0,
+      value: data?.totalSelected || 0,
+      progress: data?.totalSelectedPercentage || 0,
     },
     {
       id: 'rejected-candidates',
       title: 'Candidatos rejeitados',
       icon: Cancel,
-      value: recruiterIdReportsQuery.data?.totalRejected || 0,
-      progress: recruiterIdReportsQuery.data?.totalRejectedPercentage || 0,
+      value: data?.totalRejected || 0,
+      progress: data?.totalRejectedPercentage || 0,
     },
   ]
 
   return (
     <TabContext value={selectedTab}>
-      <Banner.Container isLoading={recruiterIdReportsQuery.isLoading}>
+      <Banner.Container isLoading={isLoading}>
         <Banner.Wrapper maxWidth='sm'>
           <Banner.Title>
             {isUserRole.RECRUITER && 'Análise e Orientações Estratégicas'}
-            {(isUserRole.COMPANY || isUserRole.ADMIN) &&
-              'Análise e Gestão Estratégica'}
+            {isUserRole.SUPER_ADMIN && 'Análise e Gestão Estratégica'}
           </Banner.Title>
           <Banner.Description>
             {isUserRole.RECRUITER &&
               'Acesse informações detalhadas e orientações estratégicas para aprimorar sua estratégia de recrutamento. Tome decisões fundamentadas e otimize sua busca pelos candidatos ideais.'}
-            {(isUserRole.COMPANY || isUserRole.ADMIN) &&
+            {isUserRole.SUPER_ADMIN &&
               'Tenha acesso a informações detalhadas e ferramentas de gestão estratégica para aprimorar a eficiência da sua plataforma de recrutamento. Tome decisões embasadas e otimize o processo de recrutamento.'}
           </Banner.Description>
         </Banner.Wrapper>
@@ -184,7 +198,7 @@ export default function ReportsPage() {
           flex: 1,
         }}
       >
-        {recruiterIdReportsQuery.isLoading ? (
+        {isLoading ? (
           <Box gap={2} display='flex' alignItems='center'>
             <CircularProgress size={16} />
             <Typography color='text.secondary'>
@@ -218,35 +232,24 @@ export default function ReportsPage() {
                     <DataContainer title='Candidatos'>
                       <AcquisitionGeneralDataProgressChart
                         application={{
-                          percentage:
-                            recruiterIdReportsQuery.data
-                              ?.totalApplicationsPercentage,
-                          total:
-                            recruiterIdReportsQuery.data?.totalApplications,
+                          percentage: data?.totalApplicationsPercentage,
+                          total: data?.totalApplications,
                         }}
                         hired={{
-                          percentage:
-                            recruiterIdReportsQuery.data
-                              ?.totalSelectedPercentage,
-                          total: recruiterIdReportsQuery.data?.totalSelected,
+                          percentage: data?.totalSelectedPercentage,
+                          total: data?.totalSelected,
                         }}
                         pending={{
-                          percentage:
-                            recruiterIdReportsQuery.data
-                              ?.totalRejectedPercentage,
-                          total: recruiterIdReportsQuery.data?.totalRejected,
+                          percentage: data?.totalRejectedPercentage,
+                          total: data?.totalRejected,
                         }}
                         rejected={{
-                          percentage:
-                            recruiterIdReportsQuery.data
-                              ?.totalRejectedPercentage,
-                          total: recruiterIdReportsQuery.data?.totalRejected,
+                          percentage: data?.totalRejectedPercentage,
+                          total: data?.totalRejected,
                         }}
                         selected={{
-                          percentage:
-                            recruiterIdReportsQuery.data
-                              ?.totalSelectedPercentage,
-                          total: recruiterIdReportsQuery.data?.totalSelected,
+                          percentage: data?.totalSelectedPercentage,
+                          total: data?.totalSelected,
                         }}
                       />
                     </DataContainer>
@@ -254,15 +257,9 @@ export default function ReportsPage() {
                   <Grid item xs={12} sm={6}>
                     <DataContainer title='Candidatos p/ gênero'>
                       <CandidatesByGenderPieChart
-                        totalFeminineGender={
-                          recruiterIdReportsQuery.data?.totalFeminineGender
-                        }
-                        totalMasculineGender={
-                          recruiterIdReportsQuery.data?.totalMasculineGender
-                        }
-                        totalOtherGender={
-                          recruiterIdReportsQuery.data?.totalOtherGender
-                        }
+                        totalFeminineGender={data?.totalFeminineGender}
+                        totalMasculineGender={data?.totalMasculineGender}
+                        totalOtherGender={data?.totalOtherGender}
                       />
                     </DataContainer>
                   </Grid>
@@ -270,7 +267,7 @@ export default function ReportsPage() {
               </Grid>
               <Grid item xs={12} md={4}>
                 <DataContainer title='Top ranking'>
-                  {recruiterIdReportsQuery.data?.candidates
+                  {data?.candidates
                     .sort((a, b) => b.totalPoints - a.totalPoints)
                     .map((candidate) => (
                       <Box

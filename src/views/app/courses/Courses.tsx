@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 
+import { Add } from '@mui/icons-material'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
   Avatar,
@@ -21,7 +22,8 @@ import {
   useScrollTrigger,
 } from '@mui/material'
 
-import { Banner, Button, Input } from 'components'
+import { Banner, Button, FloatingActionButton, Input } from 'components'
+import { useAuth } from 'contexts'
 import { useIsDevice } from 'hooks'
 
 import { MainFilters } from '../positions/components'
@@ -55,12 +57,21 @@ const TABS = [
 ]
 
 export default function CoursesPage() {
+  const { isUserRole } = useAuth()
+  const [openModal, setOpenModal] = useState(false)
   const [selectedTab, setSelectedTab] = useState(TABS[0].value)
 
   const isDevice = useIsDevice()
 
   return (
     <>
+      {isUserRole.SUPER_ADMIN && (
+        <FloatingActionButton
+          icon={Add}
+          tooltip='Clique para Adicionar um curso'
+          onClick={() => setOpenModal(true)}
+        />
+      )}
       <TabContext value={selectedTab}>
         <Banner.Container>
           <Banner.Wrapper maxWidth='sm'>

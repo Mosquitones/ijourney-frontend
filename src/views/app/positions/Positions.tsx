@@ -94,7 +94,7 @@ export default function PositionsPage() {
 
   return (
     <>
-      {!isUserRole.CANDIDATE && (
+      {(isUserRole.SUPER_ADMIN || isUserRole.RECRUITER) && (
         <FloatingActionButton
           icon={Add}
           tooltip='Clique para Adicionar uma vaga'
@@ -106,7 +106,7 @@ export default function PositionsPage() {
           <Banner.Title>
             {isUserRole.CANDIDATE && 'Encontre o emprego dos sonhos'}
             {isUserRole.RECRUITER && 'Gerencie suas Oportunidades'}
-            {(isUserRole.ADMIN || isUserRole.COMPANY) &&
+            {isUserRole.SUPER_ADMIN &&
               'Controle Centralizado das Oportunidades'}
           </Banner.Title>
           <Banner.Description>
@@ -114,7 +114,7 @@ export default function PositionsPage() {
               'Em busca da oportunidade perfeita? Explore as vagas mais recentes e aplique hoje mesmo para transformar seus sonhos em realidade. Sua carreira de sucesso começa aqui.'}
             {isUserRole.RECRUITER &&
               'Controle e gerencie facilmente as vagas que você criou. Otimize seu processo de recrutamento e encontre os melhores talentos para sua empresa.'}
-            {(isUserRole.ADMIN || isUserRole.COMPANY) &&
+            {isUserRole.SUPER_ADMIN &&
               'Tenha o controle completo sobre todas as vagas criadas na plataforma. Gerencie, edite e monitore cada oportunidade para garantir um processo de recrutamento eficiente e transparente.'}
           </Banner.Description>
         </Banner.Wrapper>

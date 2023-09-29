@@ -57,6 +57,13 @@ export const useNavItems = () => {
     filledIcon: DashboardTwoTone,
   }
 
+  const ARCHIVED_POSITIONS_ITEM: NavItemTypes = {
+    label: 'Vagas Arquivadas',
+    path: `/${ROUTES.APP}/${ROUTES.ARCHIVED_POSITIONS}`,
+    icon: InboxOutlined,
+    filledIcon: MoveToInboxTwoTone,
+  }
+
   const navItems: RouteBasedOnRoleTypes = {
     CANDIDATE: [
       {
@@ -79,12 +86,7 @@ export const useNavItems = () => {
         label: 'Minhas Vagas',
         isDefaultPath: true,
       },
-      {
-        label: 'Vagas Arquivadas',
-        path: `/${ROUTES.APP}/${ROUTES.ARCHIVED_POSITIONS}`,
-        icon: InboxOutlined,
-        filledIcon: MoveToInboxTwoTone,
-      },
+      ARCHIVED_POSITIONS_ITEM,
       REPORT_ITEM,
       // COURSE_ITEM,
       // ABOUT_US_ITEM,
@@ -94,6 +96,7 @@ export const useNavItems = () => {
         ...POSITION_ITEM_PROPERTIES,
         isDefaultPath: true,
       },
+      ARCHIVED_POSITIONS_ITEM,
       REPORT_ITEM,
       COURSE_ITEM,
       // ABOUT_US_ITEM,

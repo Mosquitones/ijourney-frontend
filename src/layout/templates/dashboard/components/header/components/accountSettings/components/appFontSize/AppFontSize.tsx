@@ -80,7 +80,7 @@ export const AppFontSizeMenuItem: React.FC<AppColorMenuItemTypes> = ({
           horizontal: 'right',
         }}
       >
-        <Box display='flex' alignItems='center' gap={1}>
+        <Box display='flex' alignItems='center'>
           {!isFontSizeSameAsInitial && (
             <Tooltip title='Voltar ao tamanho original'>
               <IconButton onClick={fontSizeHandlers.reset}>

@@ -66,6 +66,7 @@ export const Router: React.FC = () => {
       <>
         {redirectToDefaultRoute(ROUTES.POSITIONS)}
         {renderPositionRoutes()}
+        {renderArchivedPositionRoutes()}
         {renderReportRoutes()}
         {renderCourseRoutes()}
         {/* {renderAboutUsRoutes()} */}

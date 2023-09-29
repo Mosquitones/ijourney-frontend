@@ -48,6 +48,9 @@ export const AuthContextWrapper: React.FC<PropsWithChildren> = ({
       RECRUITER: user?.userType === ROLE_ENUM.RECRUITER,
       CANDIDATE: user?.userType === ROLE_ENUM.CANDIDATE,
       COMPANY: user?.userType === ROLE_ENUM.COMPANY,
+      SUPER_ADMIN:
+        user?.userType === ROLE_ENUM.COMPANY ||
+        user?.userType === ROLE_ENUM.ADMIN,
     }
 
     return check

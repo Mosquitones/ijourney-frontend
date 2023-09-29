@@ -16,12 +16,14 @@ type _UserInfoQueryTypes = UseMutationResult<
   unknown
 >
 
+type UserRoleTypes = UserTypes['userType'] | 'SUPER_ADMIN'
+
 export interface AuthContextTypes {
   user: UserTypes | null
   cookies: {
     accessToken?: string
   }
-  isUserRole: { [key in UserTypes['userType']]: boolean }
+  isUserRole: { [key in UserRoleTypes]: boolean }
   userRole: EnumValueTypes<typeof ROLE_ENUM>
   isUserAuthenticated: boolean
   signIn: (payload: LoginPayloadTypes) => void
