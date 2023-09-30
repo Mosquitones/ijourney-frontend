@@ -15,7 +15,7 @@ export const PositionHeader: React.FC<PositionHeaderPropTypes> = ({
 }) => {
   return (
     <S.HeaderMainContent>
-      <PositionAvatarIcon positionId={positionId} />
+      <PositionAvatarIcon positionId={positionId} positionTitle={title} />
       <Box display='flex' flexDirection='column' gap={1}>
         <Typography
           fontWeight={({ typography }) => typography.fontWeightBold}

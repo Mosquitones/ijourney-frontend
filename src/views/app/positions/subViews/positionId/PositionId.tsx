@@ -90,7 +90,10 @@ export default function PositionIdPage() {
               flexDirection={{ xs: 'column', sm: 'row' }}
               gap={3}
             >
-              <PositionAvatarIcon positionId={Number(positionId)} />
+              <PositionAvatarIcon
+                positionId={Number(positionId)}
+                positionTitle={String(positionIdQuery.data?.title)}
+              />
 
               <Box display='flex' flexDirection='column' gap={1}>
                 <Box
