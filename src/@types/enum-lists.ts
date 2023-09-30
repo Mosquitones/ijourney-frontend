@@ -6,6 +6,7 @@ import {
   SEXUAL_ORIENTATION_ENUM,
   FAMILY_INCOME_ENUM,
   VULNERABILITY_ENUM,
+  PHASE_STATUS_TYPE_ENUM,
 } from './enums'
 
 export const EMPLOYMENT_TYPE_LIST = [
@@ -229,5 +230,24 @@ export const VULNERABILITIES_LIST = [
   {
     label: 'Pessoa de classe social do tipo E (Abaixo de R$ 1 mil)',
     value: VULNERABILITY_ENUM.FAMILY_INCOME_E,
+  },
+] as const
+
+export const PHASE_STATUS_TYPE_LIST = [
+  {
+    label: 'Aplicado',
+    value: PHASE_STATUS_TYPE_ENUM.APPLIED,
+  },
+  {
+    label: 'Selecionado',
+    value: PHASE_STATUS_TYPE_ENUM.SELECTED,
+  },
+  {
+    label: 'Em andamento',
+    value: PHASE_STATUS_TYPE_ENUM.PENDING,
+  },
+  {
+    label: 'Contratado',
+    value: PHASE_STATUS_TYPE_ENUM.HIRED,
   },
 ] as const

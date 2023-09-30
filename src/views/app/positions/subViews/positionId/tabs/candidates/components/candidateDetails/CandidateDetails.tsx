@@ -5,8 +5,11 @@ import React, { ReactElement } from 'react'
 import {
   CheckCircleRounded,
   Close,
+  DoneRounded,
   Email,
   ErrorOutlineRounded,
+  GavelRounded,
+  HandshakeRounded,
   LocalPhoneRounded,
   TrendingFlatRounded,
 } from '@mui/icons-material'
@@ -27,16 +30,18 @@ import {
   ButtonProps,
   CircularProgress,
   Chip,
+  useTheme,
 } from '@mui/material'
 import { AxiosError } from 'axios'
-import { useMutation, useQuery } from 'react-query'
+import ConfettiExplosion from 'react-confetti-explosion'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { AdditionalFilters } from 'views/app/positions/components'
 
 import { DialogTitleComponent, Position, TopicList } from 'components'
-import { useFeedback } from 'contexts'
+import { useFeedback, useTabContext } from 'contexts'
 import { useDisclosure, useIsDevice } from 'hooks'
-import { ApiResponseTypes, CandidateServices } from 'services'
+import { ApiResponseTypes, CandidateServices, PositionTypes } from 'services'
 import { getPositionScores } from 'utils'
 
 import * as S from './CandidateDetails.styles'
@@ -112,10 +117,13 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
   isOpen,
   onClose,
   candidatePositionId,
+  refetchRanking,
 }) => {
-  const { positionId } = useParams()
+  const theme = useTheme()
   const { alert } = useFeedback()
 
+  const position = useTabContext<PositionTypes>()
+  const queryClient = useQueryClient()
   const isDevice = useIsDevice()
   const candidatePositionStatusQuery = useQuery({
     queryKey: [
@@ -131,7 +139,9 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
     mutationKey: [`/candidates/positions/phases`, { method: 'PUT' }],
     mutationFn: CandidateServices.positions.phases.put,
     onSuccess: () => {
-      alert.showSuccess('Candidato avançou no processo')
+      candidatePositionStatusQuery.refetch()
+      refetchRanking?.()
+      // alert.showSuccess('Candidato avançou no processo')
     },
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
       alert.showError(error.response?.data.message || error.message)
@@ -139,6 +149,16 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
   })
 
   const candidate = candidatePositionStatusQuery.data
+
+  const lastPhaseIndex =
+    position.phases[position.phases.length - 1].sequenceIndex
+
+  const isCandidateOnePhaseBeforeToBeHired =
+    candidate?.currentPhaseIndex === lastPhaseIndex - 1
+
+  const isCandidateHired = candidate?.currentPhaseIndex === lastPhaseIndex
+
+  const firstNameOfCandidate = candidate?.name.split(' ')[0] || ''
 
   return (
     <S.Drawer anchor='right' open={isOpen} onClose={onClose}>
@@ -184,25 +204,27 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
                     />
                   ))}
               </Box>
-              <Typography
-                color='secondary'
-                sx={{ cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() => {
-                  if (!candidate.resume) return
-                  const pdfWindow = window.open('')
-                  if (!pdfWindow) return
-                  pdfWindow.document.write(
-                    `<iframe 
+              {candidate.resume && (
+                <Typography
+                  color='secondary'
+                  sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+                  onClick={() => {
+                    if (!candidate.resume) return
+                    const pdfWindow = window.open('')
+                    if (!pdfWindow) return
+                    pdfWindow.document.write(
+                      `<iframe 
                     width='100%' 
                     height='100%' 
                     title='${candidate.name}' 
                     src='${encodeURI(candidate.resume)}'
                     ></iframe>`
-                  )
-                }}
-              >
-                Ver currículo
-              </Typography>
+                    )
+                  }}
+                >
+                  Ver currículo
+                </Typography>
+              )}
             </Box>
           </Box>
           <Divider />
@@ -246,6 +268,11 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
               currentPhaseIndex={candidate.currentPhaseIndex}
             />
             <Divider />
+            <Position.Requirement
+              title='Requisitos'
+              topicListProps={{ requirements: candidate.requirements }}
+            />
+            <Divider />
             <Position.Score
               {...getPositionScores({ requirements: candidate.requirements })}
             />
@@ -258,6 +285,8 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
               <Button
                 variant='contained'
                 fullWidth
+                disabled={isCandidateHired || updateCandidatePhase.isLoading}
+                color={isCandidateOnePhaseBeforeToBeHired ? 'primary' : 'black'}
                 onClick={() => {
                   if (candidatePositionId) {
                     updateCandidatePhase.mutate({
@@ -267,33 +296,50 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
                   }
                 }}
                 sx={{
-                  color: 'primary.contrastText',
+                  height: 56,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 2,
+                  gap: isCandidateHired ? 1 : 2,
                 }}
               >
-                {updateCandidatePhase.isIdle && (
+                {updateCandidatePhase.isLoading ? (
+                  <CircularProgress color='inherit' />
+                ) : isCandidateOnePhaseBeforeToBeHired ? (
                   <>
-                    Mover para próximo passo
+                    Contratar {firstNameOfCandidate}
+                    <SvgIcon component={GavelRounded} fontSize='small' />
+                  </>
+                ) : isCandidateHired ? (
+                  <>
+                    {firstNameOfCandidate} foi contratado
+                    <ConfettiExplosion
+                      force={0.8}
+                      duration={3000}
+                      particleCount={200}
+                      width={1000}
+                      zIndex={theme.zIndex.drawer + 1}
+                    />
+                    <SvgIcon component={CheckCircleRounded} fontSize='small' />
+                  </>
+                ) : (
+                  <>
+                    Avançar candidato no processo
                     <SvgIcon component={TrendingFlatRounded} fontSize='large' />
                   </>
                 )}
-                {updateCandidatePhase.isLoading && (
-                  <CircularProgress size={24} />
-                )}
-                {updateCandidatePhase.isError && (
+
+                {/* {updateCandidatePhase.isError && (
                   <>
                     Aconteceu um erro
                     <SvgIcon component={ErrorOutlineRounded} fontSize='large' />
                   </>
-                )}
-                {updateCandidatePhase.isSuccess && (
+                )} */}
+                {/* {updateCandidatePhase.isSuccess && (
                   <>
                     Movido com sucesso
                     <SvgIcon component={CheckCircleRounded} fontSize='large' />
                   </>
-                )}
+                )} */}
               </Button>
             </DialogActions>
           </Box>

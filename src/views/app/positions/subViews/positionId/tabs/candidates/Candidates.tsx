@@ -46,6 +46,7 @@ import { useIsDevice, useParamsSelector } from 'hooks'
 import {
   CandidatePositionTypes,
   CandidateTypes,
+  PositionRankingTypes,
   PositionServices,
   PositionTypes,
 } from 'services'
@@ -62,7 +63,7 @@ export default function CandidatesTab() {
 
   const position = useTabContext<PositionTypes>()
 
-  const candidateRankingQuery = useQuery({
+  const positionRankingQuery = useQuery({
     queryKey: [
       `/positions/${position.id}/ranking`,
       { method: 'GET', query: { currentPhaseIndex } },
@@ -106,7 +107,7 @@ export default function CandidatesTab() {
           color='text.secondary'
           flex={1}
         >
-          {candidateRankingQuery.data?.length} Candidatos
+          {positionRankingQuery.data?.length} Candidatos
         </Typography>
         <Autocomplete
           id='current-phase-autocomplete-box'
@@ -148,16 +149,17 @@ export default function CandidatesTab() {
       <TableComponent
         columns={columns}
         data={
-          candidateRankingQuery.data?.sort((a, b) => a.position - b.position) ||
+          positionRankingQuery.data?.sort((a, b) => a.position - b.position) ||
           []
         }
-        isLoading={candidateRankingQuery.isLoading}
+        isLoading={positionRankingQuery.isLoading}
         onRowClick={(row) => {
           setSelectedCandidatePositionId(row.original.candidatePositionId)
         }}
       />
 
       <CandidateDetailsDialog
+        refetchRanking={positionRankingQuery.refetch}
         candidatePositionId={candidatePositionId || undefined}
         isOpen={typeof candidatePositionId === 'number'}
         onClose={() => {

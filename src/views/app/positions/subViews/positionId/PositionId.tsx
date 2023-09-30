@@ -61,10 +61,15 @@ export default function PositionIdPage() {
     queryFn: () => PositionServices.findById(String(positionId)),
   })
 
-  // const [selectedTab, setSelectedTab] = useState(tabs[0].key)
   const selectedTabId = params.get('tab') || tabs[0].id
 
   const isDevice = useIsDevice()
+
+  useEffect(() => {
+    if (!params.get('tab')) {
+      params.add({ key: 'tab', value: tabs[0].id })
+    }
+  }, [])
 
   if (
     !positionIdQuery.isLoading &&
@@ -73,12 +78,6 @@ export default function PositionIdPage() {
   ) {
     return <NotFoundPosition />
   }
-
-  useEffect(() => {
-    if (!params.get('tab')) {
-      params.add({ key: 'tab', value: tabs[0].id })
-    }
-  }, [])
 
   return (
     <>

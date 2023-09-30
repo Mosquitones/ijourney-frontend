@@ -5,7 +5,7 @@ import { Avatar, AvatarProps, Box, Typography } from '@mui/material'
 import { BoxProps } from '@mui/material/Box'
 import { createColumnHelper } from '@tanstack/react-table'
 
-import { DisplayHeaderComponent } from 'components'
+import { DisplayHeaderComponent, PhaseStatusIndicator } from 'components'
 import { PositionRankingTypes } from 'services'
 
 const POSITION_TOP_3_STYLES: Record<number | 'DEFAULT', BoxProps> = {
@@ -113,9 +113,10 @@ export const useCandidateColumns = () => {
     }),
     columnHelper.accessor('phaseStatusType', {
       header: () => <DisplayHeaderComponent title='Status' />,
-      cell: (info) => (
-        <Typography color='text.secondary'>{info.getValue()}</Typography>
-      ),
+      cell: (info) =>
+        info.getValue() ? (
+          <PhaseStatusIndicator phaseStatusType={info.getValue()} />
+        ) : null,
     }),
     columnHelper.accessor('points', {
       header: () => <DisplayHeaderComponent title='Pontos' />,

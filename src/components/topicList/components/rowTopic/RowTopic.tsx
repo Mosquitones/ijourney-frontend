@@ -2,11 +2,14 @@
 import React from 'react'
 
 import {
+  AccessTime,
   Check,
   CheckCircleRounded,
   CheckRounded,
   Circle,
   CircleRounded,
+  HourglassBottom,
+  MoreHorizSharp,
 } from '@mui/icons-material'
 import { Box, Chip, SvgIcon, Typography } from '@mui/material'
 import { useTheme } from 'styled-components'
@@ -30,6 +33,13 @@ export const RowTopic: React.FC<RowTopicPropTypes> = ({
       backgroundIconColor: theme.palette.success.main,
       iconColor: theme.palette.common.white,
       icon: CheckRounded,
+      iconSize: 16,
+    },
+    pending: {
+      color: theme.palette.warning.main,
+      backgroundIconColor: theme.palette.warning.main,
+      iconColor: theme.palette.common.white,
+      icon: MoreHorizSharp,
       iconSize: 16,
     },
     default: {

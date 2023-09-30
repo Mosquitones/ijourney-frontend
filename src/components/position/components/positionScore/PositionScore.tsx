@@ -32,7 +32,13 @@ export const PositionScore: React.FC<PositionScorePropTypes> = ({
         />
         <RowTopic
           description={`Atual: ${currentScore} pontos`}
-          style={isCurrentScoreEqualsMaxScore ? 'success' : 'default'}
+          style={
+            isCurrentScoreEqualsMaxScore
+              ? 'success'
+              : isCurrentScoreHigherThanMinScore
+              ? 'pending'
+              : 'default'
+          }
         />
         <RowTopic
           description={`Máximo: ${maxScore} pontos`}
