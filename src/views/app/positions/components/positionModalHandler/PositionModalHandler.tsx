@@ -391,12 +391,12 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
                   <Tooltip title='Clique para aprender a escrever em Markdown'>
                     <IconButton
                       tabIndex={-1}
-                      color='info'
+                      color='primary'
                       size='small'
                       target='_blank'
                       href='https://www.markdownguide.org/basic-syntax/'
                     >
-                      <HelpOutlineOutlined fontSize='small' />
+                      <HelpOutlineOutlined fontSize='small' color='primary' />
                     </IconButton>
                   </Tooltip>
                 </Box>

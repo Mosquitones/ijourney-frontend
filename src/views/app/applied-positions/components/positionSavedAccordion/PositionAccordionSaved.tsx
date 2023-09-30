@@ -72,6 +72,7 @@ export const PositionAccordionSaved: React.FC<PositionAccordionPropTypes> = ({
           pr={2}
         >
           <Position.Header
+            positionId={position.id}
             title={position.title}
             chips={getChips({
               employmentType: position.employmentType,

@@ -181,6 +181,7 @@ export const CompletePositionCard: React.FC<CompletePositionCardPropTypes> = ({
         <S.Header>
           <Position.Header
             title={position.title}
+            positionId={position.id}
             chips={
               isCardDisabled
                 ? [

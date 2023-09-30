@@ -44,6 +44,7 @@ export const BasicPositionCard: React.FC<BasicPositionCardPropTypes> = ({
           <S.Header>
             <Position.Header
               title={position.title}
+              positionId={position.id}
               chips={getChips({
                 employmentType: position.employmentType,
                 locationType: position.locationType,

@@ -35,7 +35,7 @@ import { AxiosError } from 'axios'
 import { useMutation, useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 
-import { Banner, EmptyContent } from 'components'
+import { Banner, EmptyContent, PositionAvatarIcon } from 'components'
 import { TabContextWrapper, useAuth, useFeedback } from 'contexts'
 import { useIsDevice, useParamsSelector } from 'hooks'
 import { ApiResponseTypes, CandidateServices, PositionServices } from 'services'
@@ -90,16 +90,8 @@ export default function PositionIdPage() {
               flexDirection={{ xs: 'column', sm: 'row' }}
               gap={3}
             >
-              <Avatar
-                sx={{
-                  bgcolor: ({ palette }) => palette.primary.main,
-                  width: 54,
-                  height: 54,
-                }}
-                variant='rounded'
-              >
-                <BusinessCenter />
-              </Avatar>
+              <PositionAvatarIcon positionId={Number(positionId)} />
+
               <Box display='flex' flexDirection='column' gap={1}>
                 <Box
                   display='flex'
