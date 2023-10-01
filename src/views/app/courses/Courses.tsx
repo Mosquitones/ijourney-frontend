@@ -85,9 +85,6 @@ export default function CoursesPage() {
   const coursesQuery = useQuery({
     queryKey: ['/courses', { method: 'GET' }],
     queryFn: () => CourseServices.get(),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
   const isLoading =
@@ -180,12 +177,7 @@ export default function CoursesPage() {
                     )}
                     <MainFilters hideLocationFilters />
                   </Box>
-                  <Grid
-                    container
-                    spacing={2}
-                    // columnSpacing={2}
-                    // rowSpacing={6}
-                  >
+                  <Grid container spacing={2}>
                     {coursesQuery.data
                       ?.sort((a, b) => b.id - a.id)
                       .map((course) => (
@@ -203,18 +195,20 @@ export default function CoursesPage() {
           )}
         </Container>
       </TabContext>
-      <CourseModalHandler
-        key={selectedCourse?.id}
-        skills={skillsQuery.data || []}
-        mentors={mentorsQuery.data || []}
-        course={selectedCourse || undefined}
-        open={Boolean(selectedCourse) || openModal}
-        refetchCourses={coursesQuery.refetch}
-        onClose={() => {
-          setSelectedCourse(null)
-          setOpenModal(false)
-        }}
-      />
+      {isUserRole.SUPER_ADMIN && (
+        <CourseModalHandler
+          key={selectedCourse?.id}
+          skills={skillsQuery.data || []}
+          mentors={mentorsQuery.data || []}
+          course={selectedCourse || undefined}
+          open={Boolean(selectedCourse) || openModal}
+          refetchCourses={coursesQuery.refetch}
+          onClose={() => {
+            setSelectedCourse(null)
+            setOpenModal(false)
+          }}
+        />
+      )}
     </>
   )
 }
