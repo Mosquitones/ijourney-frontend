@@ -26,7 +26,7 @@ import { useSearchParams } from 'react-router-dom'
 
 import { Banner, Button, FloatingActionButton, Input } from 'components'
 import { useAuth, useFeedback, useLayout } from 'contexts'
-import { useDebounce, useIsDevice, useParamsSelector } from 'hooks'
+import { useDebounce, useIsDevice, useParamsSelector, useSkills } from 'hooks'
 import {
   ApiResponseTypes,
   PositionServices,
@@ -56,10 +56,7 @@ export default function PositionsPage() {
   const [openModal, setOpenModal] = useState(false)
   const { isUserRole, userId, userRole } = useAuth()
 
-  const skillsQuery = useQuery({
-    queryKey: ['/skills', { method: 'GET' }],
-    queryFn: SkillServices.findAll,
-  })
+  const skillsQuery = useSkills()
 
   const { 'salary-id': _, ...restOfParams } = params.objParams
 

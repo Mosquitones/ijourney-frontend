@@ -3,12 +3,19 @@ import React, { useEffect, useState } from 'react'
 
 import { BusinessCenter } from '@mui/icons-material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Avatar, Typography, Divider, Container, Box } from '@mui/material'
+import {
+  Avatar,
+  Typography,
+  Divider,
+  Container,
+  Box,
+  CircularProgress,
+} from '@mui/material'
 import { useQuery } from 'react-query'
 
-import { Banner } from 'components'
+import { Banner, EmptyContent } from 'components'
 import { useAuth } from 'contexts'
-import { useParamsSelector } from 'hooks'
+import { useParamsSelector, useSkills } from 'hooks'
 import { ROUTES } from 'router'
 import {
   CandidateServices,
@@ -23,10 +30,7 @@ import { PositionCard, PositionModalHandler } from '../positions/components'
 export default function ArchivedPositionsPage() {
   const { userId } = useAuth()
 
-  const skillsQuery = useQuery({
-    queryKey: ['/skills', { method: 'GET' }],
-    queryFn: SkillServices.findAll,
-  })
+  const skillsQuery = useSkills()
 
   const [selectedPosition, setSelectedPosition] =
     useState<PositionTypes | null>(null)
@@ -49,35 +53,68 @@ export default function ArchivedPositionsPage() {
           </Banner.Description>
         </Banner.Wrapper>
       </Banner.Container>
-      <Container sx={{ py: 6 }}>
-        <Box display='flex' flexDirection='column' gap={4}>
-          <Typography
-            variant='body1'
-            fontWeight={({ typography }) => typography.fontWeightBold}
-            color='text.secondary'
+      <Container
+        sx={{
+          py: 6,
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {archivedPositionsQuery.isLoading ? (
+          <Box
+            display='flex'
+            flex={1}
+            justifyContent='center'
+            alignItems='center'
           >
-            {archivedPositionsQuery.isLoading
-              ? 'Carregando vagas arquivadas...'
-              : archivedPositionsQuery.data?.length &&
-                archivedPositionsQuery.data.length >= 0
-              ? `${archivedPositionsQuery.data.length} vagas arquivadas encontrada(s)`
-              : 'Nenhuma vaga foi arquivada'}
-          </Typography>
-
-          <Box display='flex' flexDirection='column' gap={2}>
-            {archivedPositionsQuery.data
-              ?.sort((a, b) => b.id - a.id)
-              ?.map((position) => (
-                <PositionCard
-                  key={position.id}
-                  isArchived
-                  href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}`}
-                  onEditClick={() => setSelectedPosition(position)}
-                  position={position}
-                />
-              ))}
+            <Typography
+              color='text.secondary'
+              display='flex'
+              gap={1}
+              alignItems='center'
+            >
+              <CircularProgress size={18} />
+              Carregando vagas arquivadas...
+            </Typography>
           </Box>
-        </Box>
+        ) : archivedPositionsQuery.data === null ||
+          archivedPositionsQuery.data?.length === 0 ? (
+          <Box
+            display='flex'
+            flex={1}
+            justifyContent='center'
+            alignItems='center'
+            pb={10}
+          >
+            <EmptyContent title='Nenhuma vaga arquivada encontrada' />
+          </Box>
+        ) : (
+          <Box display='flex' flexDirection='column' gap={4} flex={1}>
+            <Typography
+              variant='body1'
+              fontWeight={({ typography }) => typography.fontWeightBold}
+              color='text.secondary'
+            >
+              {archivedPositionsQuery.data?.length} vagas arquivadas
+              encontrada(s)
+            </Typography>
+
+            <Box display='flex' flexDirection='column' gap={2}>
+              {archivedPositionsQuery.data
+                ?.sort((a, b) => b.id - a.id)
+                ?.map((position) => (
+                  <PositionCard
+                    key={position.id}
+                    isArchived
+                    href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}`}
+                    onEditClick={() => setSelectedPosition(position)}
+                    position={position}
+                  />
+                ))}
+            </Box>
+          </Box>
+        )}
       </Container>
       <PositionModalHandler
         key={selectedPosition?.id}

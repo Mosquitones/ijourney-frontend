@@ -41,6 +41,8 @@ const RECRUITER_TABS: TabTypes[] = [
   CULTURE_BENEFITS_TAB,
 ]
 
+const COMPANY_TABS: TabTypes[] = [...RECRUITER_TABS]
+
 export const getTabsBasedOnRole = (role?: EnumValueTypes<typeof ROLE_ENUM>) => {
   if (!role) return DEFAULT_TABS
 
@@ -48,7 +50,7 @@ export const getTabsBasedOnRole = (role?: EnumValueTypes<typeof ROLE_ENUM>) => {
     ADMIN: DEFAULT_TABS,
     RECRUITER: RECRUITER_TABS,
     CANDIDATE: CANDIDATE_TABS,
-    COMPANY: DEFAULT_TABS,
+    COMPANY: COMPANY_TABS,
   }
 
   return tabs[role]

@@ -370,10 +370,6 @@ export const PositionModalHandler: React.FC<PositionModalHandlerPropTypes> = ({
                     ? formik.errors.longDescription
                     : undefined
                 }
-                InputProps={{ sx: { p: 0 } }}
-                inputProps={{
-                  sx: { py: '0.85rem', px: '1.4rem' },
-                }}
               />
               <Box
                 display='flex'

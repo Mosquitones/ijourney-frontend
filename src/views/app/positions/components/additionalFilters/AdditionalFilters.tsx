@@ -30,7 +30,7 @@ import { renderSelectedCheckbox } from 'views/auth'
 
 import { Input } from 'components'
 import { useAuth } from 'contexts'
-import { useDebounce, useParamsSelector } from 'hooks'
+import { useDebounce, useParamsSelector, useSkills } from 'hooks'
 import { PositionPayloadQueryTypes, SkillServices } from 'services'
 import { currencyFormatter } from 'utils'
 
@@ -73,10 +73,7 @@ export const AdditionalFilters: React.FC = () => {
   const { isUserRole } = useAuth()
   const params = useParamsSelector<Filters | 'salary-id'>()
 
-  const skillsQuery = useQuery({
-    queryKey: ['/skills', { method: 'GET' }],
-    queryFn: SkillServices.findAll,
-  })
+  const skillsQuery = useSkills()
 
   const [salary, setSalary] = React.useState<number[]>(INITIAL_SALARY_VALUE)
   const minCreationDateParam = params.get('min-creation-date')

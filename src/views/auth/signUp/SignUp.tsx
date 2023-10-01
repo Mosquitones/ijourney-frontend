@@ -41,7 +41,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button, Input, Logo } from 'components'
 import { useAuth } from 'contexts'
-import { useSessionStorage } from 'hooks'
+import { useSessionStorage, useSkills } from 'hooks'
 import { ROUTES } from 'router'
 import { RegisterCandidatePayloadTypes, SkillServices } from 'services'
 import { convertToBase64, deepEquals } from 'utils'
@@ -97,10 +97,7 @@ export default function SignUpPage() {
   const navigate = useNavigate()
   const { isSigningUp, isSigningIn, signUp } = useAuth()
 
-  const skillsQuery = useQuery({
-    queryKey: ['/skills', { method: 'GET' }],
-    queryFn: SkillServices.findAll,
-  })
+  const skillsQuery = useSkills()
 
   const ctaButtonRef = React.useRef<HTMLButtonElement>(null)
 
@@ -249,8 +246,6 @@ export default function SignUpPage() {
       GENDER_LIST.find((where) => where.value === formik.values.gender) || null,
     [formik.values.gender]
   )
-
-  // const selected
 
   const clickAtCtaButton = (e: React.KeyboardEvent<unknown>) => {
     if (e.key === 'Enter' && !ctaButtonRef.current?.disabled) {

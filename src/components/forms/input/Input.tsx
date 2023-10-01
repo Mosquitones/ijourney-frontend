@@ -9,7 +9,7 @@ import {
   ButtonBase,
   FormControl,
   FormHelperText,
-  InputLabel,
+  InputLabelProps,
   TextField,
   TextFieldProps,
   Typography,
@@ -20,101 +20,118 @@ import { useForwardedRef } from 'hooks'
 
 import * as S from './Input.styles'
 
+export const InputLabel: React.FC<InputLabelProps> = ({
+  children,
+  ...rest
+}) => <S.Label {...rest}>{children}</S.Label>
+
 export const Input = forwardRef<
   HTMLInputElement,
   TextFieldProps & {
     fileName?: string | null
     label?: string | React.ReactNode
   }
->(({ label, variant = 'outlined', fileName = null, ...rest }, ref) => {
-  const [inputFileName, setInputFileName] = React.useState<string | null>(
-    fileName
-  )
-  const inputRef = useForwardedRef<HTMLInputElement>(ref)
+>(
+  (
+    { label, variant = 'outlined', fileName = null, multiline, ...rest },
+    ref
+  ) => {
+    const [inputFileName, setInputFileName] = React.useState<string | null>(
+      fileName
+    )
+    const inputRef = useForwardedRef<HTMLInputElement>(ref)
 
-  const buttonFileNameHasError = inputFileName ? false : rest.error
+    const buttonFileNameHasError = inputFileName ? false : rest.error
 
-  return (
-    <S.Container fullWidth={!!rest.fullWidth}>
-      {typeof label === 'string' ? (
-        <S.Label
-          {...rest.InputLabelProps}
-          htmlFor={rest.name}
-          error={buttonFileNameHasError}
-          required={rest.required || rest.InputLabelProps?.required}
-        >
-          {label}
-        </S.Label>
-      ) : (
-        label
-      )}
+    return (
+      <S.Container fullWidth={!!rest.fullWidth}>
+        {typeof label === 'string' ? (
+          <InputLabel
+            {...rest.InputLabelProps}
+            htmlFor={rest.name}
+            error={buttonFileNameHasError}
+            required={rest.required || rest.InputLabelProps?.required}
+          >
+            {label}
+          </InputLabel>
+        ) : (
+          label
+        )}
 
-      {rest.type === 'file' ? (
-        <>
-          <FormControl error={buttonFileNameHasError}>
-            <S.FileButton
-              type='button'
-              error={buttonFileNameHasError}
-              hasFile={!!inputFileName}
-              onClick={() => {
-                inputRef.current?.click()
-              }}
-              onBlur={() => {
-                inputRef.current?.focus()
-                inputRef.current?.blur()
-              }}
-            >
-              <Typography
-                color='inherit'
-                display='flex'
-                alignItems='center'
-                justifyContent='space-between'
-                variant='body2'
-                width='100%'
-                gap={1}
+        {rest.type === 'file' ? (
+          <>
+            <FormControl error={buttonFileNameHasError}>
+              <S.FileButton
+                type='button'
+                error={buttonFileNameHasError}
+                hasFile={!!inputFileName}
+                onClick={() => {
+                  inputRef.current?.click()
+                }}
+                onBlur={() => {
+                  inputRef.current?.focus()
+                  inputRef.current?.blur()
+                }}
               >
-                {inputFileName || rest.placeholder || 'Escolha um arquivo'}
-                <UploadFile
-                  sx={{
-                    fontSize: 20,
-                    color: ({ palette }) => `${palette.common.black}75`,
-                  }}
-                />
-              </Typography>
-            </S.FileButton>
-            <FormHelperText>{rest.helperText}</FormHelperText>
-          </FormControl>
+                <Typography
+                  color='inherit'
+                  display='flex'
+                  alignItems='center'
+                  justifyContent='space-between'
+                  variant='body2'
+                  width='100%'
+                  gap={1}
+                >
+                  {inputFileName || rest.placeholder || 'Escolha um arquivo'}
+                  <UploadFile
+                    sx={{
+                      fontSize: 20,
+                      color: ({ palette }) => `${palette.common.black}75`,
+                    }}
+                  />
+                </Typography>
+              </S.FileButton>
+              <FormHelperText>{rest.helperText}</FormHelperText>
+            </FormControl>
 
-          <TextField
+            <TextField
+              {...rest}
+              id={rest.name}
+              size='small'
+              tabIndex={-1}
+              inputProps={{
+                ...rest.inputProps,
+                tabIndex: -1,
+              }}
+              inputRef={inputRef}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const fileObj = e.target.files && e.target.files[0]
+
+                if (!fileObj) return
+
+                setInputFileName(fileObj.name)
+                rest.onChange?.(e)
+              }}
+              sx={{ position: 'absolute', zIndex: -1, opacity: 0 }}
+            />
+          </>
+        ) : (
+          <S.Input
             {...rest}
+            variant={variant}
             id={rest.name}
             size='small'
-            tabIndex={-1}
-            inputProps={{
-              ...rest.inputProps,
-              tabIndex: -1,
-            }}
             inputRef={inputRef}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const fileObj = e.target.files && e.target.files[0]
-
-              if (!fileObj) return
-
-              setInputFileName(fileObj.name)
-              rest.onChange?.(e)
-            }}
-            sx={{ position: 'absolute', zIndex: -1, opacity: 0 }}
+            {...(multiline && {
+              multiline: true,
+              InputProps: { sx: { p: 0 } },
+              inputProps: {
+                sx: { py: '0.85rem', px: '1.4rem' },
+              },
+            })}
           />
-        </>
-      ) : (
-        <S.Input
-          {...rest}
-          variant={variant}
-          id={rest.name}
-          size='small'
-          inputRef={inputRef}
-        />
-      )}
-    </S.Container>
-  )
-})
+        )}
+      </S.Container>
+    )
+  }
+)

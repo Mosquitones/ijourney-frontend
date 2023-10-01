@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 
@@ -9,6 +10,7 @@ import {
   BoxProps,
   ButtonBase,
   Chip,
+  CircularProgress,
   Container,
   Divider,
   Grid,
@@ -21,14 +23,22 @@ import {
   Typography,
   useScrollTrigger,
 } from '@mui/material'
+import { useMutation, useQuery } from 'react-query'
 
-import { Banner, Button, FloatingActionButton, Input } from 'components'
-import { useAuth } from 'contexts'
-import { useIsDevice } from 'hooks'
+import {
+  Banner,
+  Button,
+  EmptyContent,
+  FloatingActionButton,
+  Input,
+} from 'components'
+import { useAuth, useFeedback } from 'contexts'
+import { useIsDevice, useMentors, useSkills } from 'hooks'
+import { CourseServices, CourseTypes } from 'services'
 
 import { MainFilters } from '../positions/components'
 
-import { CourseCard } from './components'
+import { CourseCard, CourseModalHandler } from './components'
 
 const TABS = [
   {
@@ -58,8 +68,30 @@ const TABS = [
 
 export default function CoursesPage() {
   const { isUserRole } = useAuth()
+
+  const { alert } = useFeedback()
+  const [selectedCourse, setSelectedCourse] = useState<CourseTypes | null>(null)
   const [openModal, setOpenModal] = useState(false)
   const [selectedTab, setSelectedTab] = useState(TABS[0].value)
+
+  const skillsQuery = useSkills({
+    enabled: isUserRole.SUPER_ADMIN,
+  })
+
+  const mentorsQuery = useMentors({
+    enabled: isUserRole.SUPER_ADMIN,
+  })
+
+  const coursesQuery = useQuery({
+    queryKey: ['/courses', { method: 'GET' }],
+    queryFn: () => CourseServices.get(),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  })
+
+  const isLoading =
+    skillsQuery.isLoading || mentorsQuery.isLoading || coursesQuery.isLoading
 
   const isDevice = useIsDevice()
 
@@ -73,7 +105,7 @@ export default function CoursesPage() {
         />
       )}
       <TabContext value={selectedTab}>
-        <Banner.Container>
+        <Banner.Container isLoading={isLoading}>
           <Banner.Wrapper maxWidth='sm'>
             <Banner.Title>Se profissionalize com nossos cursos</Banner.Title>
             <Banner.Description>
@@ -91,41 +123,98 @@ export default function CoursesPage() {
           </Banner.Tabs>
         </Banner.Container>
         <Container
-          sx={{ py: 4, display: 'flex', flexDirection: 'column', gap: 4 }}
+          sx={{
+            py: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4,
+            flex: 1,
+          }}
         >
-          <Box
-            display='flex'
-            flexDirection='row'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            {isDevice.from.sm && (
+          {isLoading ? (
+            <Box
+              display='flex'
+              flex={1}
+              justifyContent='center'
+              alignItems='center'
+            >
               <Typography
-                fontWeight={({ typography }) => typography.fontWeightBold}
-                variant='h4'
+                color='text.secondary'
+                display='flex'
+                gap={1}
+                alignItems='center'
               >
-                Cursos
+                <CircularProgress size={18} />
+                Carregando cursos...
               </Typography>
-            )}
-            <MainFilters hideLocationFilters />
-          </Box>
-          {TABS.map((tab) => (
-            <TabPanel key={tab.value} value={tab.value}>
-              <Grid container columnSpacing={2} rowSpacing={6}>
-                {[...Array(10)].map((_, index) => {
-                  const key = crypto.randomUUID()
-
-                  return (
-                    <Grid item key={key} xs={12} sm={6} md={4}>
-                      <CourseCard href={key} />
-                    </Grid>
-                  )
-                })}
-              </Grid>
-            </TabPanel>
-          ))}
+            </Box>
+          ) : (
+            <>
+              {coursesQuery.data?.length === 0 ? (
+                <Box
+                  display='flex'
+                  flex={1}
+                  justifyContent='center'
+                  alignItems='center'
+                  pb={10}
+                >
+                  <EmptyContent title='Nenhum curso encontrado' />
+                </Box>
+              ) : (
+                <>
+                  <Box
+                    display='flex'
+                    flexDirection='row'
+                    alignItems='center'
+                    justifyContent='space-between'
+                  >
+                    {isDevice.from.sm && (
+                      <Typography
+                        fontWeight={({ typography }) =>
+                          typography.fontWeightBold
+                        }
+                        variant='h4'
+                      >
+                        Cursos
+                      </Typography>
+                    )}
+                    <MainFilters hideLocationFilters />
+                  </Box>
+                  <Grid
+                    container
+                    spacing={2}
+                    // columnSpacing={2}
+                    // rowSpacing={6}
+                  >
+                    {coursesQuery.data
+                      ?.sort((a, b) => b.id - a.id)
+                      .map((course) => (
+                        <Grid item key={course.id} xs={12} sm={6} md={4}>
+                          <CourseCard
+                            onClick={() => setSelectedCourse(course)}
+                            course={course}
+                          />
+                        </Grid>
+                      ))}
+                  </Grid>
+                </>
+              )}
+            </>
+          )}
         </Container>
       </TabContext>
+      <CourseModalHandler
+        key={selectedCourse?.id}
+        skills={skillsQuery.data || []}
+        mentors={mentorsQuery.data || []}
+        course={selectedCourse || undefined}
+        open={Boolean(selectedCourse) || openModal}
+        refetchCourses={coursesQuery.refetch}
+        onClose={() => {
+          setSelectedCourse(null)
+          setOpenModal(false)
+        }}
+      />
     </>
   )
 }
