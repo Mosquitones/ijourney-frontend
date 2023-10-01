@@ -24,6 +24,7 @@ import { useMutation, useQuery } from 'react-query'
 
 import { Button, Position } from 'components'
 import { useFeedback } from 'contexts'
+import { ROUTES } from 'router'
 import {
   ApiResponseTypes,
   CandidateServices,
@@ -84,7 +85,7 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
               salary: position.salaryRange,
             })}
           />
-          <CircularProgress value={60} />
+          <CircularProgress value={position.positionStatusPercentage || 0} />
         </Box>
       </S.AccordionSummary>
       <S.AccordionDetails>
@@ -104,6 +105,20 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
         <S.ItemContainer>
           <Position.Score
             {...getPositionScores({ requirements: position.requirements })}
+            header={{
+              title: 'Pontuações',
+              endAdornment: (
+                <Link
+                  sx={{
+                    color: ({ palette }) => palette.info.main,
+                    textDecorationColor: ({ palette }) => palette.info.main,
+                  }}
+                  href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}`}
+                >
+                  Consultar detalhes da vaga e empresa
+                </Link>
+              ),
+            }}
           />
         </S.ItemContainer>
 

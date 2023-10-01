@@ -69,12 +69,7 @@ export const PositionDetails: React.FC<PositionDetailsPropTypes> = ({
               value={recruiter.fullName}
             />
             <Divider flexItem orientation='vertical' />
-            {/* {createdAt && (
-              <DetailTextComponent
-                title='no dia '
-                value={formatDate(createdAt)}
-              />
-            )} */}
+
             {createdAt && (
               <Typography color='text.secondary' variant='body2'>
                 {formatDate(createdAt)}

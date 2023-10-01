@@ -28,6 +28,7 @@ import {
   renderReportRoutes,
   renderSignUpRoutes,
   renderArchivedPositionRoutes,
+  renderProfileRoutes,
   ROUTES,
   RouteTypes,
 } from '.'
@@ -49,6 +50,7 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderAppliedPositionRoutes()}
         {renderCourseRoutes()}
+        {renderProfileRoutes()}
         {/* {renderAboutUsRoutes()} */}
       </>
     ),
@@ -58,6 +60,7 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderArchivedPositionRoutes()}
         {renderReportRoutes()}
+        {renderProfileRoutes()}
         {/* {renderCourseRoutes()} */}
         {/* {renderAboutUsRoutes()} */}
       </>
@@ -68,6 +71,7 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderArchivedPositionRoutes()}
         {renderReportRoutes()}
+        {renderProfileRoutes()}
         {renderCourseRoutes()}
         {/* {renderAboutUsRoutes()} */}
       </>
@@ -77,6 +81,7 @@ export const Router: React.FC = () => {
         {redirectToDefaultRoute(ROUTES.POSITIONS)}
         {renderPositionRoutes()}
         {renderReportRoutes()}
+        {renderProfileRoutes()}
         {renderCourseRoutes()}
         {/* {renderAboutUsRoutes()} */}
       </>

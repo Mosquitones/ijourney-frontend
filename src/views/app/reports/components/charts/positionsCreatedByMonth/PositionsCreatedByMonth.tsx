@@ -31,7 +31,7 @@ const _options = {
 
 export const PositionsCreatedByMonthBarChart: React.FC<
   PositionsCreatedByMonthPropTypes
-> = () => {
+> = ({ positionsCreatedByMonth = [] }) => {
   const theme = useTheme()
 
   const data = {
@@ -52,7 +52,7 @@ export const PositionsCreatedByMonthBarChart: React.FC<
     datasets: [
       {
         label: ' Vagas criadas',
-        data: [12, 10, 4, 4, 7, 9, 4, 2, 6, 12, 6, 8],
+        data: positionsCreatedByMonth,
         backgroundColor: [theme.palette.primary.main],
       },
     ],

@@ -13,7 +13,7 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { ROUTES } from 'router'
 
@@ -35,6 +35,9 @@ const Wrapper: React.FC<
 > = ({ children, renderBackButton, ...rest }) => {
   const ariaLabel = 'Voltar para página anterior'
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const previousRoute = _getPreviousRoute(location.pathname)
 
   return (
     <S.Wrapper {...rest}>
@@ -45,9 +48,11 @@ const Wrapper: React.FC<
             label='Voltar'
             variant='filled'
             color='default'
-            aria-label={ariaLabel}
             component='a'
-            onClick={() => navigate(`/${ROUTES.APP}/${ROUTES.POSITIONS}`)}
+            aria-label={ariaLabel}
+            onClick={() => navigate(-1)}
+            // component={Link}
+            // to={previousRoute}
           />
         </Tooltip>
       )}

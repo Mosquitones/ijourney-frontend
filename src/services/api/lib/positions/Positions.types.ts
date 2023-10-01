@@ -73,6 +73,7 @@ export interface PositionTypes {
   numOfFeminineGender: number
   numOfOtherGender: number
   recruiterId: number
+  positionStatusPercentage: number
   phases: PhaseTypes[]
   requirements: RequirementTypes[]
   companyName: string

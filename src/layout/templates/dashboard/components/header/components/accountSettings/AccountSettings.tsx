@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, MouseEvent } from 'react'
 
 import {
@@ -15,18 +16,22 @@ import {
   ListItemIcon,
   Tooltip,
 } from '@mui/material'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useAuth } from 'contexts'
+import { ROUTES } from 'router'
 import { GET_LOGOUT_ROUTE } from 'views'
 
 import { AppColorMenuItem, AppFontSizeMenuItem } from './components'
 
 export const AccountSettings: React.FC = () => {
-  const { user } = useAuth()
+  const { user, userId } = useAuth()
   // const { } = useAccessibility()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
+  const navigate = useNavigate()
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -79,12 +84,21 @@ export const AccountSettings: React.FC = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose} tabIndex={0}>
-          <ListItemIcon>
-            <PersonOutlined fontSize='small' />
-          </ListItemIcon>
-          Perfil
-        </MenuItem>
+        {userId && (
+          <MenuItem
+            component={Link}
+            to={`/${ROUTES.APP}/${ROUTES.PROFILES}/${userId}`}
+            // onClick={() =>
+            //   navigate(`/${ROUTES.APP}/${ROUTES.PROFILES}/${userId}`)
+            // }
+            tabIndex={0}
+          >
+            <ListItemIcon>
+              <PersonOutlined fontSize='small' />
+            </ListItemIcon>
+            Perfil
+          </MenuItem>
+        )}
         <MenuItem
           onClick={handleClose}
           tabIndex={0}
@@ -111,8 +125,8 @@ export const AccountSettings: React.FC = () => {
         <Divider />
         <MenuItem
           sx={{ color: ({ palette }) => palette.error.main }}
-          component='a'
-          href={GET_LOGOUT_ROUTE()}
+          component={Link}
+          to={GET_LOGOUT_ROUTE()}
           tabIndex={0}
         >
           <ListItemIcon>

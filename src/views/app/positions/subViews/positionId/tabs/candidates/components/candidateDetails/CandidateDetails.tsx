@@ -31,6 +31,7 @@ import {
   CircularProgress,
   Chip,
   useTheme,
+  Tooltip,
 } from '@mui/material'
 import { AxiosError } from 'axios'
 import ConfettiExplosion from 'react-confetti-explosion'
@@ -41,8 +42,9 @@ import { AdditionalFilters } from 'views/app/positions/components'
 import { DialogTitleComponent, Position, TopicList } from 'components'
 import { useFeedback, useTabContext } from 'contexts'
 import { useDisclosure, useIsDevice } from 'hooks'
+import { ROUTES } from 'router'
 import { ApiResponseTypes, CandidateServices, PositionTypes } from 'services'
-import { getPositionScores } from 'utils'
+import { getPositionScores, openPdfInAnotherPage } from 'utils'
 
 import * as S from './CandidateDetails.styles'
 import { CandidateDetailPropTypes } from './CandidateDetails.types'
@@ -185,7 +187,16 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
             gap={3}
             flexWrap='wrap'
           >
-            <Avatar sx={{ width: 55, height: 55 }} src={candidate.picture} />
+            <Tooltip title='Clique para visualizar perfil'>
+              <IconButton
+                href={`/${ROUTES.APP}/${ROUTES.PROFILES}/${candidatePositionId}`}
+              >
+                <Avatar
+                  sx={{ width: 55, height: 55 }}
+                  src={candidate.picture}
+                />
+              </IconButton>
+            </Tooltip>
             <Box display='flex' flexDirection='column' gap={1}>
               <Typography
                 variant='subtitle1'
@@ -209,17 +220,9 @@ export const CandidateDetailsDialog: React.FC<CandidateDetailPropTypes> = ({
                   color='secondary'
                   sx={{ cursor: 'pointer', textDecoration: 'underline' }}
                   onClick={() => {
-                    if (!candidate.resume) return
-                    const pdfWindow = window.open('')
-                    if (!pdfWindow) return
-                    pdfWindow.document.write(
-                      `<iframe 
-                    width='100%' 
-                    height='100%' 
-                    title='${candidate.name}' 
-                    src='${encodeURI(candidate.resume)}'
-                    ></iframe>`
-                    )
+                    openPdfInAnotherPage(candidate.resume, {
+                      title: `Currículo - ${candidate.name}`,
+                    })
                   }}
                 >
                   Ver currículo

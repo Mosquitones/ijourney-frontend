@@ -15,6 +15,7 @@ export interface UserTypes {
   password: string
   userType: EnumValueTypes<typeof ROLE_ENUM>
   dateOfBirth: Date
+  resume: string | null
   gender: EnumValueTypes<typeof GENDER_ENUM>
   companyId: number
   phoneNumber: string

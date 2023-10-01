@@ -20,5 +20,6 @@ export interface RecruiterReportTypes {
   totalFeminineGenderPercentage: number
   totalOtherGender: number
   totalOtherGenderPercentage: number
+  positionsCreatedByMonth: number[]
   candidates: CandidateReportTypes[]
 }

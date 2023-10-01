@@ -23,12 +23,15 @@ export const ROUTES = {
   ABOUT_US: 'about-us',
   REPORTS: 'reports',
 
+  PROFILES: 'profiles',
+
   // General
   NEW: 'new',
 
   // Params
   ID: ':id',
   POSITION_ID: ':positionId',
+  PROFILE_ID: ':profileId',
 } as const
 
 export type RouteTypes = (typeof ROUTES)[keyof typeof ROUTES] | 'default'

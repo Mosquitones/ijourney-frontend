@@ -224,7 +224,9 @@ export default function ReportsPage() {
               <Grid {...GRID_CONTAINER_PROPS} container item xs={12} md={8}>
                 <Grid item xs={12}>
                   <DataContainer title='Vagas criadas de acordo com o mês'>
-                    <PositionsCreatedByMonthBarChart />
+                    <PositionsCreatedByMonthBarChart
+                      positionsCreatedByMonth={data?.positionsCreatedByMonth}
+                    />
                   </DataContainer>
                 </Grid>
                 <Grid {...GRID_CONTAINER_PROPS} container item xs={12}>
