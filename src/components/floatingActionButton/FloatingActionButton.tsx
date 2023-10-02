@@ -42,7 +42,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonPropTypes> = ({
         sx={{
           ...rest.sx,
           position: 'fixed',
-          bottom: 40,
+          bottom: 100,
           right: 16,
           top: 'auto',
           left: 'auto',
