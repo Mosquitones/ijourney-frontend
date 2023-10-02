@@ -27,8 +27,7 @@ export const MuiThemeWrapper: FCWithChildren<{ theme?: ThemeOptions }> = ({
   children,
   theme = MuiTheme,
 }) => {
-  const [contrast, setContrast] = React.useState(1)
-  const { color, fontSize, htmlFontSize, fontSizeHandlers } = useAccessibility()
+  const { color, fontSize, htmlFontSize } = useAccessibility()
 
   let currentTheme = createTheme(theme, {
     typography: {
