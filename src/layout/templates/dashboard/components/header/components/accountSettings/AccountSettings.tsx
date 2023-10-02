@@ -88,10 +88,12 @@ export const AccountSettings: React.FC = () => {
           <MenuItem
             component={Link}
             to={`/${ROUTES.APP}/${ROUTES.PROFILES}/${userId}`}
-            // onClick={() =>
-            //   navigate(`/${ROUTES.APP}/${ROUTES.PROFILES}/${userId}`)
-            // }
+            onClick={handleClose}
             tabIndex={0}
+            // component={Link}
+            // LinkComponent='a'
+            // onClick={handleClose}
+            // tabIndex={0}
           >
             <ListItemIcon>
               <PersonOutlined fontSize='small' />
@@ -127,6 +129,7 @@ export const AccountSettings: React.FC = () => {
           sx={{ color: ({ palette }) => palette.error.main }}
           component={Link}
           to={GET_LOGOUT_ROUTE()}
+          onClick={handleClose}
           tabIndex={0}
         >
           <ListItemIcon>

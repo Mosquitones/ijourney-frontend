@@ -38,7 +38,11 @@ import { CourseServices, CourseTypes } from 'services'
 
 import { MainFilters } from '../positions/components'
 
-import { CourseCard, CourseModalHandler } from './components'
+import {
+  CompleteCourseModal,
+  CourseCard,
+  CourseModalHandler,
+} from './components'
 
 const TABS = [
   {
@@ -67,7 +71,7 @@ const TABS = [
 ]
 
 export default function CoursesPage() {
-  const { isUserRole } = useAuth()
+  const { isUserRole, userId } = useAuth()
 
   const { alert } = useFeedback()
   const [selectedCourse, setSelectedCourse] = useState<CourseTypes | null>(null)
@@ -84,7 +88,10 @@ export default function CoursesPage() {
 
   const coursesQuery = useQuery({
     queryKey: ['/courses', { method: 'GET' }],
-    queryFn: () => CourseServices.get(),
+    queryFn: () =>
+      CourseServices.get({
+        candidateId: isUserRole.CANDIDATE ? String(userId) : null,
+      }),
   })
 
   const isLoading =
@@ -195,6 +202,19 @@ export default function CoursesPage() {
           )}
         </Container>
       </TabContext>
+
+      {isUserRole.CANDIDATE && (
+        <CompleteCourseModal
+          key={selectedCourse?.id}
+          open={Boolean(selectedCourse)}
+          course={selectedCourse || undefined}
+          refetchCourses={coursesQuery.refetch}
+          onClose={() => {
+            setSelectedCourse(null)
+            setOpenModal(false)
+          }}
+        />
+      )}
       {isUserRole.SUPER_ADMIN && (
         <CourseModalHandler
           key={selectedCourse?.id}

@@ -53,6 +53,7 @@ export interface PositionServerQueryTypes {
 
 export interface PositionTypes {
   id: number
+  archived: boolean
   salaryRange: number
   title: string
   shortDescription: string

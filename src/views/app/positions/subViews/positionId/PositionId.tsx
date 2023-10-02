@@ -54,7 +54,7 @@ export default function PositionIdPage() {
   const { positionId } = useParams()
   const tabs = getTabsBasedOnRole(user?.userType)
 
-  const params = useParamsSelector()
+  const params = useParamsSelector<'tab'>()
 
   const positionIdQuery = useQuery({
     queryKey: [`/positions/${positionId}`, { method: 'GET' }],
@@ -64,20 +64,6 @@ export default function PositionIdPage() {
   const selectedTabId = params.get('tab') || tabs[0].id
 
   const isDevice = useIsDevice()
-
-  useEffect(() => {
-    if (!params.get('tab')) {
-      params.add({ key: 'tab', value: tabs[0].id })
-    }
-  }, [])
-
-  if (
-    !positionIdQuery.isLoading &&
-    !positionIdQuery.data &&
-    Boolean((positionIdQuery.error as any).response.status !== 200)
-  ) {
-    return <NotFoundPosition />
-  }
 
   return (
     <>
@@ -91,6 +77,7 @@ export default function PositionIdPage() {
               gap={3}
             >
               <PositionAvatarIcon
+                isLoading={positionIdQuery.isLoading}
                 positionId={Number(positionId)}
                 positionTitle={String(positionIdQuery.data?.title)}
               />
@@ -159,3 +146,6 @@ export default function PositionIdPage() {
     </>
   )
 }
+
+export * from './tabs'
+export * from './utils/getTabBasedOnRole'

@@ -36,7 +36,7 @@ export const PositionDetails: React.FC<PositionDetailsPropTypes> = ({
   recruiter,
 }) => {
   const formatDate = (date: Date) =>
-    format(date, 'MM/dd/yyyy', { locale: ptBR })
+    format(date, 'dd/MM/yyyy', { locale: ptBR })
 
   return (
     <Box display='flex' flexDirection='column' gap={2}>
@@ -82,9 +82,14 @@ export const PositionDetails: React.FC<PositionDetailsPropTypes> = ({
             )}
             <Divider flexItem orientation='vertical' />
             <Link
+              component={Typography}
+              variant='body2'
               href={`mailto:${recruiter.email}`}
               color='text.secondary'
               underline='hover'
+              sx={{
+                cursor: 'pointer',
+              }}
             >
               {recruiter.email}
             </Link>

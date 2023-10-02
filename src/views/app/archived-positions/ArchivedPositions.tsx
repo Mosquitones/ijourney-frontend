@@ -26,6 +26,7 @@ import {
 
 import { PositionTabTemplate } from '../applied-positions/components'
 import { PositionCard, PositionModalHandler } from '../positions/components'
+import { TabTypes } from '../positions/subViews'
 
 export default function ArchivedPositionsPage() {
   const { userId } = useAuth()
@@ -96,7 +97,7 @@ export default function ArchivedPositionsPage() {
               fontWeight={({ typography }) => typography.fontWeightBold}
               color='text.secondary'
             >
-              {archivedPositionsQuery.data?.length} vagas arquivadas
+              {archivedPositionsQuery.data?.length} vaga(s) arquivada(s)
               encontrada(s)
             </Typography>
 
@@ -107,7 +108,9 @@ export default function ArchivedPositionsPage() {
                   <PositionCard
                     key={position.id}
                     isArchived
-                    href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}`}
+                    href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${
+                      position.id
+                    }?tab=${'description' as TabTypes['id']}`}
                     onEditClick={() => setSelectedPosition(position)}
                     position={position}
                   />

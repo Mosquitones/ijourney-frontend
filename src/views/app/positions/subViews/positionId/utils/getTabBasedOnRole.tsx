@@ -5,7 +5,7 @@ import { EnumValueTypes, ROLE_ENUM } from '@types'
 import CandidatesTab from '../tabs/candidates/Candidates'
 import DescriptionTab from '../tabs/description/Description'
 
-type TabTypes = {
+export type TabTypes = {
   id: 'description' | 'candidates' | 'culture-and-benefits'
   label: string
   content: React.ReactNode

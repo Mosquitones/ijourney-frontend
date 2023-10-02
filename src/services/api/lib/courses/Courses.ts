@@ -1,8 +1,13 @@
 import { ApiResponseTypes, CourseTypes, api } from 'services'
+import { makeQueryParams } from 'utils'
 
-const findAll = async () => {
+export interface CoursePayloadQueryTypes {
+  candidateId: string | null
+}
+
+const findAll = async (params?: CoursePayloadQueryTypes) => {
   const { data: response } = await api.get<ApiResponseTypes<CourseTypes[]>>(
-    `/courses`
+    `/courses${makeQueryParams(params)}`
   )
 
   return response.data

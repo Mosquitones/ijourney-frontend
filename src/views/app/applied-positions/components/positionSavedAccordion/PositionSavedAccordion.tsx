@@ -20,7 +20,8 @@ import {
 } from '@mui/material'
 import { AxiosError } from 'axios'
 import { CircularProgress } from 'components/circularProgress/CircularProgress'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { TabTypes } from 'views/app/positions/subViews'
 
 import { Button, Position } from 'components'
 import { useAuth, useFeedback } from 'contexts'
@@ -34,13 +35,14 @@ import { getChips } from 'utils'
 
 import * as S from '../positionAccordion/PositionAccordion.styles'
 
-import { PositionAccordionPropTypes } from './PositionAccordionSaved.types'
+import { PositionSavedAccordionPropTypes } from './PositionSavedAccordion.types'
 
-export const PositionAccordionSaved: React.FC<PositionAccordionPropTypes> = ({
-  position,
-}) => {
+export const PositionSavedAccordion: React.FC<
+  PositionSavedAccordionPropTypes
+> = ({ position }) => {
   const { alert } = useFeedback()
   const { userId } = useAuth()
+  const queryClient = useQueryClient()
   const recruiterIdQuery = useQuery({
     queryKey: [`/recruiters/${position.recruiterId}`, { method: 'GET' }],
     queryFn: () => RecruiterServices.id.get(position.recruiterId),
@@ -50,6 +52,10 @@ export const PositionAccordionSaved: React.FC<PositionAccordionPropTypes> = ({
     mutationKey: [`/candidates/positions/${position.id}`, { method: 'DELETE' }],
     mutationFn: CandidateServices.positions.saved.delete,
     onSuccess: () => {
+      queryClient.fetchQuery([
+        `/candidates/${userId}/positions/saved`,
+        { method: 'GET' },
+      ])
       alert.showSuccess('Você removeu essa vaga dos salvos')
     },
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
@@ -105,7 +111,9 @@ export const PositionAccordionSaved: React.FC<PositionAccordionPropTypes> = ({
           <Button
             variant='contained'
             color='black'
-            href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}`}
+            href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}?tab=${
+              'description' as TabTypes['id']
+            }`}
           >
             Visualizar vaga
           </Button>

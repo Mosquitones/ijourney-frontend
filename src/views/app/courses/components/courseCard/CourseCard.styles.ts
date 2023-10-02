@@ -8,7 +8,7 @@ export const Button = styled(MuiButton)`
 
 export const Paper = styled(MUIPaper)`
   display: grid;
-  grid-template-rows: auto 1fr repeat(4, auto);
+  grid-template-rows: auto 1fr repeat(6, auto);
   /* flex-direction: column; */
   width: 100%;
   overflow: hidden;

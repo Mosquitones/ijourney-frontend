@@ -5,8 +5,14 @@ import { PositionTabTemplate } from '../../components'
 
 import { OnGoingTabPropTypes } from './OnGoing.types'
 
-export default function OnGoingTab({ positions }: OnGoingTabPropTypes) {
+export default function OnGoingTab({
+  positions,
+  isLoading,
+}: OnGoingTabPropTypes) {
   return (
-    <PositionTabTemplate positions={positions?.sort((a, b) => a.id - b.id)} />
+    <PositionTabTemplate
+      isLoading={isLoading}
+      positions={positions?.sort((a, b) => a.id - b.id)}
+    />
   )
 }

@@ -7,4 +7,5 @@ export interface PositionAvatarIconPropTypes {
   positionId: PositionTypes['id']
   size?: number
   avatarProps?: AvatarProps
+  isLoading?: boolean
 }

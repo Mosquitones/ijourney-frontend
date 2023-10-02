@@ -48,17 +48,32 @@ export default function AppliedPositionsPage() {
     {
       id: 'on-going',
       label: 'Em andamento',
-      content: <OnGoingTab positions={positionsQuery.data} />,
+      content: (
+        <OnGoingTab
+          positions={positionsQuery.data}
+          isLoading={positionsQuery.isLoading}
+        />
+      ),
     },
     {
       id: 'archiveds',
       label: 'Arquivados',
-      content: <ArchiveTab archivedPositions={archivedPositionsQuery.data} />,
+      content: (
+        <ArchiveTab
+          archivedPositions={archivedPositionsQuery.data}
+          isLoading={archivedPositionsQuery.isLoading}
+        />
+      ),
     },
     {
       id: 'saveds',
       label: 'Salvos',
-      content: <SavedTab savedPositions={savedPositionsQuery.data} />,
+      content: (
+        <SavedTab
+          savedPositions={savedPositionsQuery.data}
+          isLoading={savedPositionsQuery.isLoading}
+        />
+      ),
     },
   ]
 
@@ -78,12 +93,6 @@ export default function AppliedPositionsPage() {
     isSelectedTabOnGoingLoading ||
     isSelectedTabArchivedLoading ||
     isSelectedTabSavedLoading
-
-  useEffect(() => {
-    if (!tabParam) {
-      params.add({ key: 'tab', value: 'on-going' })
-    }
-  }, [params, tabParam])
 
   return (
     <TabContext value={selectedTab}>
@@ -111,13 +120,11 @@ export default function AppliedPositionsPage() {
           ))}
         </Banner.Tabs>
       </Banner.Container>
-      <Container sx={{ py: 6 }}>
-        {TABS.map((tab) => (
-          <TabPanel key={tab.id} value={tab.id}>
-            {tab.content}
-          </TabPanel>
-        ))}
-      </Container>
+      {TABS.map((tab) => (
+        <TabPanel key={tab.id} value={tab.id}>
+          {tab.content}
+        </TabPanel>
+      ))}
     </TabContext>
   )
 }

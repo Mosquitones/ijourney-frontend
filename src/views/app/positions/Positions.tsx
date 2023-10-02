@@ -22,11 +22,12 @@ import {
 import { EnumValueTypes, ROLE_ENUM } from '@types'
 import { AxiosError } from 'axios'
 import { QueryKey, UseQueryOptions, useMutation, useQuery } from 'react-query'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { Banner, Button, FloatingActionButton, Input } from 'components'
 import { useAuth, useFeedback, useLayout } from 'contexts'
 import { useDebounce, useIsDevice, useParamsSelector, useSkills } from 'hooks'
+import { ROUTES } from 'router'
 import {
   ApiResponseTypes,
   PositionServices,
@@ -41,6 +42,7 @@ import {
   PositionCard,
   PositionModalHandler,
 } from './components'
+import { TabTypes } from './subViews'
 
 const DEFAULT_PADDINGS: Partial<BoxProps> = {
   py: 2,
@@ -181,7 +183,9 @@ export default function PositionsPage() {
                     ?.map((position: PositionTypes) => (
                       <PositionCard
                         key={position.id}
-                        href={String(position.id)}
+                        href={`${position.id}?tab=${
+                          'description' as TabTypes['id']
+                        }`}
                         onEditClick={() => setSelectedPosition(position)}
                         position={position}
                       />

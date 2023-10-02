@@ -6,6 +6,7 @@ import {
   AvatarGroup,
   Box,
   Button,
+  Chip,
   Divider,
   Rating,
   SvgIcon,
@@ -33,6 +34,8 @@ export const CourseCard: React.FC<CourseCardPropTypes> = ({
           <Typography
             variant='subtitle1'
             textAlign='left'
+            aria-label={course.title}
+            aria-describedby={course.title}
             lineHeight={1.5}
             fontWeight={({ typography }) => typography.fontWeightBold}
             sx={{
@@ -49,7 +52,15 @@ export const CourseCard: React.FC<CourseCardPropTypes> = ({
           </Typography>
         </Box>
         <Divider />
+        <Box display='flex' flexWrap='wrap' px={3} py={2} gap={1}>
+          {course.skills
+            .sort((a, b) => a.id - b.id)
+            .map((skill) => (
+              <Chip key={skill.id} label={skill.name} variant='filled' />
+            ))}
+        </Box>
 
+        <Divider />
         <Box
           display='flex'
           flexWrap='wrap'

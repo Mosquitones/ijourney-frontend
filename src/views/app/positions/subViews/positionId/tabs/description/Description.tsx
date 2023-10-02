@@ -42,7 +42,7 @@ export default function DescriptionTab() {
   const isDevice = useIsDevice()
   const { alert } = useFeedback()
   const { userId, isUserRole } = useAuth()
-  const { id: positionId } = useTabContext<PositionTypes>()
+  const position = useTabContext<PositionTypes>()
 
   const applyToPositionIdQuery = useMutation({
     mutationKey: [`/candidates/positions/register`, { method: 'POST' }],
@@ -95,35 +95,48 @@ export default function DescriptionTab() {
             color='black'
             disabled={
               applyToPositionIdQuery.isLoading ||
-              applyToPositionIdQuery.isSuccess
+              applyToPositionIdQuery.isSuccess ||
+              position.archived
             }
             loading={applyToPositionIdQuery.isLoading}
             onClick={() => {
-              applyToPositionIdQuery.mutate({ candidateId: userId, positionId })
+              applyToPositionIdQuery.mutate({
+                candidateId: userId,
+                positionId: position.id,
+              })
             }}
           >
             {applyToPositionIdQuery.isIdle && 'Aplicar para vaga'}
             {applyToPositionIdQuery.isLoading && 'Aplicando...'}
             {applyToPositionIdQuery.isSuccess && 'Aplicado'}
+            {position.archived && 'Vaga arquivada'}
           </Button>
-          <Button
-            variant='outlined'
-            color='black'
-            disabled={
-              savePositionIdQuery.isLoading || savePositionIdQuery.isSuccess
-            }
-            loading={savePositionIdQuery.isLoading}
-            onClick={() => {
-              savePositionIdQuery.mutate({ candidateId: userId, positionId })
-            }}
-          >
-            {applyToPositionIdQuery.isIdle && 'Salvar'}
-            {applyToPositionIdQuery.isLoading && 'Salvando...'}
-            {applyToPositionIdQuery.isSuccess && 'Salvo'}
-          </Button>
-          <Button variant='text' color='black'>
-            Reportar
-          </Button>
+
+          {!position.archived && (
+            <>
+              <Button
+                variant='outlined'
+                color='black'
+                disabled={
+                  savePositionIdQuery.isLoading || savePositionIdQuery.isSuccess
+                }
+                loading={savePositionIdQuery.isLoading}
+                onClick={() => {
+                  savePositionIdQuery.mutate({
+                    candidateId: userId,
+                    positionId: position.id,
+                  })
+                }}
+              >
+                {savePositionIdQuery.isIdle && 'Salvar'}
+                {savePositionIdQuery.isLoading && 'Salvando...'}
+                {savePositionIdQuery.isSuccess && 'Salvo'}
+              </Button>
+              <Button variant='text' color='black'>
+                Reportar
+              </Button>
+            </>
+          )}
         </Box>
       )}
     </Box>

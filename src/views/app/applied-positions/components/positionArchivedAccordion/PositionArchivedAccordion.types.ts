@@ -1,5 +1,5 @@
 import { PositionTypes } from 'services'
 
-export interface PositionAccordionPropTypes {
+export interface PositionArchivedAccordionPropTypes {
   position: PositionTypes
 }

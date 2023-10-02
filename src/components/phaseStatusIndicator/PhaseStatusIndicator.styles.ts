@@ -29,7 +29,7 @@ export const StatusIndicatorStyles = styled(Chip)<StatusIndicatorPropTypes>`
     }
     if (phaseStatusType === PHASE_STATUS_TYPE_ENUM.HIRED) {
       return css`
-        --color: ${({ theme }) => theme.palette.success[900]};
+        --color: ${({ theme }) => theme.palette.success[400]};
       `
     }
     return ''

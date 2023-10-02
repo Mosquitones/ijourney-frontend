@@ -2,10 +2,11 @@ import {
   Accordion as MUIAccordion,
   AccordionSummary as MUIAccordionSummary,
   AccordionDetails as MUIAccordionDetails,
+  Box,
 } from '@mui/material'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const Accordion = styled(MUIAccordion)`
+export const Accordion = styled(MUIAccordion)<{ isConcluded?: boolean }>`
   --border-radius: 0.5rem;
 
   border-radius: var(--border-radius) !important;
@@ -24,6 +25,13 @@ export const Accordion = styled(MUIAccordion)`
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
   }
+
+  ${({ isConcluded }) =>
+    isConcluded &&
+    css`
+      border-width: 0.1rem !important;
+      border-color: ${({ theme }) => theme.palette.success.main} !important;
+    `}
 `
 
 export const AccordionSummary = styled(MUIAccordionSummary)``
@@ -32,6 +40,6 @@ export const AccordionDetails = styled(MUIAccordionDetails)`
   padding: 0 !important;
 `
 
-export const ItemContainer = styled.div`
+export const ItemContainer = styled(Box)`
   padding: 3.2rem 2.4rem;
 `

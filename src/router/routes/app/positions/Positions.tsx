@@ -12,7 +12,10 @@ export const renderPositionRoutes = () => {
   return (
     <Route path={POSITIONS}>
       <Route index Component={PositionsPage} />
-      <Route path={POSITION_ID} Component={PositionIdPage} />
+      <Route
+        path={`${POSITION_ID}/?tab=description?`}
+        Component={PositionIdPage}
+      />
       {/* <Route path={NEW} Component={NewPlanPage} /> */}
     </Route>
   )

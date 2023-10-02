@@ -20,10 +20,11 @@ import {
 } from '@mui/material'
 import { AxiosError } from 'axios'
 import { CircularProgress } from 'components/circularProgress/CircularProgress'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { TabTypes } from 'views/app/positions/subViews'
 
 import { Button, Position } from 'components'
-import { useFeedback } from 'contexts'
+import { useAuth, useFeedback } from 'contexts'
 import { ROUTES } from 'router'
 import {
   ApiResponseTypes,
@@ -39,6 +40,8 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
   position,
 }) => {
   const { alert } = useFeedback()
+  const { userId } = useAuth()
+  const queryClient = useQueryClient()
 
   const recruiterIdQuery = useQuery({
     queryKey: [`/recruiters/${position.recruiterId}`, { method: 'GET' }],
@@ -52,6 +55,10 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
     ],
     mutationFn: CandidateServices.positions.delete,
     onSuccess: () => {
+      queryClient.fetchQuery([
+        `/candidates/${userId}/positions`,
+        { method: 'GET' },
+      ])
       alert.showSuccess('Você saiu da vaga')
     },
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
@@ -109,13 +116,17 @@ export const PositionAccordion: React.FC<PositionAccordionPropTypes> = ({
               title: 'Pontuações',
               endAdornment: (
                 <Link
+                  underline='hover'
                   sx={{
-                    color: ({ palette }) => palette.info.main,
+                    color: ({ palette }) => palette.primary.main,
                     textDecorationColor: ({ palette }) => palette.info.main,
+                    fontWeight: ({ typography }) => typography.fontWeightBold,
                   }}
-                  href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${position.id}`}
+                  href={`/${ROUTES.APP}/${ROUTES.POSITIONS}/${
+                    position.id
+                  }?tab=${'description' as TabTypes['id']}`}
                 >
-                  Consultar detalhes da vaga e empresa
+                  Consultar detalhes da vaga
                 </Link>
               ),
             }}

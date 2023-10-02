@@ -73,7 +73,7 @@ export const useNavItems = () => {
       },
       {
         label: 'Vagas Aplicadas',
-        path: `/${ROUTES.APP}/${ROUTES.APPLIED_POSITIONS}`,
+        path: `/${ROUTES.APP}/${ROUTES.APPLIED_POSITIONS}?tab=on-going`,
         icon: InboxOutlined,
         filledIcon: MoveToInboxTwoTone,
       },

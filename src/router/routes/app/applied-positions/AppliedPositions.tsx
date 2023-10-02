@@ -10,13 +10,12 @@ export const renderAppliedPositionRoutes = () => {
   const { APPLIED_POSITIONS, ID, CLASSIFICATION } = ROUTES
 
   return (
-    <Route path={APPLIED_POSITIONS}>
+    <Route path={`${APPLIED_POSITIONS}/?tab=on-going?`}>
       <Route index Component={AppliedPositionsPage} />
       <Route path={ID}>
         <Route index element={<Navigate to={APPLIED_POSITIONS} />} />
         <Route path={CLASSIFICATION} Component={ClassificationPage} />
       </Route>
-      {/* <Route path={NEW} Component={NewPlanPage} /> */}
     </Route>
   )
 }
