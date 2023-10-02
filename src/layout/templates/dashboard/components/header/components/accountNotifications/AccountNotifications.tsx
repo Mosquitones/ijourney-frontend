@@ -2,7 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react'
 
-import { NotificationsOutlined } from '@mui/icons-material'
+import {
+  DeleteOutlineOutlined,
+  NotificationsOutlined,
+} from '@mui/icons-material'
 import {
   IconButton,
   Badge,
@@ -58,6 +61,23 @@ export const AccountNotifications: React.FC = () => {
   const readAllNotificationsQuery = useMutation({
     mutationKey: [`/users/${userId}/notifications/read`, { method: 'POST' }],
     mutationFn: () => UserServices.id.notifications.read.post(userId),
+    onSuccess: () => {
+      setTimeout(() => {
+        userNotificationsQuery.refetch()
+      }, 4500)
+    },
+
+    onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
+      alert.showError(error.response?.data.message || error.message)
+    },
+  })
+
+  const deleteAllNotificationsQuery = useMutation({
+    mutationKey: [`/users/${userId}/notifications`, { method: 'DELETE' }],
+    mutationFn: () => UserServices.id.notifications.delete(userId),
+    onSuccess: () => {
+      userNotificationsQuery.refetch()
+    },
 
     onError: (error: AxiosError<ApiResponseTypes<unknown>>) => {
       alert.showError(error.response?.data.message || error.message)
@@ -96,6 +116,7 @@ export const AccountNotifications: React.FC = () => {
         PaperProps={{
           elevation: 0,
           sx: {
+            maxWidth: 400,
             overflow: 'visible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,
@@ -143,14 +164,20 @@ export const AccountNotifications: React.FC = () => {
             </Typography>
           </Box>
         ) : (
-          <>
+          <Box maxHeight={450} overflow='auto' tabIndex={-1}>
             <Box
               px={2}
+              position='sticky'
+              top={0}
+              bgcolor='white'
               display='flex'
               justifyContent='space-between'
               alignItems='center'
               py={1}
               tabIndex={-1}
+              sx={{ bgcolor: ({ palette }) => palette.common.white }}
+              zIndex={({ zIndex }) => zIndex.appBar}
+              borderBottom={({ palette }) => `0.1rem solid ${palette.divider}`}
             >
               <Typography
                 variant='body2'
@@ -158,8 +185,8 @@ export const AccountNotifications: React.FC = () => {
               >
                 Notificações
               </Typography>
-              {!!userNotifications?.totalUnreadNotifications &&
-                userNotifications.totalUnreadNotifications > 0 && (
+              {userNotifications?.notifications &&
+                userNotifications?.notifications?.length > 1 && (
                   <ButtonBase
                     sx={{
                       px: 2,
@@ -169,23 +196,29 @@ export const AccountNotifications: React.FC = () => {
                       gap: 1,
                       borderRadius: '0.5rem',
                       alignItems: 'center',
+                      color: ({ palette }) => palette.error.main,
                     }}
                     tabIndex={0}
-                    onClick={() => readAllNotificationsQuery.mutate()}
+                    onClick={() => deleteAllNotificationsQuery.mutate()}
                   >
-                    {readAllNotificationsQuery.isLoading ? (
+                    {deleteAllNotificationsQuery.isLoading ? (
                       <>
-                        <CircularProgress size={14} />
-                        Marcando...
+                        <CircularProgress size={14} color='inherit' />
+                        Deletando...
                       </>
                     ) : (
-                      'Marcar todas como lida'
+                      <>
+                        <SvgIcon
+                          component={DeleteOutlineOutlined}
+                          color='inherit'
+                          sx={{ fontSize: 15 }}
+                        />
+                        Deletar todas
+                      </>
                     )}
                   </ButtonBase>
                 )}
             </Box>
-
-            <Divider component='li' sx={{ m: '0 !important' }} />
 
             {!userNotifications?.notifications ||
             userNotifications?.notifications?.length === 0 ? (
@@ -207,15 +240,17 @@ export const AccountNotifications: React.FC = () => {
                 </Typography>
               </Box>
             ) : (
-              userNotifications?.notifications.map((notification) => (
-                <NotificationItem
-                  notification={notification}
-                  key={notification.id}
-                  refetchNotifications={userNotificationsQuery.refetch}
-                />
-              ))
+              userNotifications?.notifications
+                ?.sort((a, b) => b.id - a.id)
+                ?.map((notification) => (
+                  <NotificationItem
+                    notification={notification}
+                    key={notification.id}
+                    refetchNotifications={userNotificationsQuery.refetch}
+                  />
+                ))
             )}
-          </>
+          </Box>
         )}
       </Menu>
     </>

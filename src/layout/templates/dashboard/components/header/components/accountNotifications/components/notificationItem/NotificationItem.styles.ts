@@ -1,14 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { MenuItem as MUIMenuItem } from '@mui/material'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const MenuItem = styled(MUIMenuItem)`
-  padding: 1.2rem 0;
+export const MenuItem = styled.li<{ read?: boolean }>`
+  padding: 1.2rem 1.6rem;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
+  position: relative;
   gap: 0.4rem;
   text-align: left !important;
   align-items: flex-start !important;
   cursor: default !important;
+
+  ${({ read }) =>
+    read &&
+    css`
+      .MuiTypography-root {
+        opacity: 0.5;
+      }
+    `}
 
   .MuiButtonBase-root {
     position: absolute;

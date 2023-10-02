@@ -63,7 +63,7 @@ export const NotificationItem: React.FC<NotificationItemPropTypes> = ({
 
   return (
     <>
-      <S.MenuItem disableTouchRipple disableRipple disabled={notification.read}>
+      <S.MenuItem read={notification.read} tabIndex={0}>
         <Box
           display='flex'
           justifyContent='space-between'
@@ -124,14 +124,19 @@ export const NotificationItem: React.FC<NotificationItemPropTypes> = ({
             </ButtonBase>
           </Tooltip>
         </Box>
+        {/* <Box> */}
         <Typography
           variant='body2'
           color='text.secondary'
-          noWrap
+          // noWrap
+          // flexWrap='wrap'
+          // maxWidth={400}
+          sx={{ wordBreak: 'break-word' }}
           textAlign='left'
         >
           {notification.description}
         </Typography>
+        {/* </Box> */}
       </S.MenuItem>
       <Divider component='li' sx={{ m: '0 !important' }} />
     </>
