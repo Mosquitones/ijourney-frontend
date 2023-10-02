@@ -26,7 +26,12 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
+
+      
+      console.log(appThemeColor)
+      
       (function(){
+          var appThemeColor = document.querySelector('[name="theme-color"]').content
           var s    = document.createElement('script');
           var h    = document.querySelector('head') || document.body;
           s.src    = 'https://acsbapp.com/apps/app/dist/js/app.js';
@@ -40,8 +45,8 @@
                   disableBgProcess : false,
                   language         : 'pt',
                   position         : 'right',
-                  leadColor        : '#%VITE_APP_PRIMARY_COLOR%',
-                  triggerColor     : '#%VITE_APP_PRIMARY_COLOR%',
+                  leadColor        : appThemeColor,
+                  triggerColor     : '#146FF8',
                   triggerRadius    : '50%',
                   triggerPositionX : 'right',
                   triggerPositionY : 'bottom',

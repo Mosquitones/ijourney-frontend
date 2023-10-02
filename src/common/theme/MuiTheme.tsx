@@ -41,6 +41,14 @@ export const MuiThemeWrapper: FCWithChildren<{ theme?: ThemeOptions }> = ({
 
   currentTheme.palette.primary = getPaletteColors(color.rgba)
 
+  const headAppThemeColor = document.querySelector<HTMLElement>(
+    "meta[name='theme-color']"
+  )
+
+  if (headAppThemeColor instanceof HTMLMetaElement) {
+    headAppThemeColor.content = color.hex
+  }
+
   return (
     <ThemeProvider theme={currentTheme}>
       <CssBaseline />
