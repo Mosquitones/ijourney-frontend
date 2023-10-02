@@ -29,13 +29,12 @@ import { useDisclosure, useIsDevice } from 'hooks'
 import { ROUTES } from 'router'
 
 import {
+  AccountNotifications,
   AccountSettings,
   LeftNavigationComponent,
   NavItemTypes,
 } from './components'
 import * as S from './Header.styles'
-
-const NOTIFICATIONS_VALUE = 100
 
 export const GET_HEADER_TRIGGER = () => useScrollTrigger({ threshold: 200 })
 export const Header: React.FC = () => {
@@ -50,14 +49,6 @@ export const Header: React.FC = () => {
   const isDesktopScreen = device.from.sm
 
   const defaultPath = userNavItems?.find((item) => item.isDefaultPath)
-
-  function notificationsLabel(count: number) {
-    if (count === 0) return 'nenhuma notificação'
-
-    if (count > 99) return 'mais de 99 notificações'
-
-    return `${count} notificações`
-  }
 
   const trigger = GET_HEADER_TRIGGER()
 
@@ -110,13 +101,7 @@ export const Header: React.FC = () => {
           <Box display='flex' alignItems='center' gap={{ xs: 1, md: 3 }}>
             {isDesktopScreen ? (
               <>
-                <Tooltip title={notificationsLabel(NOTIFICATIONS_VALUE)}>
-                  <IconButton>
-                    <Badge badgeContent={NOTIFICATIONS_VALUE} color='primary'>
-                      <SvgIcon component={NotificationsOutlined} />
-                    </Badge>
-                  </IconButton>
-                </Tooltip>
+                <AccountNotifications />
                 <AccountSettings />
               </>
             ) : (

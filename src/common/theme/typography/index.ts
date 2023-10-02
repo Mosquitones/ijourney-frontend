@@ -83,7 +83,9 @@ export const typography: TypographyThemeOverrides = {
     // fontSize: '2.8ex',
     fontSize: 18,
   },
-  caption: {},
+  caption: {
+    fontSize: 12,
+  },
   subtitle2: {},
   overline: {},
 }

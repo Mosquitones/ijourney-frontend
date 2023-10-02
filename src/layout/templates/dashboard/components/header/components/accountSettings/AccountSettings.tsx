@@ -49,8 +49,8 @@ export const AccountSettings: React.FC = () => {
         </IconButton>
       </Tooltip>
       <Menu
-        anchorEl={anchorEl}
         id='account-menu'
+        anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         PaperProps={{
@@ -73,7 +73,7 @@ export const AccountSettings: React.FC = () => {
               right: 14,
               width: 10,
               height: 10,
-              bgcolor: 'background.paper',
+              bgcolor: 'background.default',
               transform: 'translateY(-50%) rotate(45deg)',
               zIndex: 0,
             },

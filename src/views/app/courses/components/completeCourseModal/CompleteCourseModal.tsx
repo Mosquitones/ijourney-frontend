@@ -95,7 +95,6 @@ export const CompleteCourseModal: React.FC<CompleteCouseModalPropTypes> = ({
           </Box>
         </DialogContent>
         <DialogActions sx={{ flexWrap: 'wrap' }}>
-          <Button onClick={handleClose}>Fechar</Button>
           <Button
             loading={completeCourseQuery.isLoading}
             disabled={completeCourseQuery.isLoading}
