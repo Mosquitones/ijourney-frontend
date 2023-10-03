@@ -44,7 +44,7 @@ export const AccountSettings: React.FC = () => {
           <Avatar
             sx={{ bgcolor: ({ palette }) => palette.primary.main }}
             alt={user?.fullName}
-            src={user?.picture}
+            src={user?.picture || undefined}
           />
         </IconButton>
       </Tooltip>

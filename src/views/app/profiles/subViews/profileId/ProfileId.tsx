@@ -61,7 +61,7 @@ export default function ProfileIdPage() {
       <Banner.Container isLoading={userIdQuery.isLoading}>
         <S.AvatarContainer>
           <S.BehindSemiCircle />
-          <S.Avatar variant='circular' src={user?.picture}>
+          <S.Avatar variant='circular' src={user?.picture || undefined}>
             {userIdQuery.isLoading ? (
               <CircularProgress color='inherit' size={60} />
             ) : null}

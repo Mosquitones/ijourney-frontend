@@ -29,7 +29,7 @@ export const UserProfileCard: React.FC<UserProfileCardPropTypes> = ({
             <Avatar
               variant='rounded'
               sx={{ width: 56, height: 56, borderRadius: 6 }}
-              src={user?.picture}
+              src={user?.picture || undefined}
             />
             <Box display='flex' flexDirection='column' gap={0.5}>
               <Typography

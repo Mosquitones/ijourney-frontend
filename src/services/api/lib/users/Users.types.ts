@@ -10,7 +10,7 @@ import { SkillTypes } from '../skills'
 export interface UserTypes {
   id: number
   fullName: string
-  picture: string
+  picture: string | null
   email: string
   password: string
   userType: EnumValueTypes<typeof ROLE_ENUM>
