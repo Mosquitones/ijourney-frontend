@@ -116,6 +116,7 @@ export default function SignUpPage() {
     validateOnBlur: true,
     isInitialValid: false,
     onSubmit: async (values) => {
+      console.log(values)
       if (
         !values.dateOfBirth ||
         !values.gender ||
@@ -177,7 +178,7 @@ export default function SignUpPage() {
       }
 
       const picture =
-        values.picture && Object.keys(values.picture).length > 0
+        values.picture instanceof File
           ? await convertToBase64(values.picture)
           : undefined
       const resumeAsBase64 = await convertToBase64(values.resume)
