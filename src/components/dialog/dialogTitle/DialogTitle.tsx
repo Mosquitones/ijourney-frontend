@@ -8,15 +8,20 @@ import { DialogTitlePropTypes } from './DialogTitle.types'
 export const DialogTitleComponent: React.FC<DialogTitlePropTypes> = ({
   onClose,
   title,
+  helpTitleAdornment,
 }) => {
   return (
     <S.DialogTitle>
       <Typography
+        display='flex'
+        gap={2}
+        alignItems='center'
         variant='h4'
         noWrap
         fontWeight={({ typography }) => typography.fontWeightBold}
       >
         {title}
+        {helpTitleAdornment}
       </Typography>
       <IconButton
         aria-label='close'
