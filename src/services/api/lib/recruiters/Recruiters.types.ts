@@ -14,3 +14,18 @@ export interface RecruiterRegisterPayloadTypes {
 export interface RecruiterTypes extends RecruiterRegisterPayloadTypes {
   id: number
 }
+
+export interface RecruiterPayloadQueryTypes {
+  'recruiter-name': string
+  email: string
+  'min-age': number
+  'max-age': number
+  genders: EnumValueTypes<typeof GENDER_ENUM>[]
+}
+
+export interface RecruiterServerQueryTypes {
+  fullName: string
+  email: string
+  rangeBetweenAges: string // min~max
+  genders: EnumValueTypes<typeof GENDER_ENUM>[]
+}

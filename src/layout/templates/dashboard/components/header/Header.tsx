@@ -41,12 +41,14 @@ export const Header: React.FC = () => {
   const device = useIsDevice()
   const location = useLocation()
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, isUserRole } = useAuth()
   const { userNavItems } = useLayout()
 
   const drawerHandlers = useDisclosure()
 
-  const isDesktopScreen = device.from.sm
+  const isDesktopScreen = isUserRole.SUPER_ADMIN
+    ? device.from.lg
+    : device.from.sm
 
   const defaultPath = userNavItems?.find((item) => item.isDefaultPath)
 

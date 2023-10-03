@@ -67,7 +67,7 @@ export const NotificationItem: React.FC<NotificationItemPropTypes> = ({
         <Box
           display='flex'
           justifyContent='space-between'
-          gap={1}
+          gap={2}
           width='100%'
           minWidth={280}
         >
@@ -78,7 +78,7 @@ export const NotificationItem: React.FC<NotificationItemPropTypes> = ({
             {notification.title}
           </Typography>
           <Typography
-            // className=''
+            minWidth='fit-content'
             variant='caption'
             color='text.secondary'
             fontStyle='italic'
@@ -98,6 +98,7 @@ export const NotificationItem: React.FC<NotificationItemPropTypes> = ({
                 py: '0.6rem',
                 mt: '-0.6rem',
                 px: 2,
+                background: ({ palette }) => palette.background.default,
               }}
               color='error'
               tabIndex={0}

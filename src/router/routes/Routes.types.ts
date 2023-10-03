@@ -22,8 +22,10 @@ export const ROUTES = {
   COURSES: 'courses',
   ABOUT_US: 'about-us',
   REPORTS: 'reports',
+  CANDIDATES: 'candidates',
 
   PROFILES: 'profiles',
+  RECRUITERS: 'recruiters',
 
   // General
   NEW: 'new',

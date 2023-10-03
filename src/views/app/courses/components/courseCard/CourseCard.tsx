@@ -92,14 +92,16 @@ export const CourseCard: React.FC<CourseCardPropTypes> = ({
               </>
             ) : (
               <AvatarGroup max={5}>
-                {course.mentors.map((mentor) => (
-                  <Tooltip key={mentor.id} title={mentor.fullName}>
-                    <Avatar
-                      alt={mentor.fullName}
-                      src={mentor.picture || undefined}
-                    />
-                  </Tooltip>
-                ))}
+                {course.mentors
+                  .sort((a, b) => a.id - b.id)
+                  .map((mentor) => (
+                    <Tooltip key={mentor.id} title={mentor.fullName}>
+                      <Avatar
+                        alt={mentor.fullName}
+                        src={mentor.picture || undefined}
+                      />
+                    </Tooltip>
+                  ))}
               </AvatarGroup>
             )}
           </Box>

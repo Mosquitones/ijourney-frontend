@@ -28,13 +28,13 @@ import * as S from './ProfileId.styles'
 
 export default function ProfileIdPage() {
   const { profileId } = useParams()
-  const { userId, isUserRole } = useAuth()
+  const { isUserRole, userId } = useAuth()
 
   const [openModal, setOpenModal] = useState(false)
 
   const userIdQuery = useQuery({
-    queryKey: [`/users/${userId}`, { method: 'GET' }],
-    queryFn: () => UserServices.id.get(userId),
+    queryKey: [`/users/${profileId}`, { method: 'GET' }],
+    queryFn: () => UserServices.id.get(Number(profileId)),
   })
 
   const user = userIdQuery.data
@@ -47,9 +47,11 @@ export default function ProfileIdPage() {
     (gender) => user?.gender === gender.value
   )
 
+  const isMyProfile = userId === Number(profileId)
+
   return (
     <>
-      {userId === Number(profileId) && !userIdQuery.isLoading && (
+      {isMyProfile && !userIdQuery.isLoading && (
         <FloatingActionButton
           icon={Edit}
           tooltip='Clique para editar perfil'
@@ -232,27 +234,31 @@ export default function ProfileIdPage() {
               </S.ContentContainer>
             )}
 
-            <Divider orientation='horizontal' flexItem />
+            {!isMyProfile && (
+              <>
+                <Divider orientation='horizontal' flexItem />
 
-            <S.ContentContainer>
-              <Box
-                display='flex'
-                gap={2}
-                flexWrap='wrap'
-                alignItems='center'
-                justifyContent='center'
-              >
-                <Button
-                  href={`tel:${user.phoneNumber}`}
-                  variant='outlined'
-                  color='primary'
-                  startIcon={<LocalPhone />}
-                  sx={{ borderRadius: 100 }}
-                >
-                  Ligar {isUserRole.CANDIDATE && 'para candidato'}
-                </Button>
-              </Box>
-            </S.ContentContainer>
+                <S.ContentContainer>
+                  <Box
+                    display='flex'
+                    gap={2}
+                    flexWrap='wrap'
+                    alignItems='center'
+                    justifyContent='center'
+                  >
+                    <Button
+                      href={`tel:${user.phoneNumber}`}
+                      variant='outlined'
+                      color='primary'
+                      startIcon={<LocalPhone />}
+                      sx={{ borderRadius: 100 }}
+                    >
+                      Ligar {isUserRole.CANDIDATE && 'para candidato'}
+                    </Button>
+                  </Box>
+                </S.ContentContainer>
+              </>
+            )}
           </>
         )}
       </Container>

@@ -7,6 +7,8 @@ import {
   MoveToInboxTwoTone,
   AddchartOutlined,
   AddchartTwoTone,
+  GroupOutlined,
+  GroupTwoTone,
 } from '@mui/icons-material'
 import { EnumValueTypes, ROLE_ENUM } from '@types'
 import { NavItemTypes } from 'layout'
@@ -64,6 +66,20 @@ export const useNavItems = () => {
     filledIcon: MoveToInboxTwoTone,
   }
 
+  const CANDIDATE_ITEM: NavItemTypes = {
+    label: 'Candidatos',
+    path: `/${ROUTES.APP}/${ROUTES.CANDIDATES}`,
+    icon: GroupOutlined,
+    filledIcon: GroupTwoTone,
+  }
+
+  const RECRUITER_ITEM: NavItemTypes = {
+    label: 'Recrutadores',
+    path: `/${ROUTES.APP}/${ROUTES.RECRUITERS}`,
+    icon: GroupOutlined,
+    filledIcon: GroupTwoTone,
+  }
+
   const navItems: RouteBasedOnRoleTypes = {
     CANDIDATE: [
       {
@@ -88,6 +104,7 @@ export const useNavItems = () => {
       },
       ARCHIVED_POSITIONS_ITEM,
       REPORT_ITEM,
+      CANDIDATE_ITEM,
       // COURSE_ITEM,
       // ABOUT_US_ITEM,
     ],
@@ -99,6 +116,8 @@ export const useNavItems = () => {
       ARCHIVED_POSITIONS_ITEM,
       REPORT_ITEM,
       COURSE_ITEM,
+      RECRUITER_ITEM,
+      CANDIDATE_ITEM,
       // ABOUT_US_ITEM,
     ],
     ADMIN: [

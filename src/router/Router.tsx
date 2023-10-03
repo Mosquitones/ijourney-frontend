@@ -31,6 +31,8 @@ import {
   renderProfileRoutes,
   ROUTES,
   RouteTypes,
+  renderCandidateRoutes,
+  renderRecruiterRoutes,
 } from '.'
 
 const redirectToDefaultRoute = (to: RouteTypes) => (
@@ -61,6 +63,7 @@ export const Router: React.FC = () => {
         {renderArchivedPositionRoutes()}
         {renderReportRoutes()}
         {renderProfileRoutes()}
+        {renderCandidateRoutes()}
         {/* {renderCourseRoutes()} */}
         {/* {renderAboutUsRoutes()} */}
       </>
@@ -72,6 +75,8 @@ export const Router: React.FC = () => {
         {renderArchivedPositionRoutes()}
         {renderReportRoutes()}
         {renderProfileRoutes()}
+        {renderCandidateRoutes()}
+        {renderRecruiterRoutes()}
         {renderCourseRoutes()}
         {/* {renderAboutUsRoutes()} */}
       </>
@@ -82,6 +87,8 @@ export const Router: React.FC = () => {
         {renderPositionRoutes()}
         {renderReportRoutes()}
         {renderProfileRoutes()}
+        {renderCandidateRoutes()}
+        {renderRecruiterRoutes()}
         {renderCourseRoutes()}
         {/* {renderAboutUsRoutes()} */}
       </>

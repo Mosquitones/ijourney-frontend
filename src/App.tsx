@@ -16,7 +16,9 @@ import { BackdropComponent, Router } from './router'
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { refetchOnWindowFocus: false, retry: false },
+    queries: {
+      retry: false,
+    },
   },
 })
 

@@ -82,8 +82,6 @@ export const AdditionalFilters: React.FC = () => {
   const salaryIdParam = Number(
     params.get('salary-id') || 0
   ) as (typeof SALARIES_LIST)[number]['id']
-  const minSalaryParam = Number(params.get('min-salary') || 0)
-  const maxSalaryParam = Number(params.get('max-salary') || 0)
 
   const debouncedSalary = useDebounce(salary, 500)
 
